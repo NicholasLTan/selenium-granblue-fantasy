@@ -29,7 +29,7 @@ public class FreeSP {
 		driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[6]/div/div[2]/div/div[1]/div/div[4]")).click();  //Play
 		System.out.println("Play");
 		Thread.sleep(5000);
-		int maxAttempts = 300; // Optional: To prevent infinite loops
+		int maxAttempts = 200; // Optional: To prevent infinite loops
 		int attempts = 0;
 		while (attempts < maxAttempts) {
 			confirmTeam.confirmTeam(wait);

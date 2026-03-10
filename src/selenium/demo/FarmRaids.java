@@ -41,6 +41,7 @@ public class FarmRaids {
 		// //Imagination Overdrive banner
 
 		boolean exitAtZero = true;
+		boolean speedFarm = true;
 		int maxAttempts = 20; // Optional: To prevent infinite loops
 		int attempts = 1;
 		while (attempts <= maxAttempts) {
@@ -98,6 +99,8 @@ public class FarmRaids {
 			int raidNum = 1;
 			int maxPct = 0;
 			int maxNum = 0;
+			int minPct = 100;
+			int minNum = 0;
 			int currBP = Integer.valueOf(driver.findElement(By.cssSelector("div[data-current-bp]")).getAttribute("data-current-bp"));
 			System.out.println(currBP + " BP");
 			if ( exitAtZero && currBP <= 1 ) { break; }
@@ -108,20 +111,35 @@ public class FarmRaids {
 				int intPct = Integer.parseInt(strPct.replaceAll("\\D+", ""));				
 				
 				if ((ten || raidStatus.getAttribute("class").equals(lowApStr))) {
-					//System.out.println(raidNum + " " + raidStatus.getAttribute("class") + " " + intPct);					
+					System.out.println(raidNum + " " + raidStatus.getAttribute("class") + " " + intPct);					
 					if (intPct > maxPct) {
 						maxPct = intPct;
 						maxNum = raidNum;
 					}
+					if (intPct < minPct && intPct > 5) {
+						minPct = intPct;
+						minNum = raidNum;
+					}
 				}
 				raidNum++;
 			}						
-			System.out.println("maxNum = " + maxNum + "; maxPct = " + maxPct);
-			maxNum--;
-			WebElement raid = raids.get(maxNum);
+			if (speedFarm) {
+				System.out.println("speed mode. minNum = " + minNum + "; minPct = " + minPct);
+				if (minNum==0) { continue; }
+				minNum--;
+				raidNum = minNum;
+			} else {
+				System.out.println("FP mode. maxNum = " + maxNum + "; maxPct = " + maxPct);
+				maxNum--;
+				raidNum = maxNum;
+			}
+			
+			
+			
+			WebElement raid = raids.get(raidNum);
 			WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[2]"));
 			System.out.println("");
-			if (maxNum > 5) {
+			if (raidNum > 5) {
 				Actions actions = new Actions(driver);
 				actions.sendKeys(Keys.PAGE_DOWN).perform();
 				Thread.sleep(1000);

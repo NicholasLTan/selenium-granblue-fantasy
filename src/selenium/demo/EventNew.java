@@ -15,6 +15,7 @@ public class EventNew {
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		AutoBattle autoBattle = new AutoBattle();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(600));
+		IsElementPresent ePresent = new IsElementPresent();
 		//driver.findElement(By.cssSelector("img[class='img-global-banner'][src*='treasureraid165']")).click(); // Lives Yet Unwritten
 		driver.get("https://game.granbluefantasy.jp/#event/treasureraid169"); 
 		System.out.println("Bonitomurai");
@@ -23,11 +24,16 @@ public class EventNew {
 		//driver.findElement(By.cssSelector("img[class='img-raid-boss']")).click();
 		System.out.println("Raid Battle");
 		Thread.sleep(1000);
+		if (ePresent.isElementPresent(driver, By.className("pop-select-part-raid"))) {
+			System.out.println("Event boss selection");
+			driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[9]/div")).click();
+			Thread.sleep(1000);
+		}
 		//driver.findElement(By.cssSelector("img[class='img-quest-thumb'][src*='93744']")).click();
 		driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='939821']")).click();
 		System.out.println("Impossible");
 
-		int maxAttempts = 9; // Optional: To prevent infinite loops
+		int maxAttempts = 5; // Optional: To prevent infinite loops
 		int attempts = 0;
 		/*
 		 * if (attempts < maxAttempts) {
@@ -38,8 +44,7 @@ public class EventNew {
 		 */
 		while (attempts < maxAttempts) {
 			confirmTeam.confirmTeam(wait);
-			autoBattle.autoBattle(driver, wait);
-			IsElementPresent ePresent = new IsElementPresent();
+			autoBattle.autoBattle(driver, wait);			
 			Results results = new Results();
 			if (attempts + 1 == maxAttempts) {
 				results.results(driver, wait, false);
@@ -50,7 +55,7 @@ public class EventNew {
 			boolean elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-close"));
 			if (elementExists) {
 				Thread.sleep(1000);
-				driver.findElement(By.className("btn-usual-close")).click();
+				driver.findElement(By.className("bt)n-usual-close")).click();
 				System.out.println("Mission Close");
 				Thread.sleep(2000);
 			}
