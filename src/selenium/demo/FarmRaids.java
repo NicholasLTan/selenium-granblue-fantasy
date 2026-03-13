@@ -28,7 +28,7 @@ public class FarmRaids {
 		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid166";
 
 		final By refreshBy = By.cssSelector("div[class='btn-search-refresh']");
-		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot2']");
+		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot4']");
 
 		final String normalApStr = "prt-use-ap";
 		final String normalApCss = "div[class='" + normalApStr + "']";
@@ -40,10 +40,12 @@ public class FarmRaids {
 		// driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[2]/div/img")).click();
 		// //Imagination Overdrive banner
 
-		boolean exitAtZero = true;
+		boolean exitAtZero = false;
 		boolean speedFarm = true;
-		int maxAttempts = 20; // Optional: To prevent infinite loops
+		int maxAttempts = 10; // Optional: To prevent infinite loops
 		int attempts = 1;
+		int minHP = 20;
+		boolean forcedRefresh = false;
 		while (attempts <= maxAttempts) {
 			if (driver.getCurrentUrl() != "https://game.granbluefantasy.jp/#quest/assist") {
 				driver.get("https://game.granbluefantasy.jp/#quest/assist");
@@ -68,7 +70,7 @@ public class FarmRaids {
 			refresh = driver.findElement(refreshBy);
 			int refreshCount=0;
 			System.out.println(raids.size() + " reduced ap");
-			while (raids.size() < 1) { 
+			while (raids.size() < 1 || forcedRefresh) { 
 				System.out.println("Refresh " + refreshCount);
 				//wait.until(element.isDisplayed() -> element.click());
 				wait.until(ExpectedConditions.elementToBeClickable(refresh));
@@ -94,6 +96,7 @@ public class FarmRaids {
 			 * System.out.println(rNum + " " + raid.getAttribute("class")); rNum++; }
 			 */
 			System.out.println("*****");
+			forcedRefresh = false;
 			raids = raidList.findElements(By.xpath("./div"));
 			if (raids.size() == 0) { System.out.println("zero"); continue; }
 			int raidNum = 1;
@@ -116,7 +119,7 @@ public class FarmRaids {
 						maxPct = intPct;
 						maxNum = raidNum;
 					}
-					if (intPct < minPct && intPct > 5) {
+					if (intPct < minPct && intPct > minHP) {
 						minPct = intPct;
 						minNum = raidNum;
 					}
@@ -125,7 +128,7 @@ public class FarmRaids {
 			}						
 			if (speedFarm) {
 				System.out.println("speed mode. minNum = " + minNum + "; minPct = " + minPct);
-				if (minNum==0) { continue; }
+				if (minNum==0) { forcedRefresh = true; continue; }
 				minNum--;
 				raidNum = minNum;
 			} else {

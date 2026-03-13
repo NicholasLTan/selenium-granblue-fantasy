@@ -26,7 +26,7 @@ public class EventNew {
 		Thread.sleep(1000);
 		if (ePresent.isElementPresent(driver, By.className("pop-select-part-raid"))) {
 			System.out.println("Event boss selection");
-			driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[9]/div")).click();
+			driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[9]/div/div[2]/div/div[2]")).click();
 			Thread.sleep(1000);
 		}
 		//driver.findElement(By.cssSelector("img[class='img-quest-thumb'][src*='93744']")).click();
