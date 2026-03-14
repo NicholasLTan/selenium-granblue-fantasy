@@ -20,6 +20,10 @@ public class EventNew {
 		System.out.println("PS,the Astrals...");
 		Thread.sleep(5000);
 		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[5]/div[1]/div[1]/div[2]/div/div[1]/div[5]/div[1]/div[2]/div/img")).click();
+		int raidMatNum = Integer.valueOf(driver.findElement(By.cssSelector("div[class='txt-possessed-item']")).getText());		
+		int maxAttempts = raidMatNum / 5; // Optional: To prevent infinite loops
+		System.out.println("Script calculates " + maxAttempts + " IMP runs");
+		int attempts = 0;
 		driver.findElement(By.cssSelector("div[class='btn-event-raid group']")).click();
 		System.out.println("Raid Battle");
 		Thread.sleep(1000);
@@ -32,9 +36,7 @@ public class EventNew {
 		//driver.findElement(By.cssSelector("img[class='img-quest-thumb'][src*='93744']")).click();
 		driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='939821']")).click();
 		System.out.println("Impossible");
-
-		int maxAttempts = 5; // Optional: To prevent infinite loops
-		int attempts = 0;
+			
 		/*
 		 * if (attempts < maxAttempts) {
 		 * driver.findElement(By.cssSelector("[data-group='3']")).click(); // Raid
