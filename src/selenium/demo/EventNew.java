@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.openqa.selenium.*;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class EventNew {
@@ -19,50 +20,65 @@ public class EventNew {
 		driver.get("https://game.granbluefantasy.jp/#event/treasureraid169"); 
 		System.out.println("PS,the Astrals...");
 		Thread.sleep(5000);
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[5]/div[1]/div[1]/div[2]/div/div[1]/div[5]/div[1]/div[2]/div/img")).click();
-		int raidMatNum = Integer.valueOf(driver.findElement(By.cssSelector("div[class='txt-possessed-item']")).getText());		
-		int maxAttempts = raidMatNum / 5; // Optional: To prevent infinite loops
-		System.out.println("Script calculates " + maxAttempts + " IMP runs");
-		int attempts = 0;
-		driver.findElement(By.cssSelector("div[class='btn-event-raid group']")).click();
-		System.out.println("Raid Battle");
-		Thread.sleep(1000);
-		if (ePresent.isElementPresent(driver, By.className("pop-select-part-raid"))) {
-			System.out.println("Event boss selection");
-			//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[9]/div/div[2]/div/div[2]")).click();
-			driver.findElement(By.cssSelector("div[data-part='1']")).click();
+		if (ePresent.isElementPresent(driver, By.cssSelector("div[class='pop-usual pop-daily-bonus pop-show']"))) {
+			driver.findElement(By.className("btn-usual-close")).click();
 			Thread.sleep(1000);
+		}		
+		int currLoop = 2;
+		int maxAttempts = 100; // Optional: To prevent infinite loops
+		int raidMatNum = Integer.valueOf(driver.findElement(By.cssSelector("div[class='txt-possessed-item']")).getText());
+		if (ePresent.isElementPresent(driver, By.cssSelector("span[class='txt-red']"))) { 
+			currLoop = 1; 
+			maxAttempts = Integer.valueOf(driver.findElement(By.cssSelector("span[class='txt-red']")).getText());
 		}
-		//driver.findElement(By.cssSelector("img[class='img-quest-thumb'][src*='93744']")).click();
-		driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='939821']")).click();
-		System.out.println("Impossible");
-			
-		/*
-		 * if (attempts < maxAttempts) {
-		 * driver.findElement(By.cssSelector("[data-group='3']")).click(); // Raid
-		 * Thread.sleep(1000); driver.findElement(By.xpath(
-		 * "/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[7]/div/div[2]/div/div[3]/div[2]/div[4]"
-		 * )) .click(); // Hard Thread.sleep(2000); }
-		 */
-		while (attempts < maxAttempts) {
-			confirmTeam.confirmTeam(wait);
-			autoBattle.autoBattle(driver, wait);			
-			Results results = new Results();
-			if (attempts + 1 == maxAttempts) {
-				results.results(driver, wait, false);
-			} else {
-				results.results(driver, wait, true);
-			}
-
-			boolean elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-close"));
-			if (elementExists) {
+		//System.out.println("Script calculates " + maxAttempts + " IMP runs");
+		
+		while (currLoop < 3) {
+			int attempts = 0;
+			if (currLoop == 2 ) { maxAttempts = raidMatNum / 5; }
+			System.out.println("Loop " + currLoop + ": " + maxAttempts + " IMP runs");
+			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-event-raid group']")));
+			driver.findElement(By.cssSelector("div[class='btn-event-raid group']")).click();
+			System.out.println("Raid Battle");
+			Thread.sleep(1000);
+			if (ePresent.isElementPresent(driver, By.className("pop-select-part-raid"))) {
+				System.out.println("Event boss selection");
+				//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[9]/div/div[2]/div/div[2]")).click();
+				driver.findElement(By.cssSelector("div[data-part='1']")).click();
 				Thread.sleep(1000);
-				driver.findElement(By.className("bt)n-usual-close")).click();
-				System.out.println("Mission Close");
-				Thread.sleep(2000);
 			}
-			attempts++;
-			System.out.println(attempts);
+			//driver.findElement(By.cssSelector("img[class='img-quest-thumb'][src*='93744']")).click();
+			driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='939821']")).click();
+			System.out.println("Impossible");
+
+			/*
+			 * if (attempts < maxAttempts) {
+			 * driver.findElement(By.cssSelector("[data-group='3']")).click(); // Raid
+			 * Thread.sleep(1000); driver.findElement(By.xpath(
+			 * "/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[7]/div/div[2]/div/div[3]/div[2]/div[4]"
+			 * )) .click(); // Hard Thread.sleep(2000); }
+			 */
+			while (attempts < maxAttempts) {
+				confirmTeam.confirmTeam(wait);
+				autoBattle.autoBattle(driver, wait);			
+				Results results = new Results();
+				if (attempts + 1 == maxAttempts) {
+					results.results(driver, wait, false);
+				} else {
+					results.results(driver, wait, true);
+				}
+
+				boolean elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-close"));
+				if (elementExists) {
+					Thread.sleep(1000);
+					driver.findElement(By.className("btn-usual-close")).click();
+					System.out.println("Mission Close");
+					Thread.sleep(2000);
+				}
+				attempts++;
+				System.out.println(attempts);
+			}
+			currLoop++;
 		}
 		System.out.println("Script Complete");
 	}
