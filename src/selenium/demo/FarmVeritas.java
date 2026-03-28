@@ -12,16 +12,19 @@ public class FarmVeritas {
 	public static final String mimicClass = "div[data-chapter-name='Mimic'][class='prt-quest-list btn-quest-list']"; //Mimic
 	//public static final String questClass = "div[data-quest-id='811021'][class^='prt-quest-list btn-quest-list']"; //E Living Lightning Rod
 	//public static final String questClass = "div[data-quest-id='811081'][class^='prt-quest-list btn-quest-list']"; //E Hundred-Armed Hulk
+	//public static final String questClass = "div[data-quest-id='812071'][class^='prt-quest-list btn-quest-list']"; //F Eyes of Sorrow
+	//public static final String questClass = "div[data-quest-id='812051'][class^='prt-quest-list btn-quest-list']"; //F Faymian Fortress
 	//public static final String questClass = "div[data-quest-id='813081'][class^='prt-quest-list btn-quest-list']"; //G Goliath Vanguard
 	//public static final String questClass = "div[data-quest-id='813041'][class^='prt-quest-list btn-quest-list']"; //G Temptation's Guide
 	//public static final String questClass = "div[data-quest-id='814091'][class^='prt-quest-list btn-quest-list']"; //H Harbinger Tyrant
-	public static final String questClass = "div[data-quest-id='814061'][class^='prt-quest-list btn-quest-list']"; //H Demanding Stormgod
+	//public static final String questClass = "div[data-quest-id='814061'][class^='prt-quest-list btn-quest-list']"; //H Demanding Stormgod
 	//public static final String questClass = "div[data-quest-id='814071'][class^='prt-quest-list btn-quest-list']"; //H Phantasmagoric Aberration
 	//public static final String questClass = "div[data-quest-id='814081'][class^='prt-quest-list btn-quest-list']"; //H Dimensional Riftwalker
 	//public static final String questClass = "div[data-quest-id='814101'][class^='prt-quest-list btn-quest-list']"; //H D Jadegleam Dragon
 	//public static final String questClass = "div[data-quest-id='818061'][class^='prt-quest-list btn-quest-list']"; //L Simpering Beast
 	//public static final String questClass = "div[data-quest-id='819031'][class^='prt-quest-list btn-quest-list']"; //M High-Voltage Rock
 	//public static final String questClass = "div[data-quest-id='819091'][class^='prt-quest-list btn-quest-list']"; //M Princess of Dragons
+	public static final String questClass = "div[data-quest-id='819071'][class^='prt-quest-list btn-quest-list']"; //M Parasite Steve
 	@Test
 	public void farmVeritas() throws InterruptedException {
 		Login login = new Login();
@@ -34,17 +37,20 @@ public class FarmVeritas {
 		WebElement element;
 		IsElementPresent ePresent = new IsElementPresent();
 		
-		driver.findElement(By.className("btn-head-pop")).click();  //Menu
-		System.out.println("Menu");
-		Thread.sleep(1000);
-		driver.findElement(By.className("btn-sub-main-arcarum")).click();  //Arcarum
+		//driver.findElement(By.className("btn-head-pop")).click();  //Menu
+		//System.out.println("Menu");
+		//Thread.sleep(1000);
+		//driver.findElement(By.className("btn-sub-main-arcarum")).click();  //Arcarum
+		driver.get("https://game.granbluefantasy.jp/#replicard");
 		System.out.println("Arcarum");
-		Thread.sleep(5000);
+		//Thread.sleep(5000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[data-area-id='3']")));
 		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[5]/div[1]/div[1]/div[2]/div[2]")).click();  //ZoneE
+		//driver.findElement(By.cssSelector("div[data-area-id='3']")).click();  //ZoneF
 		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[1]/div[2]/div[4]")).click();  //ZoneG
-		driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[1]/div[2]/div[5]")).click();  //ZoneH		
+		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[1]/div[2]/div[5]")).click();  //ZoneH		
 		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[5]/div[1]/div[1]/div[2]/div[9]")).click();  //ZoneL
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[1]/div[2]/div[1]")).click();  //ZoneM
+		driver.findElement(By.cssSelector("div[data-area-id='10']")).click();  //ZoneM
 		System.out.println("Zone Eletio");
 
 		/*element = driver.findElement(By.cssSelector("div[data-quest-id='814101'][class='prt-quest-list btn-quest-list']")); //D Jadegleam Dragonkin
@@ -107,7 +113,7 @@ public class FarmVeritas {
 			//System.out.println(cost);
 			if ( cost == 20 && turnReload ) {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(120));
-				reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
+				//reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
 			}
 
 			//if ( attempts + 1 == maxAttempts && aap < cost ) {
