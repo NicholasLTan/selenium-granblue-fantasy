@@ -19,8 +19,8 @@ public class Login {
 
 
 		WebDriver driver = new ChromeDriver(options);
-		driver.get("https://game.granbluefantasy.jp/#mypage"); 
-		Thread.sleep(5000);  // Let the user actually see something!
+		//driver.get("https://game.granbluefantasy.jp/#mypage"); 
+		Thread.sleep(1000);  // Let the user actually see something!
 		// Click on the element
 		IsElementPresent ePresent = new IsElementPresent();
 		boolean elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-close"));
