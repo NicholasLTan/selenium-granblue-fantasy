@@ -10,42 +10,24 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FreeSP {
 	@Test
 	public void freeSP() throws InterruptedException {
+		int maxAttempts = 200; // To prevent infinite loops
+		By click1 = By.cssSelector("div[data-key='8000']"); //Exclusive Quest
+		By click2 = By.cssSelector("div[data-chapter-id='80001']");	//Play
+		
 		Login login = new Login();
 		WebDriver driver = login.login();
-		ConfirmTeam confirmTeam = new ConfirmTeam();
-		SemiAuto semiAuto = new SemiAuto();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
 		
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[1]/div[1]/div[8]/div[1]")).click();  //Quest
-		//driver.findElement(By.className("btn-link-quest")).click();  //Quest
-		//System.out.println("Quest");
-		//Thread.sleep(5000);
-		//driver.findElement(By.cssSelector("div[class^='btn-extra-quest']")).click();  //Special
 		driver.get("https://game.granbluefantasy.jp/#quest/extra");
 		System.out.println("Event SP Quests");
-		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[data-key='8001']")));
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[2]/div/div[1]/div/div[4]")).click();  //FreeSP
-		driver.findElement(By.cssSelector("div[data-key='8001']")).click();  //FreeSP
+		wait.until(ExpectedConditions.elementToBeClickable(click1));
+		driver.findElement(click1).click();  
 		System.out.println("FreeSP");
-		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[data-chapter-id='80002']")));
-		driver.findElement(By.cssSelector("div[data-chapter-id='80002']")).click();  //FreeSP
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[6]/div/div[2]/div/div[1]/div/div[4]")).click();  //Play
+		wait.until(ExpectedConditions.elementToBeClickable(click2));
+		driver.findElement(click2).click();  
 		System.out.println("Play");
-		//Thread.sleep(5000);
-		int maxAttempts = 140; // Optional: To prevent infinite loops
-		int attempts = 0;
-		while (attempts < maxAttempts) {
-			confirmTeam.confirmTeam(wait);
-			semiAuto.semiAuto(driver, wait);
-			IsElementPresent ePresent = new IsElementPresent();				
-			Results results = new Results();
-			if ( attempts + 1 == maxAttempts) {
-				results.results(driver, wait, false);
-			} else {
-				results.results(driver, wait, true);
-			}
-			attempts++;
-			System.out.println(attempts);
-		}
+		
+		PlayAgain playAgain = new PlayAgain();
+		playAgain.playAgain(driver, wait, maxAttempts);		
 	}
 }
