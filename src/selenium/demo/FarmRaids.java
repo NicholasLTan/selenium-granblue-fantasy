@@ -12,10 +12,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaids {
 	@Test
 	public void farmRaids() throws InterruptedException {
+		boolean exitAtZero = true;
+		boolean speedFarm = true;
+		int maxAttempts = 15; // Optional: To prevent infinite loops		
+		int minHP = 20;
+		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot2']");
+		
 		Login login = new Login();
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		AutoBattle autoBattle = new AutoBattle();
+		Battle battle = new Battle();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		Results results = new Results();
@@ -23,23 +29,13 @@ public class FarmRaids {
 		IsElementPresent ePresent = new IsElementPresent();
 		//WebElement raid;
 
-		final String raidStr = "treasureraid166_high";
-		final String raidCss = "img[alt$='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid166";
-
 		final By refreshBy = By.cssSelector("div[class='btn-search-refresh']");
-		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot4']");
-
 		final String normalApStr = "prt-use-ap";
 		final String normalApCss = "div[class='" + normalApStr + "']";
 		final String lowApStr = normalApStr + " decreased";
 		final String lowApCss = "div[class='" + lowApStr + "']";
 
-		boolean exitAtZero = true;
-		boolean speedFarm = true;
-		int maxAttempts = 15; // Optional: To prevent infinite loops
 		int attempts = 1;
-		int minHP = 20;
 		boolean forcedRefresh = false;
 		while (attempts <= maxAttempts) {
 			if (driver.getCurrentUrl() != "https://game.granbluefantasy.jp/#quest/assist") {
@@ -132,15 +128,13 @@ public class FarmRaids {
 				raidNum = maxNum;
 			}
 			
-			
-			
 			WebElement raid = raids.get(raidNum);
-			WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[2]"));
+			//WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[2]"));
 			System.out.println("");
 			if (raidNum > 5) {
 				Actions actions = new Actions(driver);
 				actions.sendKeys(Keys.PAGE_DOWN).perform();
-				Thread.sleep(1000);
+				Thread.sleep(1000); //Necessary sleep for PGDN to process
 			}
 			raid.click();
 			//Thread.sleep(5000);
@@ -164,7 +158,7 @@ public class FarmRaids {
 				String url = driver.getCurrentUrl();
 				System.out.println("Conf " + url + " Auto");
 				try {
-					autoBattle.autoBattle(driver, wait);
+					battle.battle(driver, longWait);
 				} catch (ElementClickInterceptedException e) {
 					if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid")) {
 						System.out.println("supporter_raid"); 
@@ -198,7 +192,7 @@ public class FarmRaids {
 						driver.findElement(By.className("btn-treasure-footer-reload")).click();
 					}
 				}
-				results.results(driver, longWait, false);
+				results.results(driver, wait, false);
 				
 				System.out.println("Attempt " + attempts + " completed");
 				attempts++;
