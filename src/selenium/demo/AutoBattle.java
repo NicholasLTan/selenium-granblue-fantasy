@@ -1,10 +1,15 @@
 package selenium.demo;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
 public class AutoBattle {
 	public void autoBattle(WebDriver driver, WebDriverWait wait) {		
 		try { 	
@@ -14,7 +19,10 @@ public class AutoBattle {
 			// solo url: https://game.granbluefantasy.jp/#raid/1982213644
 			By autoButton = By.className("btn-auto");
 			By attackButton = By.className("btn-attack-start");
-			By semiAutoButton = By.className("btn-attack-start");
+			Wait<WebDriver> fluentWait = new FluentWait<>(driver)
+				.withTimeout(Duration.ofSeconds(30))
+				.pollingEvery(Duration.ofMillis(100));
+				
 			wait.until ( ExpectedConditions.or (
 					ExpectedConditions.elementToBeClickable(autoButton),
 					ExpectedConditions.elementToBeClickable(attackButton)));
@@ -24,8 +32,8 @@ public class AutoBattle {
 			} else if (!driver.findElements(attackButton).isEmpty() && driver.findElement(attackButton).isDisplayed()) {
 				driver.findElement(attackButton).click();
 				System.out.println("attack");
-				wait.until(ExpectedConditions.stalenessOf(driver.findElement(attackButton)));
-				//wait.until(ExpectedConditions.elementToBeClickable(autoButton));
+				//wait.until(ExpectedConditions.stalenessOf(driver.findElement(attackButton)));
+				fluentWait.until(ExpectedConditions.elementToBeClickable(autoButton));
 				driver.findElement(autoButton).click();
 				System.out.println("semi-auto");
 			}
