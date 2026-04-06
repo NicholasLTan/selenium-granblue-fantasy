@@ -33,7 +33,7 @@ public class AngelHalo {
 		driver.get("https://game.granbluefantasy.jp/#quest/extra");
 		//Thread.sleep(2000);
 		
-		int maxRelics = 85; // Optional: To prevent infinite loops
+		int maxRelics = 20; // Optional: To prevent infinite loops
 		int relics = 0;
 		while (relics < maxRelics) {
 			int haloCount = 0;
@@ -43,7 +43,7 @@ public class AngelHalo {
 				semiAuto.semiAuto(driver, wait);
 				//autoBattleNew.autoBattleNew(driver, wait);
 				haloCount++;
-				System.out.println("VH " + haloCount );
+				System.out.println(relics + "." + haloCount );
 				Results results = new Results();
 				results.results(driver, wait, true);
 				IsElementPresent ePresent = new IsElementPresent();
