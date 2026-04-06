@@ -8,9 +8,27 @@ import org.openqa.selenium.WebElement;
 public class AutoBattle {
 	public void autoBattle(WebDriver driver, WebDriverWait wait) {		
 		try { 	
-			WebElement autoButton = wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-auto")));  
-			autoButton.click(); //Turn on auto-battle
-			System.out.println("Auto-battle");
+			//WebElement autoButton = wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-auto")));  
+			//WebElement autoButton; 
+			// raid url: https://game.granbluefantasy.jp/#raid_multi/44875607170
+			// solo url: https://game.granbluefantasy.jp/#raid/1982213644
+			By autoButton = By.className("btn-auto");
+			By attackButton = By.className("btn-attack-start");
+			By semiAutoButton = By.className("btn-attack-start");
+			wait.until ( ExpectedConditions.or (
+					ExpectedConditions.elementToBeClickable(autoButton),
+					ExpectedConditions.elementToBeClickable(attackButton)));
+			if (!driver.findElements(autoButton).isEmpty() && driver.findElement(autoButton).isDisplayed()) { 
+				driver.findElement(autoButton).click(); //Turn on auto-battle
+				System.out.println("auto");
+			} else if (!driver.findElements(attackButton).isEmpty() && driver.findElement(attackButton).isDisplayed()) {
+				driver.findElement(attackButton).click();
+				System.out.println("attack");
+				wait.until(ExpectedConditions.stalenessOf(driver.findElement(attackButton)));
+				//wait.until(ExpectedConditions.elementToBeClickable(autoButton));
+				driver.findElement(autoButton).click();
+				System.out.println("semi-auto");
+			}
 		} catch (TimeoutException e) {
 			String url = driver.getCurrentUrl();
 			System.out.println("Autobattle " + url);
