@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FarmFavorite {
 	@Test
-	public void freeSP() throws InterruptedException {
+	public void farmFavorite() throws InterruptedException {
 		Login login = new Login();
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
@@ -24,7 +24,6 @@ public class FarmFavorite {
 		driver.get("https://game.granbluefantasy.jp/#quest");
 		System.out.println("Quests");
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-favorite visible']")));
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[2]/div/div[1]/div/div[4]")).click();  //FreeSP
 		driver.findElement(By.cssSelector("div[class='btn-favorite visible']")).click();  //FreeSP
 		System.out.println("Favorites");
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-recommend visible'")));
