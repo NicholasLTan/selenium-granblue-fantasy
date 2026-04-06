@@ -15,141 +15,115 @@ public class Results {
 		System.out.println("Results wait");
 		Thread.sleep(1000);
 		By ok = By.className("btn-usual-ok");
-		By ctrl = By.className("btn-control");
-		By next = By.className("btn-usual-next");
+		By ctrl = By.className("btn-control"); //Backup Requests //Special Quests
+		By next = By.className("btn-usual-next"); //Play Next, for DHalo
+		By popup = By.className("pop-usual");
+		By rankup = By.id("cjs-lp-rankup");
+		By close = By.className("btn-usual-close");
+		By playAgain = By.cssSelector("div[data-chapter-id][class='btn-retry cnt-quest']");
 		
-		WebElement element;
-		wait.until(ExpectedConditions.or(
-				ExpectedConditions.elementToBeClickable(ok),
-				ExpectedConditions.elementToBeClickable(ctrl),
-				//ExpectedConditions.textToBePresentInElementLocated(By.className("prt-popup-header"), "Battle Concluded"),
-				ExpectedConditions.elementToBeClickable(By.className("prt-tips-box"))
-		));
-		System.out.println("Results proceeding");
-		IsElementPresent ePresent = new IsElementPresent();
-		if (ePresent.isElementPresent(driver, ok)) {
-			System.out.println("ok");
-			element = driver.findElement(ok);
-		} else if (ePresent.isElementPresent(driver, ctrl)) {
-			System.out.println("ctrl");
-			element = driver.findElement(ctrl);
-		} else {
-			System.out.println("Results failed");
+		String resultsURL = "https://game.granbluefantasy.jp/#result";
+		
+		while (driver.getCurrentUrl().startsWith(resultsURL)) {
+			System.out.println("In Results Wait Loop");
+			wait.until(ExpectedConditions.or(
+					ExpectedConditions.visibilityOfElementLocated(popup),
+					ExpectedConditions.elementToBeClickable(rankup),
+					ExpectedConditions.elementToBeClickable(ok),
+					ExpectedConditions.elementToBeClickable(ctrl),
+					ExpectedConditions.elementToBeClickable(close),
+					ExpectedConditions.elementToBeClickable(playAgain))); 
+			String url = driver.getCurrentUrl();
+			List<WebElement> elementPopup = driver.findElements(popup);
+			List<WebElement> elementRankup = driver.findElements(rankup);
+			List<WebElement> elementOk = driver.findElements(ok);
+			List<WebElement> elementCtrl = driver.findElements(ctrl);
+			List<WebElement> elementClose = driver.findElements(close);
+			List<WebElement> elementPlayAgain = driver.findElements(playAgain);
+			if (url.startsWith("https://game.granbluefantasy.jp/#result_multi/empty")) {
+				wait.until(ExpectedConditions.elementToBeClickable(ctrl));
+				driver.findElement(ctrl).click(); 
+			} else if (!elementRankup.isEmpty() && elementRankup.get(0).isDisplayed()) {
+				System.out.println("Rankup");
+				wait.until(ExpectedConditions.elementToBeClickable(elementRankup.get(0)));
+				Thread.sleep(1000); //Necessary sleep for canvas anim to play
+				elementRankup.get(0).click();
+				wait.until(ExpectedConditions.stalenessOf(elementRankup.get(0)));
+				System.out.println("Rankup clicked");
+			} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
+				System.out.println("Close");
+				elementClose.get(0).click();
+				wait.until(ExpectedConditions.stalenessOf(elementClose.get(0)));
+			} else if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
+				System.out.println("Popup Ok");
+				System.out.println(elementPopup.get(0).findElement(By.className("prt-popup-header")).getText());
+				elementOk.get(0).click();
+				wait.until(ExpectedConditions.invisibilityOf(elementPopup.get(0))); 	
+			/*} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
+				System.out.println("Ok");
+				elementOk.get(0).click();
+				wait.until(ExpectedConditions.invisibilityOfElementLocated(ok)); */			
+			} else if (retry  && !elementPlayAgain.isEmpty() && elementPlayAgain.get(0).isDisplayed()) {
+				System.out.println("PlayAgain");
+				elementPlayAgain.get(0).click();
+				break;
+			} else if (!elementCtrl.isEmpty() && elementCtrl.get(0).isDisplayed()) {
+				System.out.println("Ctrl");
+				elementCtrl.get(0).click();
+				//wait.until(ExpectedConditions.invisibilityOfElementLocated(ctrl));
+				System.out.println("Ctrl complete");
+				break;
+			}
+		}
+		
+		List<WebElement> elementPopup = driver.findElements(popup);
+		while (!elementPopup.isEmpty() && driver.getCurrentUrl().startsWith(resultsURL)) {
+			System.out.println("In Results Wait Loop 2");
+			wait.until(ExpectedConditions.or(
+					ExpectedConditions.visibilityOfElementLocated(popup),
+					ExpectedConditions.elementToBeClickable(ok),
+					ExpectedConditions.elementToBeClickable(close)));
+			elementPopup = driver.findElements(popup);
+			if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
+				System.out.println("Popup Ok");
+				System.out.println(elementPopup.get(0).findElement(By.className("prt-popup-header")).getText());
+				List<WebElement> elementNext = driver.findElements(next);
+				List<WebElement> elementOk = driver.findElements(ok);
+				List<WebElement> elementClose = driver.findElements(close);
+				if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed()) {
+					System.out.println("PlayAgain Next");
+					elementNext.get(0).click();
+				} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
+					System.out.println("PlayAgain Ok");
+					elementOk.get(0).click();
+				} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
+					System.out.println("PlayAgain Close");
+					elementClose.get(0).click();
+				}
+			}
+		}
+		if (driver.getCurrentUrl().startsWith("https://game.granbluefantasy.jp/#quest/supporter")) {
+			System.out.println("Results return to supporter");
+			return;
+		} else if (driver.getCurrentUrl().startsWith("https://game.granbluefantasy.jp/#quest/assist")) {
+			System.out.println("Results return to Backup Requests");
 			return;
 		}
-		
-		String url = driver.getCurrentUrl();
-		System.out.println(url + " " + driver.getCurrentUrl());
-		if (url.startsWith("https://game.granblue.jp/#result_multi/empty")) {
-			Thread.sleep(1000);
-			element.click(); //Back to Backup Requests				
-			Thread.sleep(5000);
-		}
-		else if (url.startsWith("https://game.granbluefantasy.jp/#raid")) {
-			System.out.println("Raid OK");
-			element = wait.until(ExpectedConditions.elementToBeClickable(ok));
-			element.click();
-			Thread.sleep(1000);
-			element = wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-treasure-footer-reload")));
-			element.click();
-			Thread.sleep(4000);
-		}
-		element.getClass();
-		
-		boolean elementExists = ePresent.isElementPresent(driver, ok);
-		if (elementExists) {
-			System.out.println("XP");
-			element = wait.until(ExpectedConditions.elementToBeClickable(ok));
-			element.click(); //XP		
-			Thread.sleep(4000);
-		}
-		
-		
-		elementExists = ePresent.isElementPresent(driver, By.id("cjs-lp-rankup"));
-		while (elementExists) {
-			System.out.println("Rankup");
-			element = wait.until(ExpectedConditions.elementToBeClickable(By.id("cjs-lp-rankup")));
-			element.click();			
-			Thread.sleep(1000);
-			elementExists = ePresent.isElementPresent(driver, By.id("cjs-lp-rankup"));
-		}
-		
-		
-		elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-close"));
-		if (elementExists) {
-			System.out.println("Missions");
-			element = wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-usual-close")));
-			element.click(); //Tokens			
-			Thread.sleep(1000);
-		}
-		elementExists = ePresent.isElementPresent(driver, ok);
-		if (elementExists) {
-			System.out.println("Tokens");
-			element = wait.until(ExpectedConditions.elementToBeClickable(ok));
-			element.click(); //Tokens			
-			Thread.sleep(1000);
-			elementExists = ePresent.isElementPresent(driver, ok);
-			if (elementExists) {
-				System.out.println("Missions");
-				element = wait.until(ExpectedConditions.elementToBeClickable(ok));
-				Thread.sleep(1000);
-				element.click(); //Tokens			
-				Thread.sleep(1000);
-			}
-		}
-
-		elementExists = ePresent.isElementPresent(driver, By.id("cjs-lp-rankup"));
-		while (elementExists) {
-			System.out.println("Rankup");
-			element = wait.until(ExpectedConditions.elementToBeClickable(By.id("cjs-lp-rankup")));
-			element.click();			
-			Thread.sleep(1000);
-			elementExists = ePresent.isElementPresent(driver, By.id("cjs-lp-rankup"));
-		}
-		//elementExists = ePresent.isElementPresent(driver, By.className("btn-retry"));
-		
-		elementExists = ePresent.isElementPresent(driver, By.cssSelector("div[data-chapter-id][class='btn-retry cnt-quest']"));  //Retry
-		boolean expeditionExists = ePresent.isElementPresent(driver, By.xpath(expeditionXpath)); //Expedition
-		boolean spExists = ePresent.isElementPresent(driver, ctrl); //SP Quests
-		//System.out.println (elementExists);
-		//System.out.println (retry);
-		if (elementExists && retry) {
-			System.out.println("Retry");
-			element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(retryXpath)));
-			element.click(); //Retry			
-			Thread.sleep(1000);
-			elementExists = ePresent.isElementPresent(driver, next); //Dimensional Halo, Play Next			
-			if (elementExists) {
-				System.out.println("Dimensional Halo");
-				return;
-			}
-			elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-close")); //Mission
-			if (elementExists) {
-				System.out.println("Mission Close");
-				element = wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-usual-close")));
-				element.click();
-				Thread.sleep(2000);
-			}
-		} else if (expeditionExists) {
-			System.out.println("Expedition");
-			element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(expeditionXpath)));
-			element.click(); //Expedition			
-			Thread.sleep(1000);
-		} else if (spExists) {
-			System.out.println("Back to SP Quests");
-			element = wait.until(ExpectedConditions.elementToBeClickable(ctrl));
-			element.click(); //Back to SP Quests				
-			Thread.sleep(5000);
-		}
-		
-		
-		elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-close"));  //Close Missions
-		if (elementExists) {
-			System.out.println("Skyscope Mission Close");
-			element = wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-usual-close")));
-			element.click();
-			Thread.sleep(1000);
-		}
+		System.out.println("Results return");
 		return;
+
+		// "div[class='btn-result']" > Next button during stalled raid battle (angel halo)
+		/* Pre popups:
+		 * pop-usual pop-exp pop-show : EXP Gained
+		 * pop-usual pop-interlude-book-status-up pop-show : Sephira Guidebook 
+		 * pop-usual pop-interlude-mission-achieved pop-show : Tales Missions
+		 * pop-usual pop-interlude-searchrank-up pop-show : Rank Increased
+		 * pop-usual pop-chara-change-ability pop-show : Skill Enhanced
+		 * 
+		 * Post popups:
+		 * pop-usual js-pop-skyscope-achieved pop-skyscope-achieved-mission pop-show : Skyscope
+		 * 
+		 */
+
 	}
 }
