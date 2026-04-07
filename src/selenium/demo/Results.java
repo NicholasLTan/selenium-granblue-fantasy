@@ -75,33 +75,37 @@ public class Results {
 				break;
 			}
 		}
+		//Thread.sleep(1000); //Necessary sleep for potential popup to manifest
 		
-		List<WebElement> elementPopup = driver.findElements(popup);
-		while (!elementPopup.isEmpty() && driver.getCurrentUrl().startsWith(resultsURL)) {
+		while ( driver.getCurrentUrl().startsWith(resultsURL)) {
 			System.out.println("In Results Wait Loop 2");
-			wait.until(ExpectedConditions.or(
-					ExpectedConditions.visibilityOfElementLocated(popup),
-					ExpectedConditions.elementToBeClickable(ok),
-					ExpectedConditions.elementToBeClickable(close)));
-			elementPopup = driver.findElements(popup);
-			if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
-				System.out.println("Popup Ok");
-				System.out.println(elementPopup.get(0).findElement(By.className("prt-popup-header")).getText());
-				List<WebElement> elementNext = driver.findElements(next);
-				List<WebElement> elementOk = driver.findElements(ok);
-				List<WebElement> elementClose = driver.findElements(close);
-				if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed()) {
-					System.out.println("PlayAgain Next");
-					elementNext.get(0).click();
-					wait.until(ExpectedConditions.stalenessOf(elementNext.get(0)));
-				} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
-					System.out.println("PlayAgain Ok");
-					elementOk.get(0).click();
-					wait.until(ExpectedConditions.stalenessOf(elementOk.get(0)));
-				} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
-					System.out.println("PlayAgain Close");
-					elementClose.get(0).click();
-					wait.until(ExpectedConditions.stalenessOf(elementClose.get(0)));
+			Thread.sleep(500);
+			List<WebElement> elementPopup = driver.findElements(popup);
+			while (!elementPopup.isEmpty()) {
+				wait.until(ExpectedConditions.or(
+						ExpectedConditions.visibilityOfElementLocated(popup),
+						ExpectedConditions.elementToBeClickable(ok),
+						ExpectedConditions.elementToBeClickable(close)));				
+				elementPopup = driver.findElements(popup);
+				if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
+					System.out.println("Popup Ok");
+					System.out.println(elementPopup.get(0).findElement(By.className("prt-popup-header")).getText());
+					List<WebElement> elementNext = driver.findElements(next);
+					List<WebElement> elementOk = driver.findElements(ok);
+					List<WebElement> elementClose = driver.findElements(close);
+					if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed()) {
+						System.out.println("PlayAgain Next");
+						elementNext.get(0).click();
+						wait.until(ExpectedConditions.stalenessOf(elementNext.get(0)));
+					} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
+						System.out.println("PlayAgain Ok");
+						elementOk.get(0).click();
+						wait.until(ExpectedConditions.stalenessOf(elementOk.get(0)));
+					} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
+						System.out.println("PlayAgain Close");
+						elementClose.get(0).click();
+						wait.until(ExpectedConditions.stalenessOf(elementClose.get(0)));
+					}
 				}
 			}
 		}
