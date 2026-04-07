@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class PlayAgain {
 	public void playAgain(WebDriver driver, WebDriverWait longWait, String itemID) throws InterruptedException {
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		AutoBattle autoBattle = new AutoBattle();
+		//AutoBattle autoBattle = new AutoBattle();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		Battle battle = new Battle();
 		MaterialTracker materialTracker = new MaterialTracker();
@@ -27,7 +27,7 @@ public class PlayAgain {
 	public void playAgain(WebDriver driver, WebDriverWait longWait, int maxAttempts) throws InterruptedException {
 		int attempts = 0;
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		AutoBattle autoBattle = new AutoBattle();
+		//AutoBattle autoBattle = new AutoBattle();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		Battle battle = new Battle();
 		while (attempts < maxAttempts) {
@@ -42,7 +42,7 @@ public class PlayAgain {
 				results.results(driver, wait, true);
 			}
 			attempts++;
-			System.out.println(attempts);
+			System.out.println("Run " + attempts + "/" + maxAttempts + " completed");
 		}
 	}
 }
