@@ -12,15 +12,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class JourneyDropsActivate {
 	public void journeyDropsActivate(WebDriver driver) throws InterruptedException {
-		
-		driver.get("https://game.granbluefantasy.jp/#shop/exchange/trajectory"); 
+		System.out.println("Starting JD");
+		driver.get("https://game.granbluefantasy.jp/#shop/exchange/trajectory");
+		//driver.get("https://https://www.google.com/");
 		String hours = "2";
 		String[] dropList = {"1","2","6"};
 		By ok = By.className("btn-usual-ok");
 		By cancel = By.className("btn-usual-cancel");
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		System.out.println("Before trangect");
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("txt-trangect-num")));
-		int jdNum = Integer.valueOf(driver.findElement(By.className("txt-trangect-num")).getText()); 
+		int jdNum = Integer.valueOf(driver.findElement(By.className("txt-trangect-num")).getText());
+		System.out.println("After trangect");
 		for (String dropId : dropList) {
 			By jdByCSS = By.cssSelector("div[data-support-id='" + dropId + "']");
 			if (Integer.valueOf(dropId) > 5) {
