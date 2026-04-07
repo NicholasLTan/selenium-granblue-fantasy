@@ -35,10 +35,12 @@ public class FarmVeritas {
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		AutoBattle autoBattle = new AutoBattle();
+		Battle battle = new Battle();
 		Reload reload = new Reload();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(200));
 		Results results = new Results();
 		WebElement element;
+		By ok = By.className("btn-usual-ok"); 
 		IsElementPresent ePresent = new IsElementPresent();
 		
 		//driver.findElement(By.className("btn-head-pop")).click();  //Menu
@@ -72,20 +74,23 @@ public class FarmVeritas {
 				System.out.println("Chest");
 				driver.findElement(chestBy).click();
 				Thread.sleep(500);
-				wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-usual-ok")));
-				driver.findElement(By.className("btn-usual-ok")).click();
+				wait.until(ExpectedConditions.elementToBeClickable(ok));
+				WebElement okButton = driver.findElement(ok);
+				okButton.click();
+				wait.until(ExpectedConditions.stalenessOf(okButton));
+				Thread.sleep(500); //To prevent potentially detecting stale ok button
 				wait.until(ExpectedConditions.or(
 						ExpectedConditions.elementToBeClickable(By.cssSelector(mimicClass)),
-						ExpectedConditions.elementToBeClickable(By.className("btn-usual-ok")),
+						ExpectedConditions.elementToBeClickable(ok),
 						ExpectedConditions.elementToBeClickable(By.cssSelector(questClass))));
 				if (ePresent.isElementPresent(driver, By.cssSelector(mimicClass))) { //Mimic
 					driver.findElement(By.cssSelector(mimicClass)).click();
 					wait.until(ExpectedConditions.urlMatches("https://game.granbluefantasy.jp/#replicard/supporter/"));
 					confirmTeam.confirmTeam(wait);
-					autoBattle.autoBattle(driver, wait);
+					battle.battle(driver, wait);
 					results.results(driver, wait, false);					
 				} else {
-					driver.findElement(By.className("btn-usual-ok")).click();
+					driver.findElement(ok).click();
 				}
 				wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(questClass)));
 			}
@@ -108,7 +113,7 @@ public class FarmVeritas {
 				System.out.println("cost = " + cost);
 			}
 			confirmTeam.confirmTeam(wait);
-			autoBattle.autoBattle(driver, wait);
+			battle.battle(driver, wait);
 			if ( cost == 20 && turnReload ) {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(120));
 				//reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
