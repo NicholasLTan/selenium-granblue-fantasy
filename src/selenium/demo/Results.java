@@ -93,12 +93,15 @@ public class Results {
 				if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed()) {
 					System.out.println("PlayAgain Next");
 					elementNext.get(0).click();
+					wait.until(ExpectedConditions.stalenessOf(elementNext.get(0)));
 				} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
 					System.out.println("PlayAgain Ok");
 					elementOk.get(0).click();
+					wait.until(ExpectedConditions.stalenessOf(elementOk.get(0)));
 				} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
 					System.out.println("PlayAgain Close");
 					elementClose.get(0).click();
+					wait.until(ExpectedConditions.stalenessOf(elementClose.get(0)));
 				}
 			}
 		}
