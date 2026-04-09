@@ -22,6 +22,8 @@ public class AngelHalo {
 	
 	@Test
 	public void angelHalo() throws InterruptedException {
+		int maxRelics = 13; // Number of Silver Relics to farm
+		
 		Login login = new Login();
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
@@ -29,18 +31,17 @@ public class AngelHalo {
 		SemiAuto semiAuto = new SemiAuto();
 		AutoBattleNew autoBattleNew = new AutoBattleNew();
 		AutoBattle autoBattle = new AutoBattle();
+		Battle battle = new Battle();
 
 		driver.get("https://game.granbluefantasy.jp/#quest/extra");
-		//Thread.sleep(2000);
-		
-		int maxRelics = 20; // Optional: To prevent infinite loops
 		int relics = 0;
 		while (relics < maxRelics) {
 			int haloCount = 0;
 			this.AngelVH(driver); //Angel Halo VH quest
 			while (haloCount < 10) {
 				confirmTeam.confirmTeam(wait);
-				semiAuto.semiAuto(driver, wait);
+				//semiAuto.semiAuto(driver, wait);
+				battle.battle(driver, wait);
 				//autoBattleNew.autoBattleNew(driver, wait);
 				haloCount++;
 				System.out.println(relics + "." + haloCount );
@@ -52,19 +53,15 @@ public class AngelHalo {
 					System.out.println(haloCount + " VHs");
 					relics++;
 					haloCount=10;
-
 					driver.findElement(By.className("btn-usual-next")).click();
 					System.out.println("DHalo start " + relics ); 
-					//Thread.sleep(2000);
-
-
 					confirmTeam.confirmTeam(wait);		  
-					autoBattle.autoBattle(driver, wait);
+					//autoBattle.autoBattle(driver, wait);
+					battle.battle(driver, wait);
 					results.results(driver, wait, false);								
 				}
 			}
 		}
 		System.out.println("Angel Halo farming complete");
 	}
-
 }
