@@ -81,8 +81,8 @@ public class FarmVeritas {
 				Thread.sleep(500); //To prevent potentially detecting stale ok button
 				wait.until(ExpectedConditions.or(
 						ExpectedConditions.elementToBeClickable(By.cssSelector(mimicClass)),
-						ExpectedConditions.elementToBeClickable(ok),
-						ExpectedConditions.elementToBeClickable(By.cssSelector(questClass))));
+						ExpectedConditions.elementToBeClickable(ok)));
+						//ExpectedConditions.elementToBeClickable(By.cssSelector(questClass))));
 				if (ePresent.isElementPresent(driver, By.cssSelector(mimicClass))) { //Mimic
 					driver.findElement(By.cssSelector(mimicClass)).click();
 					wait.until(ExpectedConditions.urlMatches("https://game.granbluefantasy.jp/#replicard/supporter/"));
