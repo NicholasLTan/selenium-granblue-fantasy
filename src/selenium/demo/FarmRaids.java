@@ -26,6 +26,7 @@ public class FarmRaids {
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		Results results = new Results();
 		WebElement refresh;
+		WebElement element;
 		IsElementPresent ePresent = new IsElementPresent();
 		//WebElement raid;
 
@@ -41,9 +42,11 @@ public class FarmRaids {
 			if (driver.getCurrentUrl() != "https://game.granbluefantasy.jp/#quest/assist") {
 				driver.get("https://game.granbluefantasy.jp/#quest/assist");
 				System.out.println("Raids");
-				wait.until(ExpectedConditions.elementToBeClickable(By.id("tab-search")));
-				driver.findElement(By.id("tab-search")).click();
-				System.out.println("search click");
+				element = wait.until(ExpectedConditions.elementToBeClickable(By.id("tab-search")));
+				if ( element.getAttribute("class").equals("btn-tabs")) {
+					driver.findElement(By.id("tab-search")).click();
+					System.out.println("search click");
+				}
 				wait.until(ExpectedConditions.elementToBeClickable(finderSlot));
 				driver.findElement(finderSlot).click();
 				System.out.println("finder click");
@@ -153,7 +156,7 @@ public class FarmRaids {
 			}
 
 			if (!retry) {
-				confirmTeam.confirmTeam(wait);
+				confirmTeam.confirmTeam(driver, wait);
 				//Thread.sleep(1500);
 				String url = driver.getCurrentUrl();
 				System.out.println("Conf " + url + " Auto");
