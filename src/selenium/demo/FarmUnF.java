@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmUnF {
 	@Test
 	public void farmUnF() throws InterruptedException {
-		int maxAttempts = 30; // Optional: To prevent infinite loops;
+		int maxAttempts = 60; // Optional: To prevent infinite loops;
 		int target = 3; // Selects quest. Choose from 1-5 below
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -25,7 +25,9 @@ public class FarmUnF {
 		System.out.println("UnF");
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-ranking-profile")));
 		
-		if (target == 5) {banner = driver.findElement(By.className("btn-ex-raid4")); } //Nightmare;
+		if (target == 7) {banner = driver.findElement(By.className("btn-ex-raid6")); } //United Battle
+		else if (target == 6) {banner = driver.findElement(By.className("btn-ex-raid5")); } //Nightmare;
+		else if (target == 5) {banner = driver.findElement(By.className("btn-ex-raid4")); } //Nightmare;
 		else if (target == 4) {banner = driver.findElement(By.className("btn-ex-raid4")); } //Nightmare;
 		else if (target == 3) {banner = driver.findElement(By.className("btn-ex-raid2")); } //BaitFarm;
 		else if (target == 2) {banner = driver.findElement(By.className("btn-raid-select")); } //Solo;
@@ -36,7 +38,9 @@ public class FarmUnF {
 		banner.click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class*='pop-raid']")));
 		
-		if (target == 5) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94268']")); } //NM95
+		if (target == 7) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94270']")); } //NM150
+		else if (target == 6) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94269']")); } //NM100
+		else if (target == 5) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94268']")); } //NM95
 		else if (target == 4) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94267']")); } //NM90
 		else if (target == 3) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94265']")); } //Extreme+
 		else if (target == 2) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94263']")); //Very Hard
