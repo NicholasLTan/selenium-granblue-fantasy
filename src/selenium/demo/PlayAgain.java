@@ -14,12 +14,16 @@ public class PlayAgain {
 		Results results = new Results();
 		boolean nextLoop = true;
 		while (nextLoop) {
+			wait.until(ExpectedConditions.urlContains("supporter"));
 			confirmTeam.confirmTeam(driver, wait);
+			wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid"));
 			battle.battle(driver, longWait);
 			nextLoop = materialTracker.materialTracker(driver, itemID);
 			results.results(driver, wait, true);
+			if ( driver.getCurrentUrl().equals("https://game.granbluefantasy.jp/#quest/extra") ) { return; }
 		}
 		results.results(driver, wait, false);
+		return;
 	}
 	
 	public void playAgain(WebDriver driver, WebDriverWait longWait, int maxAttempts) throws InterruptedException {
@@ -41,5 +45,6 @@ public class PlayAgain {
 			attempts++;
 			System.out.println("Run " + attempts + "/" + maxAttempts + " completed");
 		}
+		return;
 	}
 }
