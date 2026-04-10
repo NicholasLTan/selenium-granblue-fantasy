@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmUnF {
 	@Test
 	public void farmUnF() throws InterruptedException {
-		int maxAttempts = 60; // Optional: To prevent infinite loops;
+		int maxAttempts = 50; // Optional: To prevent infinite loops;
 		int target = 3; // Selects quest. Choose from 1-5 below
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -25,14 +25,24 @@ public class FarmUnF {
 		System.out.println("UnF");
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-ranking-profile")));
 		
-		if (target == 7) {banner = driver.findElement(By.className("btn-ex-raid6")); } //United Battle
-		else if (target == 6) {banner = driver.findElement(By.className("btn-ex-raid5")); } //Nightmare;
-		else if (target == 5) {banner = driver.findElement(By.className("btn-ex-raid4")); } //Nightmare;
-		else if (target == 4) {banner = driver.findElement(By.className("btn-ex-raid4")); } //Nightmare;
-		else if (target == 3) {banner = driver.findElement(By.className("btn-ex-raid2")); } //BaitFarm;
-		else if (target == 2) {banner = driver.findElement(By.className("btn-raid-select")); } //Solo;
-		else if (target == 1) {banner = driver.findElement(By.className("btn-raid-select")); } //Solo;
-		
+		if (target == 7) { //United Battle
+			boolean isPresent = !driver.findElements(By.className("btn-ex-raid7")).isEmpty();
+			if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid7")); }
+			else {
+				isPresent = !driver.findElements(By.className("btn-ex-raid6")).isEmpty();
+				if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid6")); }
+				else { System.out.println("ERROR: United Battle class not found"); }
+			}
+		} else if (target <= 6 && target >= 4) { //Nightmare
+				boolean isPresent = !driver.findElements(By.className("btn-ex-raid5")).isEmpty();
+				if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid5")); }
+				else {
+					isPresent = !driver.findElements(By.className("btn-ex-raid4")).isEmpty();
+					if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid4")); }
+					else { System.out.println("ERROR: Nightmare class not found"); }
+				}
+		} else if (target == 3) {banner = driver.findElement(By.className("btn-ex-raid2")); } //BaitFarm;
+		else if (target <= 2) {banner = driver.findElement(By.className("btn-raid-select")); } //Solo;		
 		
 		System.out.println(banner.findElement(By.className("img-btn-raid")).getAttribute("alt"));
 		banner.click();
