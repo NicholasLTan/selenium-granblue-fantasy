@@ -13,6 +13,9 @@ public class DreadBarrage {
 
 	@Test
 	public void dreadBarrage() throws InterruptedException {
+		int quest = 5;
+		int maxAttempts = 10; // Optional: To prevent infinite loops
+		
 		Login login = new Login();
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
@@ -25,26 +28,24 @@ public class DreadBarrage {
 		//driver.findElement(By.cssSelector("[alt='banner_event_start_1']")).click();
 		Thread.sleep(2000);
 
-		// 1*
-		//driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[1]/div[2]")).click();
-
-		// 2*
-		//driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[2]/div[2]")).click();
-		//System.out.println("2*");
-
-		// 3*
-		//driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[3]/div[2]")).click();
-
-		// 4*
-		//driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[4]/div[2]")).click();
-		//System.out.println("4*");
-
-		// 5*
-		driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[5]/div[2]")).click();
-		System.out.println("5*");
+		if ( quest == 5 ) {
+			driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[5]/div[2]")).click();
+			System.out.println("5*");
+		} else if ( quest == 4 ) {
+			driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[4]/div[2]")).click();
+			System.out.println("4*");
+		} else if ( quest == 3 ) {
+			driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[3]/div[2]")).click();
+			System.out.println("3*");
+		} else if ( quest == 2 ) {
+			driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[2]/div[2]")).click();
+			System.out.println("2*");
+		} else if ( quest == 1 ) {
+			driver.findElement(By.xpath("//*[@id=\"enemy-info-list\"]/div[2]/div[1]/div[2]")).click();
+			System.out.println("1*");
+		}
 		Thread.sleep(2000);
-
-		int maxAttempts = 10; // Optional: To prevent infinite loops
+	
 		int attempts = 0;
 		while (attempts < maxAttempts) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1000));
