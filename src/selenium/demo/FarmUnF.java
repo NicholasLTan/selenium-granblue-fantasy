@@ -25,7 +25,7 @@ public class FarmUnF {
 		System.out.println("UnF");
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-ranking-profile")));
 		
-		if (target == 7) { //United Battle
+		if (target >= 7) { //United Battle
 			boolean isPresent = !driver.findElements(By.className("btn-ex-raid8")).isEmpty();
 			if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid8")); }
 			else {
@@ -52,7 +52,9 @@ public class FarmUnF {
 		banner.click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class*='pop-raid']")));
 		
-		if (target == 7) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94270']")); } //NM150
+		if (target == 9) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94272']")); } //NM250
+		else if (target == 8) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94271']")); } //NM200
+		else if (target == 7) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94270']")); } //NM150
 		else if (target == 6) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94269']")); } //NM100
 		else if (target == 5) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94268']")); } //NM95
 		else if (target == 4) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94267']")); } //NM90
