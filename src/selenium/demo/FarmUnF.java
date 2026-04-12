@@ -12,7 +12,7 @@ public class FarmUnF {
 	@Test
 	public void farmUnF() throws InterruptedException {
 		int maxAttempts = 50; // Optional: To prevent infinite loops;
-		int target = 3; // Selects quest. Choose from 1-5 below
+		int target = 7; // Selects quest. Choose from 1-5 below
 		Login login = new Login();
 		WebDriver driver = login.login();
 		PlayAgain playAgain = new PlayAgain();
@@ -26,12 +26,16 @@ public class FarmUnF {
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-ranking-profile")));
 		
 		if (target == 7) { //United Battle
-			boolean isPresent = !driver.findElements(By.className("btn-ex-raid7")).isEmpty();
-			if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid7")); }
+			boolean isPresent = !driver.findElements(By.className("btn-ex-raid8")).isEmpty();
+			if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid8")); }
 			else {
-				isPresent = !driver.findElements(By.className("btn-ex-raid6")).isEmpty();
-				if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid6")); }
-				else { System.out.println("ERROR: United Battle class not found"); }
+				isPresent = !driver.findElements(By.className("btn-ex-raid7")).isEmpty();
+				if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid7")); }
+				else { 
+					isPresent = !driver.findElements(By.className("btn-ex-raid6")).isEmpty();
+					if (isPresent) { banner = driver.findElement(By.className("btn-ex-raid6")); }
+					else { System.out.println("ERROR: United Battle class not found"); }
+				}
 			}
 		} else if (target <= 6 && target >= 4) { //Nightmare
 				boolean isPresent = !driver.findElements(By.className("btn-ex-raid5")).isEmpty();
