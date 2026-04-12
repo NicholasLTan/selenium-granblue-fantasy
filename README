@@ -1,0 +1,41 @@
+Welcome to the Selenium automation project for Granblue Fantasy
+New events require updating for URLs, battle IDs
+
+
+Event-specific automation classes
+-----
+DreadBarrage.java -- Farm Dread Barrage event 
+EventNew.java -- For story events using New style (free 5 raids/day). Farms free dailies and uses up materials for quests.   
+EventOld.java -- For story events using Old style (Solo Maniac 2x/day).
+FarmExo.java -- Farm Exo events. Farms most recently selected difficulty
+FarmRaidEvent.java -- Farm Raid Battles for any given event.
+FarmRotBBadges.java -- Farm for Rise of the Beasts
+FarmUnF.java -- Farm for Unite and Fight
+FreeSP.java -- Farm Campaign-Exclusive Quest that occurs during festivals (0 AP until 30 clears, 15 AP until 300, 20 AP for 301+)
+RecordsTen.java -- Farm Records of the Ten
+=====
+Standard automation classes
+-----
+AngelHalo.java -- Farm AngelHalo for Dimension Halo drops
+FarmFavorite.java -- Farm your personal Favorited missions
+FarmRaids.java -- Farm normal Raids. Can be set to farm quickly (low %) or for FP (high %). Can farm to 1/0 EP, or using berries 
+FarmSpecialQuest.java -- Farm specified Special Quest 
+FarmVeritas.java -- Farm Arcarum: Replicard Sandbox
+=====
+Helper classes
+-----
+Login.java -- Called by individual automation classes. Logs into the app, and can call JourneyDropsActivate(). 
+				Requires using a chrome instance with a remote-debugging-port enabled to 9222
+JourneyDropsActivate.java -- Auto enables x hours of XP, Rank XP, Drop Rate by default.
+PlayAgain.java -- Main logic loop for many automation classes
+ConfirmTeam.java -- Confirms team/support summon. Requires auto-pick support summon to be enabled. 
+AutoBattle.java -- Handles click of Auto/Semi-auto buttons; generally called by Battle.java
+Battle.java -- Watches during the battle for exceptional popups, and calls AutoBattle()
+Results.java -- Handles the Results screen, dealing with any XP, Rankups, popups, missions, replaying or returning to RaidSelector/Quests 
+MaterialTracker.java -- boolean. For item farming, checks if itemID in bottom ribbon has reached desired count. Requires item to be favorited and have a target number.  
+IsElementPresent.java -- boolean. Checks existence of element given a By. 
+=====
+Deprecated
+-----
+AutoBattleNew.java -- Failed attempt at handling auto-battle from pre-battle screen.
+SemiAuto.java -- Functionality rolled into AutoBattle.java 
