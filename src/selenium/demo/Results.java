@@ -46,7 +46,7 @@ public class Results {
 			} else if (!elementRankup.isEmpty() && elementRankup.get(0).isDisplayed()) {
 				System.out.println("Rankup");
 				wait.until(ExpectedConditions.elementToBeClickable(elementRankup.get(0)));
-				Thread.sleep(1500); //Necessary sleep for canvas anim to play
+				Thread.sleep(2500); //Necessary sleep for canvas anim to play
 				elementRankup.get(0).click();
 				wait.until(ExpectedConditions.stalenessOf(elementRankup.get(0)));
 				System.out.println("Rankup clicked");
