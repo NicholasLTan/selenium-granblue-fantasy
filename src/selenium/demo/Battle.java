@@ -1,5 +1,7 @@
 package selenium.demo;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,13 +18,14 @@ public class Battle {
 			wait.until(ExpectedConditions.or(
 					ExpectedConditions.visibilityOfElementLocated(popup),
 					ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result")));
-			WebElement element = driver.findElement(ok);
-			if (element.isDisplayed()) {
+			List<WebElement> elementPopup = driver.findElements(popup); 
+			if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed() ) {
 				System.out.println("Battle OK Click");
-				element.click();
-				wait.until(ExpectedConditions.stalenessOf(element));
+				elementPopup.get(0).findElement(ok).click();
+				wait.until(ExpectedConditions.stalenessOf(elementPopup.get(0)));
+				driver.findElement(By.className("btn-treasure-footer-reload")).click();
+				return;
 			}
-			
 		}
 		if (!driver.getCurrentUrl().startsWith("https://game.granbluefantasy.jp/#raid")) {
 			return;
