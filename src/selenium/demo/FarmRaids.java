@@ -12,11 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaids {
 	@Test
 	public void farmRaids() throws InterruptedException {
-		boolean exitAtZero = true;
+		boolean exitAtZero = false;
 		boolean speedFarm = true;
-		int maxAttempts = 15; // Optional: To prevent infinite loops		
+		int maxAttempts = 10; // Optional: To prevent infinite loops		
 		int minHP = 20;
-		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot2']");
+		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot4']");
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -99,14 +99,19 @@ public class FarmRaids {
 			int minPct = 100;
 			int minNum = 0;
 			int currBP = Integer.valueOf(driver.findElement(By.cssSelector("div[data-current-bp]")).getAttribute("data-current-bp"));
+			boolean crew = false;
 			System.out.println(currBP + " BP");
 			if ( exitAtZero && currBP <= 1 ) { break; }
-			for (WebElement raid : raids) {				
+			for (WebElement raid : raids) {
+				if (raid.getAttribute("class").endsWith("guild-member")) {
+					crew = true;
+					break;
+				}
 				WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[2]"));
 				WebElement raidPct = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[@class='prt-raid-gauge']/div[@class='prt-raid-gauge-inner']"));
 				String strPct = raidPct.getAttribute("style");
 				int intPct = Integer.parseInt(strPct.replaceAll("\\D+", ""));				
-				
+				//<div class="btn-multi-raid lis-raid guild-member" data-quest-id="743461" data-quest-type="1" data-raid-id="45287985320" data-raid-type="1" data-viewer-id="" data-chapter-name="Lvl 150 Shenxian" data-bp="2" data-buff-name="" data-cjs-id="9101593" data-is-semi="false" data-timeline-id="633" data-user-id="19656090"><div class="prt-raid-thumbnail"><img class="img-raid-thumbnail" data-raid-id="45287985320" src="https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/assets/summon/qm/6063771_highlevel.png" alt="assets/summon/qm/6063771_highlevel"></div><div class="prt-raid-info"><div class="txt-raid-name" style="width: 180px; font-size: 12px; height: 12px; line-height: 12px;">Lvl 150 Shenxian</div><div class="prt-item-effect"></div><div class="prt-raid-status"><div class="prt-raid-gauge"><div class="prt-raid-gauge-inner" style="width: 38%;"></div></div><div class="prt-use-ap" data-ap="2" data-ap-max="3"><span class="ico-ap"></span><span class="ico-ap"></span><span class="ico-ap-none"></span></div></div><div class="prt-raid-subinfo"><div class="prt-flees-in">1/18</div><div class="prt-remaining-time">01:24:41</div></div><div class="prt-request-info"><div class="txt-request">Quest Host:</div> <img class="img-job-icon" src="https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/job/100401.png" alt="100401"><div class="txt-request"><span class="txt-request-name">Seal</span></div><div class="ico-user-status"></div></div></div><div class="prt-button-cover"></div></div>
 				if ((ten || raidStatus.getAttribute("class").equals(lowApStr))) {
 					//System.out.println(raidNum + " " + raidStatus.getAttribute("class") + " " + intPct);					
 					if (intPct > maxPct) {
@@ -120,7 +125,10 @@ public class FarmRaids {
 				}
 				raidNum++;
 			}						
-			if (speedFarm) {
+			if (crew) {
+				System.out.println("crew raid found. raidNum = " + raidNum);
+				//raidNum-- ???
+			} else if (speedFarm) {
 				System.out.println("speed mode. minNum = " + minNum + "; minPct = " + minPct);
 				if (minNum==0) { forcedRefresh = true; continue; }
 				minNum--;
