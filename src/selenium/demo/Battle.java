@@ -18,8 +18,10 @@ public class Battle {
 			wait.until(ExpectedConditions.or(
 					ExpectedConditions.visibilityOfElementLocated(popup),
 					ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result")));
-			List<WebElement> elementPopup = driver.findElements(popup); 
-			if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed() ) {
+			List<WebElement> elementPopup = driver.findElements(popup);
+			if (driver.getCurrentUrl().contains("https://game.granbluefantasy.jp/#result")) {
+				return;
+			} else if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed() ) {
 				System.out.println("Battle OK Click");
 				elementPopup.get(0).findElement(ok).click();
 				wait.until(ExpectedConditions.stalenessOf(elementPopup.get(0)));
