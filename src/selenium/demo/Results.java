@@ -41,8 +41,11 @@ public class Results {
 			List<WebElement> elementClose = driver.findElements(close);
 			List<WebElement> elementPlayAgain = driver.findElements(playAgain);
 			if (url.startsWith("https://game.granbluefantasy.jp/#result_multi/empty")) {
+				System.out.println("Empty result");
 				wait.until(ExpectedConditions.elementToBeClickable(ctrl));
-				driver.findElement(ctrl).click(); 
+				driver.findElement(ctrl).click();
+				System.out.println("CTRL clicked");
+				wait.until(ExpectedConditions.stalenessOf(elementCtrl.get(0)));
 			} else if (!elementRankup.isEmpty() && elementRankup.get(0).isDisplayed()) {
 				System.out.println("Rankup");
 				wait.until(ExpectedConditions.elementToBeClickable(elementRankup.get(0)));
@@ -97,14 +100,17 @@ public class Results {
 						System.out.println("PlayAgain Next");
 						elementNext.get(0).click();
 						wait.until(ExpectedConditions.stalenessOf(elementNext.get(0)));
+						break;
 					} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
 						System.out.println("PlayAgain Ok");
 						elementOk.get(0).click();
 						wait.until(ExpectedConditions.stalenessOf(elementOk.get(0)));
+						break;
 					} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
 						System.out.println("PlayAgain Close");
 						elementClose.get(0).click();
 						wait.until(ExpectedConditions.stalenessOf(elementClose.get(0)));
+						break;
 					}
 				}
 			}
