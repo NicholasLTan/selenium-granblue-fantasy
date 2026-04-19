@@ -12,41 +12,42 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaidEvent {
 	@Test
 	public void farmRaidEvent() throws InterruptedException {
+		final String raidStr = "6063771_highlevel";
+		final String raidCss = "img[alt$='" + raidStr + "']";
+		final String eventUrl = "https://game.granbluefantasy.jp/#event/advent";
+		int maxAttempts = 5; // Optional: To prevent infinite loops
+		
 		Login login = new Login();
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		AutoBattle autoBattle = new AutoBattle();
+		Battle battle = new Battle();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		Results results = new Results();
 		WebElement refresh;
+		List<WebElement> elements;
 		IsElementPresent ePresent = new IsElementPresent();
-		/**UnF
-		final String raidCss = "img[alt$='hell100']";
-		final String raidStr = "hell100";
-		**/
-		final String raidStr = "treasureraid169_high";
-		final String raidCss = "img[alt$='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid169";
-		
-		//WebElement raid;
 
-
-		driver.get("https://game.granbluefantasy.jp/#quest/assist");
+		driver.get("https://game.granbluefantasy.jp/#quest/assist/event");
 		// driver.findElement(By.cssSelector("img[class='img-global-banner'][src*='treasureraid165']")).click();
 		// // Lives Yet Unwritten
 		// driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[2]/div/img")).click();
 		// //Imagination Overdrive banner
-		System.out.println("Raids");
-		Thread.sleep(5000);
+		//System.out.println("Raids");
+		//Thread.sleep(5000);
 
-		driver.findElement(By.id("tab-multi")).click();
-		Thread.sleep(1000);
+		//driver.findElement(By.id("tab-multi")).click();
+		//Thread.sleep(1000);
 
-		driver.findElement(By.cssSelector("div[class^='btn-switch-list event']")).click();
-		Thread.sleep(1000);
-
-		int maxAttempts = 3; // Optional: To prevent infinite loops
+		//driver.findElement(By.cssSelector("div[class^='btn-switch-list event']")).click();
+		//Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='onm-assist-priority'")));
+		elements = driver.findElements(By.cssSelector("div[class^='onm-assist-priority'"));
+		if (!elements.isEmpty() && elements.get(0).getAttribute("class").endsWith("disable")) {
+			elements.get(0).click();
+		}
+//		<div class="btn-multi-raid lis-raid guild-member" data-quest-id="743461" data-quest-type="1" data-raid-id="45287985320" data-raid-type="1" data-viewer-id="" data-chapter-name="Lvl 150 Shenxian" data-bp="2" data-buff-name="" data-cjs-id="9101593" data-is-semi="false" data-timeline-id="633" data-user-id="19656090"><div class="prt-raid-thumbnail"><img class="img-raid-thumbnail" data-raid-id="45287985320" src="https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/assets/summon/qm/6063771_highlevel.png" alt="assets/summon/qm/6063771_highlevel"></div><div class="prt-raid-info"><div class="txt-raid-name" style="width: 180px; font-size: 12px; height: 12px; line-height: 12px;">Lvl 150 Shenxian</div><div class="prt-item-effect"></div><div class="prt-raid-status"><div class="prt-raid-gauge"><div class="prt-raid-gauge-inner" style="width: 38%;"></div></div><div class="prt-use-ap" data-ap="2" data-ap-max="3"><span class="ico-ap"></span><span class="ico-ap"></span><span class="ico-ap-none"></span></div></div><div class="prt-raid-subinfo"><div class="prt-flees-in">1/18</div><div class="prt-remaining-time">01:24:41</div></div><div class="prt-request-info"><div class="txt-request">Quest Host:</div> <img class="img-job-icon" src="https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/job/100401.png" alt="100401"><div class="txt-request"><span class="txt-request-name">Seal</span></div><div class="ico-user-status"></div></div></div><div class="prt-button-cover"></div></div>
 		int attempts = 1;
 		while (attempts <= maxAttempts) {
 			System.out.println("Attempt " + attempts + " started");
@@ -64,7 +65,7 @@ public class FarmRaidEvent {
 				System.out.println("Refresh " + refreshCount);
 				//wait.until(element.isDisplayed() -> element.click());
 				wait.until(ExpectedConditions.elementToBeClickable(refresh));
-				if (refreshCount == 50) {
+				if (refreshCount == 500) {
 					System.out.println(refreshCount + " refreshes");
 					raids = raidList.findElements(By.cssSelector("img[class='img-raid-thumbnail']"));
 					ten = true;
@@ -90,7 +91,12 @@ public class FarmRaidEvent {
 			int raidNum = 1;
 			int maxPct = 0;
 			int maxNum = 0;
-			for (WebElement raid : raids) {				
+			boolean crew = false;
+			for (WebElement raid : raids) {	
+				if (raid.getAttribute("class").endsWith("guild-member")) { // Prioritize crew raid for Prestige pendants
+					crew = true;
+					break;
+				}
 				WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-thumbnail']/img[@class='img-raid-thumbnail']"));
 				WebElement raidPct = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[@class='prt-raid-gauge']/div[@class='prt-raid-gauge-inner']"));
 				String strPct = raidPct.getAttribute("style");
@@ -104,9 +110,16 @@ public class FarmRaidEvent {
 				
 				raidNum++;
 			}
+			if (crew) {
+				System.out.println("crew raid found. raidNum = " + raidNum);
+				maxNum = raidNum;
+				//raidNum-- ???
+			} else {
+				
+			}
 			maxNum--;
 			WebElement raid = raids.get(maxNum);
-			System.out.println("maxNum = " + maxNum);
+			System.out.println("maxNum = " + (maxNum+1));
 			WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-thumbnail']/img[@class='img-raid-thumbnail']"));
 			
 			if (raidStatus.getAttribute("alt").endsWith(raidStr)) {
@@ -171,7 +184,8 @@ public class FarmRaidEvent {
 						continue;
 					}
 				}
-				autoBattle.autoBattle(driver, wait);
+				//autoBattle.autoBattle(driver, wait);
+				battle.battle(driver, longWait);
 				results.results(driver, longWait, false);
 				System.out.println("Attempt " + attempts + " completed");
 				attempts++;
