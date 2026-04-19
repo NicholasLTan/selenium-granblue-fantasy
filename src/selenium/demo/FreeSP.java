@@ -10,13 +10,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FreeSP {
 	@Test
 	public void freeSP() throws InterruptedException {
-		int maxAttempts = 200; // To prevent infinite loops
-		By click1 = By.cssSelector("div[data-key='8000']"); //Exclusive Quest
-		By click2 = By.cssSelector("div[data-chapter-id='80001']");	//Play
+		int maxAttempts = 400; // To prevent infinite loops
+		//By click1 = By.cssSelector("div[data-key='8000']"); //Exclusive Quest
+		//By click2 = By.cssSelector("div[data-chapter-id='80001']");	//Play
+		
+		By click1 = By.cssSelector("div[data-key='8001']"); //Exclusive Quest
+		By click2 = By.cssSelector("div[data-chapter-id='80002']");	//Play
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		
 		driver.get("https://game.granbluefantasy.jp/#quest/extra");
 		System.out.println("Event SP Quests");
