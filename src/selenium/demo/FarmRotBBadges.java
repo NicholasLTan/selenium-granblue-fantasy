@@ -11,42 +11,40 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FarmRotBBadges {
 	@Test
-	public void farmRaidEvent() throws InterruptedException {
+	public void farmRotBBadges() throws InterruptedException {
+		int maxAttempts = 3;
+		String[] questIdList = {"711191","711041","711141","711091"};
+		final String eventUrl = "https://game.granbluefantasy.jp/#event/advent";
+		
 		Login login = new Login();
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		AutoBattle autoBattle = new AutoBattle();
+		Battle battle = new Battle();
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		Results results = new Results();
 		WebElement refresh;
 		IsElementPresent ePresent = new IsElementPresent();
-		/**UnF
-			final String raidCss = "img[alt$='hell100']";
-			final String raidStr = "hell100";
-		 **/
-		final String raidStr = "6063771_highlevel";
-		final String raidCss = "img[alt$='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/advent";
-
-		int maxAttempts = 7;
-		int attempts;
-		String[] questIdList = {"711191","711041","711141","711091"}; 
 		
+		int attempts;
 		driver.get(eventUrl);		
 		for (String questId : questIdList) {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+			PlayAgain playAgain = new PlayAgain();
 			attempts = 0;
-			
 			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-select-multi'")));
-			Thread.sleep(1000);
+			//Thread.sleep(1000);
 			driver.findElement(By.cssSelector("div[class='btn-select-multi']")).click();
-			Thread.sleep(2000);
+			//Thread.sleep(2000);
 			String questString = "div[data-quest-id='" + questId + "']";
+			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(questString)));
 			driver.findElement(By.cssSelector(questString)).click();
-			
+			playAgain.playAgain(driver, longWait, maxAttempts);
+			/*
 			while (attempts < maxAttempts) {
-				confirmTeam.confirmTeam(wait);
-				autoBattle.autoBattle(driver, wait);
+				wait.until(ExpectedConditions.urlContains("supporter"));
+				confirmTeam.confirmTeam(driver, wait);
+				wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid"));
+				battle.battle(driver, wait);
 				if ( attempts + 1 == maxAttempts) {
 					results.results(driver, wait, false);
 				} else {
@@ -55,7 +53,8 @@ public class FarmRotBBadges {
 				attempts++;
 				System.out.println(attempts);
 			}
-
+			*/
 		}
+		System.out.println("Script complete");
 	}
 }
