@@ -21,7 +21,7 @@ public class AutoBattle {
 			By attackButton = By.className("btn-attack-start");
 			Wait<WebDriver> fluentWait = new FluentWait<>(driver)
 				.withTimeout(Duration.ofSeconds(30))
-				.pollingEvery(Duration.ofMillis(100));
+				.pollingEvery(Duration.ofMillis(50));
 				
 			wait.until ( ExpectedConditions.or (
 					ExpectedConditions.elementToBeClickable(autoButton),
