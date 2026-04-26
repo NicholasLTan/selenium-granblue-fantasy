@@ -32,28 +32,11 @@ public class FarmRotBBadges {
 			PlayAgain playAgain = new PlayAgain();
 			attempts = 0;
 			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-select-multi'")));
-			//Thread.sleep(1000);
 			driver.findElement(By.cssSelector("div[class='btn-select-multi']")).click();
-			//Thread.sleep(2000);
 			String questString = "div[data-quest-id='" + questId + "']";
 			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(questString)));
 			driver.findElement(By.cssSelector(questString)).click();
 			playAgain.playAgain(driver, longWait, maxAttempts);
-			/*
-			while (attempts < maxAttempts) {
-				wait.until(ExpectedConditions.urlContains("supporter"));
-				confirmTeam.confirmTeam(driver, wait);
-				wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid"));
-				battle.battle(driver, wait);
-				if ( attempts + 1 == maxAttempts) {
-					results.results(driver, wait, false);
-				} else {
-					results.results(driver, wait, true);
-				}
-				attempts++;
-				System.out.println(attempts);
-			}
-			*/
 		}
 		System.out.println("Script complete");
 	}
