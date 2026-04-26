@@ -1,6 +1,8 @@
 Welcome to the Selenium automation project for Granblue Fantasy
 New events require updating for URLs, battle IDs
 
+NOTE: 	Some event types need updating in order to use newer, more robust classes and better wait-handling (instead of sleeps).
+		Requires the events to occur again to make changes that match the framework.
 
 Event-specific automation classes
 -----
