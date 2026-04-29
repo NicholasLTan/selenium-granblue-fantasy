@@ -19,7 +19,7 @@ public class EventNew {
 		PlayAgain playAgain = new PlayAgain();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		IsElementPresent ePresent = new IsElementPresent();
-		driver.get("https://game.granbluefantasy.jp/#event/treasureraid170"); 
+		driver.get("https://game.granbluefantasy.jp/#event/treasureraid171"); 
 		System.out.println("Momvasion");
 		//Thread.sleep(5000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
@@ -52,7 +52,7 @@ public class EventNew {
 				Thread.sleep(1000);
 			}
 			//driver.findElement(By.cssSelector("img[class='img-quest-thumb'][src*='93744']")).click();
-			driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='942041']")).click();
+			driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='942941']")).click();
 			System.out.println("Impossible");
 
 			playAgain.playAgain(driver, wait, maxAttempts);
