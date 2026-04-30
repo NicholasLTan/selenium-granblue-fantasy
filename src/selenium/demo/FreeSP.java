@@ -11,11 +11,11 @@ public class FreeSP {
 	@Test
 	public void freeSP() throws InterruptedException {
 		int maxAttempts = 400; // To prevent infinite loops
-		//By click1 = By.cssSelector("div[data-key='8000']"); //Exclusive Quest
-		//By click2 = By.cssSelector("div[data-chapter-id='80001']");	//Play
-		
-		By click1 = By.cssSelector("div[data-key='8001']"); //Exclusive Quest
-		By click2 = By.cssSelector("div[data-chapter-id='80002']");	//Play
+		By click1 = By.cssSelector("div[data-key^='800']"); //Exclusive Quest
+		By click2 = By.cssSelector("div[data-chapter-id^='8000']");	//Play
+
+		//By click1 = By.cssSelector("div[data-key='8001']"); //Exclusive Quest
+		//By click2 = By.cssSelector("div[data-chapter-id='80002']");	//Play
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
