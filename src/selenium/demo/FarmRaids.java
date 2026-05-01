@@ -12,9 +12,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaids {
 	@Test
 	public void farmRaids() throws InterruptedException {
-		boolean exitAtZero = false;
+		boolean exitAtZero = true;
 		boolean speedFarm = true;
-		int maxAttempts = 10; // Optional: To prevent infinite loops		
+		int maxAttempts = 20; // Optional: To prevent infinite loops		
 		int minHP = 20;
 		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot4']");
 		
@@ -58,22 +58,15 @@ public class FarmRaids {
 			wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
 			WebElement raidList = driver.findElement(By.id("prt-search-list"));
 			List<WebElement> raids;
+			List<WebElement> raidNormalAP;
 			raids = raidList.findElements(By.cssSelector(lowApCss));
+			raidNormalAP = raidList.findElements(By.cssSelector(normalApCss));
 			Thread.sleep(1000);
 			wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
 			refresh = driver.findElement(refreshBy);
 			int refreshCount=0;
 			System.out.println(raids.size() + " reduced ap");
 			while (raids.size() < 1 || forcedRefresh) { 
-				System.out.println("Refresh " + refreshCount);
-				//wait.until(element.isDisplayed() -> element.click());
-				wait.until(ExpectedConditions.elementToBeClickable(refresh));
-				if (refreshCount == 3) {
-					System.out.println(refreshCount + " refreshes");
-					raids = raidList.findElements(By.cssSelector(normalApCss));
-					ten = true;
-					break;
-				}
 				refresh.click();
 				refreshCount++;
 				Thread.sleep(100);
@@ -82,6 +75,18 @@ public class FarmRaids {
 				raids = raidList.findElements(By.cssSelector(lowApCss));
 				System.out.println(raids.size() + " reduced ap");
 				Thread.sleep(1000);
+				System.out.println("Refresh " + refreshCount);
+				//wait.until(element.isDisplayed() -> element.click());
+				wait.until(ExpectedConditions.elementToBeClickable(refresh));
+				if (refreshCount == 5) {
+					System.out.println(refreshCount + " refreshes");
+					raids = raidList.findElements(By.cssSelector(normalApCss));
+					ten = true;
+					refreshCount=0;
+					//break;
+				} else if (forcedRefresh) {
+					forcedRefresh = false;
+				}
 			}
 			/*
 			 * int rNum = 1; for (WebElement raid : raids) { //WebElement raidStatus =
