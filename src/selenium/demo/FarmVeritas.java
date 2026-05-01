@@ -13,7 +13,7 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='811021'][class^='prt-quest-list btn-quest-list']"; //E Living Lightning Rod
 	//public static final String questClass = "div[data-quest-id='811081'][class^='prt-quest-list btn-quest-list']"; //E Hundred-Armed Hulk
 	//public static final String questClass = "div[data-quest-id='812071'][class^='prt-quest-list btn-quest-list']"; //F Eyes of Sorrow
-	public static final String questClass = "div[data-quest-id='812011'][class^='prt-quest-list btn-quest-list']"; //F Trident Grandmaster
+	//public static final String questClass = "div[data-quest-id='812011'][class^='prt-quest-list btn-quest-list']"; //F Trident Grandmaster
 	//public static final String questClass = "div[data-quest-id='812051'][class^='prt-quest-list btn-quest-list']"; //F Faymian Fortress
 	//public static final String questClass = "div[data-quest-id='813081'][class^='prt-quest-list btn-quest-list']"; //G Goliath Vanguard
 	//public static final String questClass = "div[data-quest-id='813041'][class^='prt-quest-list btn-quest-list']"; //G Temptation's Guide
@@ -22,7 +22,9 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='814071'][class^='prt-quest-list btn-quest-list']"; //H Phantasmagoric Aberration
 	//public static final String questClass = "div[data-quest-id='814081'][class^='prt-quest-list btn-quest-list']"; //H Dimensional Riftwalker
 	//public static final String questClass = "div[data-quest-id='814101'][class^='prt-quest-list btn-quest-list']"; //H D Jadegleam Dragon
+	//public static final String questClass = "div[data-quest-id='814051'][class^='prt-quest-list btn-quest-list']"; //H Vengeful Demigod
 	//public static final String questClass = "div[data-quest-id='818061'][class^='prt-quest-list btn-quest-list']"; //L Simpering Beast
+	public static final String questClass = "div[data-quest-id='818131'][class^='prt-quest-list btn-quest-list']"; //L Xeno Sagi Militis
 	//public static final String questClass = "div[data-quest-id='819031'][class^='prt-quest-list btn-quest-list']"; //M High-Voltage Rock
 	//public static final String questClass = "div[data-quest-id='819091'][class^='prt-quest-list btn-quest-list']"; //M Princess of Dragons
 	//public static final String questClass = "div[data-quest-id='819071'][class^='prt-quest-list btn-quest-list']"; //M Parasite Steve
@@ -51,13 +53,28 @@ public class FarmVeritas {
 		System.out.println("Arcarum");
 		//Thread.sleep(5000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[data-area-id='3']")));
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[5]/div[1]/div[1]/div[2]/div[2]")).click();  //ZoneE
-		driver.findElement(By.cssSelector("div[data-area-id='3']")).click();  //ZoneF
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[1]/div[2]/div[4]")).click();  //ZoneG
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[4]/div[1]/div[1]/div[2]/div[5]")).click();  //ZoneH		
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[5]/div[1]/div[1]/div[2]/div[9]")).click();  //ZoneL
+		
+		String areaStr = questClass.replaceAll("[^0-9]", "");
+		//System.out.println(areaStr);
+		String area = areaStr.substring(2,3);
+		//System.out.println(area);
+		int areaNum = Integer.valueOf(area) + 1;
+		//System.out.println(areaNum);
+		By areaBy = By.cssSelector("div[data-area-id='" + (areaNum) + "']");
+		 
+		//driver.findElement(By.cssSelector("div[data-area-id='2']")).click();  //ZoneE
+		//driver.findElement(By.cssSelector("div[data-area-id='3']")).click();  //ZoneF
+		//driver.findElement(By.cssSelector("div[data-area-id='4']")).click();  //ZoneG
+		//driver.findElement(By.cssSelector("div[data-area-id='5']")).click();  //ZoneH		
+		//driver.findElement(By.cssSelector("div[data-area-id='6']")).click();  //ZoneI
+		//driver.findElement(By.cssSelector("div[data-area-id='7']")).click();  //ZoneJ
+		//driver.findElement(By.cssSelector("div[data-area-id='8']")).click();  //ZoneK
+		//driver.findElement(By.cssSelector("div[data-area-id='9']")).click();  //ZoneL
 		//driver.findElement(By.cssSelector("div[data-area-id='10']")).click();  //ZoneM
-		System.out.println("Zone Eletio");
+		driver.findElement(areaBy).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-head-current")));
+		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
+		//System.out.println("Zone Eletio");
 
 		int attempts = 0;
 		int cost = 19;
@@ -69,6 +86,7 @@ public class FarmVeritas {
 					ExpectedConditions.urlMatches("https://game.granbluefantasy.jp/#replicard/supporter/"),
 					ExpectedConditions.elementToBeClickable(By.cssSelector(questClass)),
 					ExpectedConditions.elementToBeClickable(By.cssSelector(mimicClass))));
+			System.out.println(driver.findElement(By.className("prt-head-current")).getText());
 			boolean chest = ePresent.isElementPresent(driver, chestBy);			
 			if (chest) {
 				System.out.println("Chest");
@@ -98,8 +116,16 @@ public class FarmVeritas {
 			if (quest) {
 				element = driver.findElement(By.cssSelector(questClass));
 				element.click();
-				System.out.println("Class name: " + element.getAttribute("data-chapter-name"));
+				String name = element.getAttribute("data-chapter-name");
+				System.out.println("Class name: " + name);
+				if (name.endsWith("Militis")) {
+					wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-offer")));
+					driver.findElement(By.className("btn-offer")).click();
+				}
+				
 			}
+
+			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("txt-stamina-after")));
 			aap = Integer.valueOf(driver.findElement(By.className("txt-stamina-after")).getText());
 			System.out.println(aap);
