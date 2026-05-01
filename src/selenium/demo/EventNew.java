@@ -20,7 +20,8 @@ public class EventNew {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		IsElementPresent ePresent = new IsElementPresent();
 		driver.get("https://game.granbluefantasy.jp/#event/treasureraid171"); 
-		System.out.println("Momvasion");
+		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
+		//System.out.println("Momvasion");
 		//Thread.sleep(5000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
 		if (ePresent.isElementPresent(driver, By.cssSelector("div[class='pop-usual pop-daily-bonus pop-show']"))) {
