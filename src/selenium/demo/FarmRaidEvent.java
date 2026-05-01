@@ -12,10 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaidEvent {
 	@Test
 	public void farmRaidEvent() throws InterruptedException {
-		final String raidStr = "6063771_highlevel";
+		final String raidStr = "treasureraid171_high";
 		final String raidCss = "img[alt$='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/advent";
-		int maxAttempts = 5; // Optional: To prevent infinite loops
+		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid171";
+		final String raidUrl = "https://game.granbluefantasy.jp/#quest/assist/event";
+		int maxAttempts = 2; // Optional: To prevent infinite loops
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -26,39 +27,27 @@ public class FarmRaidEvent {
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		Results results = new Results();
 		WebElement refresh;
+		By refreshBy = By.cssSelector("div[class='btn-switch-list event active']");
 		List<WebElement> elements;
 		IsElementPresent ePresent = new IsElementPresent();
 
-		driver.get("https://game.granbluefantasy.jp/#quest/assist/event");
-		// driver.findElement(By.cssSelector("img[class='img-global-banner'][src*='treasureraid165']")).click();
-		// // Lives Yet Unwritten
-		// driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[2]/div/img")).click();
-		// //Imagination Overdrive banner
-		//System.out.println("Raids");
-		//Thread.sleep(5000);
-
-		//driver.findElement(By.id("tab-multi")).click();
-		//Thread.sleep(1000);
-
-		//driver.findElement(By.cssSelector("div[class^='btn-switch-list event']")).click();
-		//Thread.sleep(1000);
+		driver.get(raidUrl);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='onm-assist-priority'")));
 		elements = driver.findElements(By.cssSelector("div[class^='onm-assist-priority'"));
 		if (!elements.isEmpty() && elements.get(0).getAttribute("class").endsWith("disable")) {
 			elements.get(0).click();
 		}
-//		<div class="btn-multi-raid lis-raid guild-member" data-quest-id="743461" data-quest-type="1" data-raid-id="45287985320" data-raid-type="1" data-viewer-id="" data-chapter-name="Lvl 150 Shenxian" data-bp="2" data-buff-name="" data-cjs-id="9101593" data-is-semi="false" data-timeline-id="633" data-user-id="19656090"><div class="prt-raid-thumbnail"><img class="img-raid-thumbnail" data-raid-id="45287985320" src="https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/assets/summon/qm/6063771_highlevel.png" alt="assets/summon/qm/6063771_highlevel"></div><div class="prt-raid-info"><div class="txt-raid-name" style="width: 180px; font-size: 12px; height: 12px; line-height: 12px;">Lvl 150 Shenxian</div><div class="prt-item-effect"></div><div class="prt-raid-status"><div class="prt-raid-gauge"><div class="prt-raid-gauge-inner" style="width: 38%;"></div></div><div class="prt-use-ap" data-ap="2" data-ap-max="3"><span class="ico-ap"></span><span class="ico-ap"></span><span class="ico-ap-none"></span></div></div><div class="prt-raid-subinfo"><div class="prt-flees-in">1/18</div><div class="prt-remaining-time">01:24:41</div></div><div class="prt-request-info"><div class="txt-request">Quest Host:</div> <img class="img-job-icon" src="https://prd-game-a-granbluefantasy.akamaized.net/assets_en/img/sp/ui/icon/job/100401.png" alt="100401"><div class="txt-request"><span class="txt-request-name">Seal</span></div><div class="ico-user-status"></div></div></div><div class="prt-button-cover"></div></div>
 		int attempts = 1;
 		while (attempts <= maxAttempts) {
 			System.out.println("Attempt " + attempts + " started");
 			boolean retry = false;
 			boolean ten = false;
-			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-switch-list event active']")));
+			wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
 			WebElement raidList = driver.findElement(By.id("prt-multi-list"));
 			List<WebElement> raids;
 			raids = raidList.findElements(By.cssSelector(raidCss));
 			Thread.sleep(1000);
-			refresh = driver.findElement(By.cssSelector("div[class='btn-switch-list event active']"));
+			refresh = driver.findElement(refreshBy);
 			int refreshCount=0;
 			System.out.println(raids.size() + " " + raidStr);
 			while (raids.size() < 1) { 
@@ -130,18 +119,20 @@ public class FarmRaidEvent {
 					Thread.sleep(1000);
 				}
 				raid.click();
-				Thread.sleep(5000);
-				if (driver.getCurrentUrl().equals("https://game.granbluefantasy.jp/#quest/assist")) {
+				//Thread.sleep(5000);
+				/*
+				if (driver.getCurrentUrl().equals("https://game.granbluefantasy.jp/#quest/assist/event")) {
 					System.out.println("assist");
 					driver.findElement(By.className("btn-usual-ok")).click();
 					retry = true;
-					wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-switch-list event active']")));
-					driver.findElement(By.cssSelector("div[class='btn-switch-list event active']")).click();
+					wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
+					driver.findElement(refreshBy).click();
 					//break;
 				} else {
 					System.out.println("break");
 					//break;
 				}
+				*/
 			} else if (ten) {
 				System.out.println(raid.getAttribute("class"));
 				
@@ -149,7 +140,19 @@ public class FarmRaidEvent {
 				//break;
 			}
 			
-			
+			wait.until(ExpectedConditions.or(
+					//ExpectedConditions.urlMatches("https://game.granbluefantasy.jp/#quest/assist"),
+					ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#quest/supporter_raid"),
+					ExpectedConditions.urlContains("https://game.granluefantasy.jp/#result_multi"),
+					ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid_multi"),
+					ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='pop-usual common-pop-error pop-show']"))));
+			if (driver.getCurrentUrl().equals(raidUrl)) {
+				System.out.println("assist");
+				driver.findElement(By.className("btn-usual-ok")).click();
+				retry = true;
+				wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
+				driver.findElement(refreshBy).click();
+			}
 			
 			
 			if (!retry) {
@@ -158,30 +161,39 @@ public class FarmRaidEvent {
 				Thread.sleep(1500);
 				String url = driver.getCurrentUrl();
 				System.out.println("Conf " + url + " Auto");
-				if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid") ) {
-					System.out.println("supporter_raid");
-					Thread.sleep(1000);
-					boolean elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-ok"));
-					if (elementExists) {
-						System.out.println("Raid ended");
+				try {
+					battle.battle(driver, longWait);
+				} catch (ElementClickInterceptedException e) {
+					if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid")) {
+						System.out.println("supporter_raid"); 
+						Thread.sleep(1000); 
+						boolean	elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-ok")); 
+						if (elementExists) {
+							System.out.println("Raid ended");
+							driver.findElement(By.className("btn-usual-ok")).click(); 
+							//Thread.sleep(2000);
+							driver.get(raidUrl);
+							wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
+							Thread.sleep(1000); 
+							driver.findElement(refreshBy).click();
+							//Thread.sleep(5000); 
+							continue; 
+						} 
+					} else if (url.startsWith("https://game.granluefantasy.jp/#result_multi")) {
+						System.out.println("result_multi"); 
+						boolean elementExists =	ePresent.isElementPresent(driver, By.className("btn-control")); 
+						if (elementExists) { 
+							driver.findElement(By.className("btn-control")).click();
+							//Thread.sleep(2000);
+							driver.get(raidUrl);
+							//Thread.sleep(5000); 
+							continue; 
+						} 
+					} else if (url.startsWith("https://game.granbluefantasy.jp/#raid_multi")) {
+						System.out.println("raid_multi");
 						driver.findElement(By.className("btn-usual-ok")).click();
-						Thread.sleep(2000);
-						driver.get("https://game.granbluefantasy.jp/#quest/assist");
-						wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-switch-list event active']")));
 						Thread.sleep(1000);
-						driver.findElement(By.cssSelector("div[class='btn-switch-list event active']")).click();
-						Thread.sleep(5000);
-						continue;
-					}
-				} else if ( url.startsWith("https://game.granluefantasy.jp/#result_multi") ) {
-					System.out.println("result_multi");
-					boolean elementExists = ePresent.isElementPresent(driver, By.className("btn-control"));
-					if (elementExists) {
-						driver.findElement(By.className("btn-control")).click();
-						Thread.sleep(2000);
-						driver.get("https://game.granbluefantasy.jp/#quest/assist");
-						Thread.sleep(5000);
-						continue;
+						driver.findElement(By.className("btn-treasure-footer-reload")).click();
 					}
 				}
 				//autoBattle.autoBattle(driver, wait);
@@ -192,7 +204,7 @@ public class FarmRaidEvent {
 				wait.until(ExpectedConditions.urlMatches(eventUrl));
 				wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-multi']")));
 				driver.findElement(By.cssSelector("div[class^='btn-event-multi']")).click();
-				wait.until(ExpectedConditions.urlMatches("https://game.granbluefantasy.jp/#quest/assist/event"));
+				wait.until(ExpectedConditions.urlMatches(raidUrl));
 				//Thread.sleep(5000);
 			}
 		}
