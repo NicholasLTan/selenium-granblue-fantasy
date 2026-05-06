@@ -47,4 +47,15 @@ public class PlayAgain {
 		}
 		return;
 	}
+	
+	public void playSkip(WebDriver driver, WebDriverWait longWait) throws InterruptedException {
+		ConfirmTeam confirmTeam = new ConfirmTeam();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		Results results = new Results();
+		wait.until(ExpectedConditions.urlContains("supporter"));
+		confirmTeam.confirmTeam(driver, wait);
+		results.results(driver, wait, false);						
+
+		return;
+	}
 }
