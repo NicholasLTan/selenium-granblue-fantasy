@@ -88,6 +88,7 @@ public class Results {
 				wait.until(ExpectedConditions.or(
 						ExpectedConditions.visibilityOfElementLocated(popup),
 						ExpectedConditions.elementToBeClickable(ok),
+						ExpectedConditions.elementToBeClickable(ctrl),
 						ExpectedConditions.elementToBeClickable(close)));				
 				elementPopup = driver.findElements(popup);
 				if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
@@ -96,7 +97,8 @@ public class Results {
 					List<WebElement> elementNext = driver.findElements(next);
 					List<WebElement> elementOk = driver.findElements(ok);
 					List<WebElement> elementClose = driver.findElements(close);
-					if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed()) {
+					List<WebElement> elementCtrl = driver.findElements(ctrl);
+					if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed() && retry) {
 						System.out.println("PlayAgain Next");
 						elementNext.get(0).click();
 						wait.until(ExpectedConditions.stalenessOf(elementNext.get(0)));
@@ -111,6 +113,12 @@ public class Results {
 						elementClose.get(0).click();
 						wait.until(ExpectedConditions.stalenessOf(elementClose.get(0)));
 						break;
+					} else if (!elementCtrl.isEmpty() && elementCtrl.get(0).isDisplayed()) {
+						wait.until(ExpectedConditions.elementToBeClickable(ctrl));
+						System.out.println(elementCtrl.get(0).getAttribute("data-buton-name"));
+						elementCtrl.get(0).click();
+						System.out.println("CTRL clicked");
+						wait.until(ExpectedConditions.stalenessOf(elementCtrl.get(0)));
 					}
 				}
 			}
