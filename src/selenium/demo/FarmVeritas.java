@@ -62,15 +62,6 @@ public class FarmVeritas {
 		//System.out.println(areaNum);
 		By areaBy = By.cssSelector("div[data-area-id='" + (areaNum) + "']");
 		 
-		//driver.findElement(By.cssSelector("div[data-area-id='2']")).click();  //ZoneE
-		//driver.findElement(By.cssSelector("div[data-area-id='3']")).click();  //ZoneF
-		//driver.findElement(By.cssSelector("div[data-area-id='4']")).click();  //ZoneG
-		//driver.findElement(By.cssSelector("div[data-area-id='5']")).click();  //ZoneH		
-		//driver.findElement(By.cssSelector("div[data-area-id='6']")).click();  //ZoneI
-		//driver.findElement(By.cssSelector("div[data-area-id='7']")).click();  //ZoneJ
-		//driver.findElement(By.cssSelector("div[data-area-id='8']")).click();  //ZoneK
-		//driver.findElement(By.cssSelector("div[data-area-id='9']")).click();  //ZoneL
-		//driver.findElement(By.cssSelector("div[data-area-id='10']")).click();  //ZoneM
 		driver.findElement(areaBy).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-head-current")));
 		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
@@ -111,6 +102,13 @@ public class FarmVeritas {
 					driver.findElement(ok).click();
 				}
 				wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(questClass)));
+			}
+			
+			if (ePresent.isElementPresent(driver, By.cssSelector("div[class='pop-open-chest']"))) {
+				wait.until(ExpectedConditions.elementToBeClickable(ok));
+				WebElement okButton = driver.findElement(ok);
+				okButton.click();
+				wait.until(ExpectedConditions.invisibilityOfAllElements(okButton));
 			}
 			boolean quest = ePresent.isElementPresent(driver, By.cssSelector(questClass));
 			if (quest) {
