@@ -25,9 +25,10 @@ public class EventNew {
 		//Thread.sleep(5000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
 		if (ePresent.isElementPresent(driver, By.cssSelector("div[class='pop-usual pop-daily-bonus pop-show']"))) {
-			driver.findElement(By.className("btn-usual-close")).click();
+			WebElement close = driver.findElement(By.className("btn-usual-close"));
+			close.click();
 			Thread.sleep(1000);
-			wait.until(ExpectedConditions.stalenessOf(null));
+			wait.until(ExpectedConditions.stalenessOf(close));
 		}		
 		int currLoop = 2;
 		int maxAttempts = 100; // Optional: To prevent infinite loops
