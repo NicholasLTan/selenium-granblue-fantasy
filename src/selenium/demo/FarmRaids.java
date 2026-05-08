@@ -16,7 +16,7 @@ public class FarmRaids {
 		boolean speedFarm = true;
 		int maxAttempts = 20; // Optional: To prevent infinite loops		
 		int minHP = 20;
-		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot4']");
+		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot3']");
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -35,12 +35,13 @@ public class FarmRaids {
 		final String normalApCss = "div[class='" + normalApStr + "']";
 		final String lowApStr = normalApStr + " decreased";
 		final String lowApCss = "div[class='" + lowApStr + "']";
+		final String raidUrl = "https://game.granbluefantasy.jp/#quest/assist";
 
 		int attempts = 1;
 		boolean forcedRefresh = false;
 		while (attempts <= maxAttempts) {
-			if (driver.getCurrentUrl() != "https://game.granbluefantasy.jp/#quest/assist") {
-				driver.get("https://game.granbluefantasy.jp/#quest/assist");
+			if (driver.getCurrentUrl() != raidUrl) {
+				driver.get(raidUrl);
 				System.out.println("Raids");
 				element = wait.until(ExpectedConditions.elementToBeClickable(By.id("tab-search")));
 				if ( element.getAttribute("class").equals("btn-tabs")) {
@@ -173,6 +174,10 @@ public class FarmRaids {
 				//Thread.sleep(1500);
 				String url = driver.getCurrentUrl();
 				System.out.println("Conf " + url + " Auto");
+				if (url.equals("https://game.granbluefantasy.jp/#mypage")) {
+					driver.get(raidUrl);
+					continue;
+				}
 				try {
 					battle.battle(driver, longWait);
 				} catch (ElementClickInterceptedException e) {
