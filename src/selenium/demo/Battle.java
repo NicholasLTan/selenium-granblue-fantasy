@@ -1,5 +1,6 @@
 package selenium.demo;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -12,10 +13,16 @@ public class Battle {
 	public void battle(WebDriver driver, WebDriverWait wait) throws InterruptedException {
 		By ok = By.className("btn-usual-ok");
 		By popup = By.className("pop-usual");
+		WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		AutoBattle autoBattle = new AutoBattle();
-		autoBattle.autoBattle(driver, wait);
+		autoBattle.autoBattle(driver, shortWait);
 		//activate purple skills
-		  
+		
+		
+		wait.until(ExpectedConditions.or (
+				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid"),
+				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result_multi/empty")
+		));
 		List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][type='5'][state='2']"));
 		if ( !purpleSkills.isEmpty() ) {
 		    for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {
