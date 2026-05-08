@@ -12,6 +12,9 @@ public class FarmVeritas {
 	public static final String mimicClass = "div[data-chapter-name='Mimic'][class='prt-quest-list btn-quest-list']"; //Mimic
 	//public static final String questClass = "div[data-quest-id='811021'][class^='prt-quest-list btn-quest-list']"; //E Living Lightning Rod
 	//public static final String questClass = "div[data-quest-id='811081'][class^='prt-quest-list btn-quest-list']"; //E Hundred-Armed Hulk
+	//public static final String questClass = "div[data-quest-id='811041'][class^='prt-quest-list btn-quest-list']"; //E Paradoxical Gate
+	//public static final String questClass = "div[data-quest-id='811071'][class^='prt-quest-list btn-quest-list']"; //E Terror Trifecta
+	//public static final String questClass = "div[data-quest-id='811091'][class^='prt-quest-list btn-quest-list']"; //E Rageborn One
 	//public static final String questClass = "div[data-quest-id='812071'][class^='prt-quest-list btn-quest-list']"; //F Eyes of Sorrow
 	//public static final String questClass = "div[data-quest-id='812011'][class^='prt-quest-list btn-quest-list']"; //F Trident Grandmaster
 	//public static final String questClass = "div[data-quest-id='812051'][class^='prt-quest-list btn-quest-list']"; //F Faymian Fortress
@@ -23,35 +26,30 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='814081'][class^='prt-quest-list btn-quest-list']"; //H Dimensional Riftwalker
 	//public static final String questClass = "div[data-quest-id='814101'][class^='prt-quest-list btn-quest-list']"; //H D Jadegleam Dragon
 	//public static final String questClass = "div[data-quest-id='814051'][class^='prt-quest-list btn-quest-list']"; //H Vengeful Demigod
+	//public static final String questClass = "div[data-quest-id='815031'][class^='prt-quest-list btn-quest-list']"; //I Blushing Groom
 	//public static final String questClass = "div[data-quest-id='818061'][class^='prt-quest-list btn-quest-list']"; //L Simpering Beast
-	public static final String questClass = "div[data-quest-id='818131'][class^='prt-quest-list btn-quest-list']"; //L Xeno Sagi Militis
+	//public static final String questClass = "div[data-quest-id='818131'][class^='prt-quest-list btn-quest-list']"; //L Xeno Sagi Militis
 	//public static final String questClass = "div[data-quest-id='819031'][class^='prt-quest-list btn-quest-list']"; //M High-Voltage Rock
 	//public static final String questClass = "div[data-quest-id='819091'][class^='prt-quest-list btn-quest-list']"; //M Princess of Dragons
 	//public static final String questClass = "div[data-quest-id='819071'][class^='prt-quest-list btn-quest-list']"; //M Parasite Steve
+	public static final String questClass = "div[data-quest-id='819021'][class^='prt-quest-list btn-quest-list']"; //M Earth-Shattering Fire Demon
 	@Test
 	public void farmVeritas() throws InterruptedException {
-		int maxAttempts = 100; // Optional: To prevent infinite loops
+		int maxAttempts = 50; // Optional: To prevent infinite loops
 		boolean exitAtZero = true;
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		AutoBattle autoBattle = new AutoBattle();
 		Battle battle = new Battle();
-		Reload reload = new Reload();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(200));
 		Results results = new Results();
 		WebElement element;
 		By ok = By.className("btn-usual-ok"); 
 		IsElementPresent ePresent = new IsElementPresent();
 		
-		//driver.findElement(By.className("btn-head-pop")).click();  //Menu
-		//System.out.println("Menu");
-		//Thread.sleep(1000);
-		//driver.findElement(By.className("btn-sub-main-arcarum")).click();  //Arcarum
 		driver.get("https://game.granbluefantasy.jp/#replicard");
 		System.out.println("Arcarum");
-		//Thread.sleep(5000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[data-area-id='3']")));
 		
 		String areaStr = questClass.replaceAll("[^0-9]", "");
@@ -65,7 +63,6 @@ public class FarmVeritas {
 		driver.findElement(areaBy).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-head-current")));
 		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
-		//System.out.println("Zone Eletio");
 
 		int attempts = 0;
 		int cost = 19;
@@ -120,10 +117,8 @@ public class FarmVeritas {
 					wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-offer")));
 					driver.findElement(By.className("btn-offer")).click();
 				}
-				
 			}
 
-			
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("txt-stamina-after")));
 			aap = Integer.valueOf(driver.findElement(By.className("txt-stamina-after")).getText());
 			System.out.println(aap);
@@ -142,7 +137,7 @@ public class FarmVeritas {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(120));
 				//reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
 			}
-			if (( attempts++ == maxAttempts ) || ( exitAtZero == true && aap == 0 )) {
+			if (( attempts++ >= maxAttempts ) || ( exitAtZero == true && aap == 0 )) {
 				results.results(driver, wait, false);
 				next = false;
 				System.out.println("next = " + next);
