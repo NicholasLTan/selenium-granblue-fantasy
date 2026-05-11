@@ -15,7 +15,7 @@ public class Login {
 
 	public WebDriver login() throws InterruptedException {
 
-		boolean journeyDrops = true; //true to enable/extend Journey Drops every run; otherwise false;
+		//boolean journeyDrops = false; //deprecated, move Journey Drops to Suite
 
 		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Nick\\libs\\selenium-jars\\chromedriver-win64\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
@@ -33,10 +33,12 @@ public class Login {
 			System.out.println("Main Quest Close");
 			wait.until(ExpectedConditions.stalenessOf(element));
 		}
+		/*
 		if ( journeyDrops == true ) {
 			JourneyDropsActivate JDA = new JourneyDropsActivate();
 			JDA.journeyDropsActivate(driver);
 		}
+		*/
 		return driver;
 	}	  
 }

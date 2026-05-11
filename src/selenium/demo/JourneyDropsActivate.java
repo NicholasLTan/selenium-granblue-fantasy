@@ -1,5 +1,7 @@
 package selenium.demo;
 import java.time.Duration;
+
+import org.junit.Test;
 import org.openqa.selenium.*;
 
 import org.openqa.selenium.By;
@@ -11,14 +13,15 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class JourneyDropsActivate {
-	public void journeyDropsActivate(WebDriver driver) throws InterruptedException {
-		//System.out.println("Starting JD");
-		driver.get("https://game.granbluefantasy.jp/#shop/exchange/trajectory");
-		//driver.get("https://https://www.google.com/");
+	@Test
+	public void journeyDropsActivate() throws InterruptedException {
+		Login login = new Login();
+		WebDriver driver = login.login();
 		String hours = "2";
 		String[] dropList = {"1","2","6"};
 		By ok = By.className("btn-usual-ok");
-		By cancel = By.className("btn-usual-cancel");
+		By cancel = By.className("btn-usual-cancel");		
+		driver.get("https://game.granbluefantasy.jp/#shop/exchange/trajectory");
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		//System.out.println("Before trangect");
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("txt-trangect-num")));
