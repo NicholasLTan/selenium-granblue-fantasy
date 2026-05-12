@@ -17,6 +17,7 @@ public class FarmRaids {
 		int maxAttempts = 30; // Optional: To prevent infinite loops		
 		int minHP = 20;
 		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot3']");
+		int logLevel = 0;
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -42,18 +43,18 @@ public class FarmRaids {
 		while (attempts <= maxAttempts) {
 			if (driver.getCurrentUrl() != raidUrl) {
 				driver.get(raidUrl);
-				System.out.println("Raids");
+				if ( logLevel >= 1 ) {System.out.println("Raids");}
 				element = wait.until(ExpectedConditions.elementToBeClickable(By.id("tab-search")));
 				if ( element.getAttribute("class").equals("btn-tabs")) {
 					driver.findElement(By.id("tab-search")).click();
-					System.out.println("search click");
+					if ( logLevel >= 1 ) {System.out.println("search click");}
 				}
 				wait.until(ExpectedConditions.elementToBeClickable(finderSlot));
 				driver.findElement(finderSlot).click();
-				System.out.println("finder click");
+				if ( logLevel >= 1 ) {System.out.println("finder click");}
 			}
 			
-			System.out.println("Attempt " + attempts + " started");
+			if ( logLevel >= 1 ) {System.out.println("Attempt " + attempts + " started");}
 			boolean retry = false;
 			boolean ten = false;
 			wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
@@ -66,7 +67,7 @@ public class FarmRaids {
 			wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
 			refresh = driver.findElement(refreshBy);
 			int refreshCount=0;
-			System.out.println(raids.size() + " reduced ap");
+			if ( logLevel >= 1 ) {System.out.println(raids.size() + " reduced ap");}
 			while (raids.size() < 1 || forcedRefresh) { 
 				refresh.click();
 				refreshCount++;
@@ -74,13 +75,13 @@ public class FarmRaids {
 				wait.until(ExpectedConditions.elementToBeClickable(refresh));
 				Thread.sleep(1000);
 				raids = raidList.findElements(By.cssSelector(lowApCss));
-				System.out.println(raids.size() + " reduced ap");
+				if ( logLevel >= 1 ) {System.out.println(raids.size() + " reduced ap");}
 				Thread.sleep(1000);
-				System.out.println("Refresh " + refreshCount);
+				if ( logLevel >= 1 ) {System.out.println("Refresh " + refreshCount);}
 				//wait.until(element.isDisplayed() -> element.click());
 				wait.until(ExpectedConditions.elementToBeClickable(refresh));
 				if (refreshCount == 5) {
-					System.out.println(refreshCount + " refreshes");
+					if ( logLevel >= 1 ) {System.out.println(refreshCount + " refreshes");}
 					raids = raidList.findElements(By.cssSelector(normalApCss));
 					ten = true;
 					refreshCount=0;
@@ -95,7 +96,7 @@ public class FarmRaids {
 			 * "./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[2]"));
 			 * System.out.println(rNum + " " + raid.getAttribute("class")); rNum++; }
 			 */
-			System.out.println("*****");
+			if ( logLevel >= 1 ) {System.out.println("*****");}
 			forcedRefresh = false;
 			raids = raidList.findElements(By.xpath("./div"));
 			if (raids.size() == 0) { System.out.println("zero"); continue; }
@@ -106,7 +107,7 @@ public class FarmRaids {
 			int minNum = 0;
 			int currBP = Integer.valueOf(driver.findElement(By.cssSelector("div[data-current-bp]")).getAttribute("data-current-bp"));
 			boolean crew = false;
-			System.out.println(currBP + " BP");
+			if ( logLevel >= 1 ) {System.out.println(currBP + " BP");}
 			if ( exitAtZero && currBP <= 1 ) { break; }
 			for (WebElement raid : raids) {
 				if (raid.getAttribute("class").endsWith("guild-member")) {
@@ -135,26 +136,23 @@ public class FarmRaids {
 				System.out.println("crew raid found. raidNum = " + raidNum);
 				//raidNum-- ???
 			} else if (speedFarm) {
-				System.out.println("speed mode. minNum = " + minNum + "; minPct = " + minPct);
+				if ( logLevel >= 1 ) {System.out.println("speed mode. minNum = " + minNum + "; minPct = " + minPct);}
 				if (minNum==0) { forcedRefresh = true; continue; }
 				minNum--;
 				raidNum = minNum;
 			} else {
-				System.out.println("FP mode. maxNum = " + maxNum + "; maxPct = " + maxPct);
+				if ( logLevel >= 1 ) {System.out.println("FP mode. maxNum = " + maxNum + "; maxPct = " + maxPct);}
 				maxNum--;
 				raidNum = maxNum;
 			}
 			
 			WebElement raid = raids.get(raidNum);
-			//WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[2]"));
-			System.out.println("");
 			if (raidNum > 5) {
 				Actions actions = new Actions(driver);
 				actions.sendKeys(Keys.PAGE_DOWN).perform();
 				Thread.sleep(1000); //Necessary sleep for PGDN to process
 			}
 			raid.click();
-			//Thread.sleep(5000);
 			wait.until(ExpectedConditions.or(
 					//ExpectedConditions.urlMatches("https://game.granbluefantasy.jp/#quest/assist"),
 					ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#quest/supporter_raid"),
@@ -173,7 +171,7 @@ public class FarmRaids {
 				confirmTeam.confirmTeam(driver, wait);
 				//Thread.sleep(1500);
 				String url = driver.getCurrentUrl();
-				System.out.println("Conf " + url + " Auto");
+				if ( logLevel >= 1 ) {System.out.println("Conf " + url + " Auto");}
 				if (url.equals("https://game.granbluefantasy.jp/#mypage")) {
 					driver.get(raidUrl);
 					continue;
@@ -182,11 +180,11 @@ public class FarmRaids {
 					battle.battle(driver, longWait);
 				} catch (ElementClickInterceptedException e) {
 					if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid")) {
-						System.out.println("supporter_raid"); 
+						if ( logLevel >= 1 ) {System.out.println("supporter_raid");} 
 						Thread.sleep(1000); 
 						boolean	elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-ok")); 
 						if (elementExists) {
-							System.out.println("Raid ended");
+							if ( logLevel >= 1 ) {System.out.println("Raid ended");}
 							driver.findElement(By.className("btn-usual-ok")).click(); 
 							//Thread.sleep(2000);
 							driver.get("https://game.granbluefantasy.jp/#quest/assist");
@@ -197,7 +195,7 @@ public class FarmRaids {
 							continue; 
 						} 
 					} else if (url.startsWith("https://game.granluefantasy.jp/#result_multi")) {
-						System.out.println("result_multi"); 
+						if ( logLevel >= 1 ) {System.out.println("result_multi");} 
 						boolean elementExists =	ePresent.isElementPresent(driver, By.className("btn-control")); 
 						if (elementExists) { 
 							driver.findElement(By.className("btn-control")).click();
@@ -207,7 +205,7 @@ public class FarmRaids {
 							continue; 
 						} 
 					} else if (url.startsWith("https://game.granbluefantasy.jp/#raid_multi")) {
-						System.out.println("raid_multi");
+						if ( logLevel >= 1 ) {System.out.println("raid_multi");}
 						driver.findElement(By.className("btn-usual-ok")).click();
 						Thread.sleep(1000);
 						driver.findElement(By.className("btn-treasure-footer-reload")).click();
