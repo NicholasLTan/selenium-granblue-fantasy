@@ -137,7 +137,6 @@ public class FarmVeritas {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(120));
 				//reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
 			}
-			System.out.println("attempts = " + attempts + "; max = " + maxAttempts);
 			if (( attempts++ >= maxAttempts ) || ( exitAtZero == true && aap == 0 )) {
 				results.results(driver, wait, false);
 				next = false;
@@ -145,7 +144,7 @@ public class FarmVeritas {
 			} else {
 				results.results(driver, wait, true);
 			}
-			System.out.println(attempts + "/" + maxAttempts + " attempts");
+			System.out.println("Completed " + attempts + "/" + maxAttempts + " attempts");
 		}
 		System.out.println("Farm Complete");
 	}
