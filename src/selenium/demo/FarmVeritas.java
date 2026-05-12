@@ -35,7 +35,7 @@ public class FarmVeritas {
 	public static final String questClass = "div[data-quest-id='819021'][class^='prt-quest-list btn-quest-list']"; //M Earth-Shattering Fire Demon
 	@Test
 	public void farmVeritas() throws InterruptedException {
-		int maxAttempts = 50; // Optional: To prevent infinite loops
+		int maxAttempts = 500; // Optional: To prevent infinite loops
 		boolean exitAtZero = true;
 		
 		Login login = new Login();
@@ -79,7 +79,7 @@ public class FarmVeritas {
 			if (chest) {
 				System.out.println("Chest");
 				driver.findElement(chestBy).click();
-				Thread.sleep(500);
+				Thread.sleep(500); //For chest animation to process
 				wait.until(ExpectedConditions.elementToBeClickable(ok));
 				WebElement okButton = driver.findElement(ok);
 				okButton.click();
@@ -121,7 +121,7 @@ public class FarmVeritas {
 
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("txt-stamina-after")));
 			aap = Integer.valueOf(driver.findElement(By.className("txt-stamina-after")).getText());
-			System.out.println(aap);
+			System.out.println(aap + " AAP");
 			if (cost == 19) {
 				String costString = driver.findElement(By.className("txt-stamina")).getText();
 				int preNum = costString.indexOf(':');
@@ -137,6 +137,7 @@ public class FarmVeritas {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(120));
 				//reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
 			}
+			System.out.println("attempts = " + attempts + "; max = " + maxAttempts);
 			if (( attempts++ >= maxAttempts ) || ( exitAtZero == true && aap == 0 )) {
 				results.results(driver, wait, false);
 				next = false;
@@ -144,7 +145,7 @@ public class FarmVeritas {
 			} else {
 				results.results(driver, wait, true);
 			}
-			System.out.println(attempts);
+			System.out.println(attempts + "/" + maxAttempts + " attempts");
 		}
 		System.out.println("Farm Complete");
 	}
