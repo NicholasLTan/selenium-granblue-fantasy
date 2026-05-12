@@ -81,18 +81,26 @@ public class ProQuests {
 						driver.findElement(By.className("btn-usual-ok")).click();
 						wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#quest/supporter"));
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.className("prt-supporter")));
-						if (type.equals("normal") && questNum <= 1) {
-							if ( questNum == 0 && !maxR ) {
+						System.out.println("Type = " + type + "; questNum = " + i);
+						if (type.equals("normal") && i <= 1) {
+							if ( i == 0 && !maxR ) {
 								driver.findElement(By.cssSelector("div[class*='id-5'][data-id='5']")).click();
-								wait.until(ExpectedConditions.textToBe(By.className("prt-deck-title"), "Hayai"));
+								wait.until(ExpectedConditions.or(
+										ExpectedConditions.textToBe(By.className("prt-deck-title"), "Hayai"),
+										ExpectedConditions.textToBe(By.className("prt-deck-title"), "R")));
 								driver.findElement(By.cssSelector("ol[class*='flex-control-nav'] > li:nth-child(3)")).click();
-							} else if ( questNum == 1 && !maxSR) {
+								System.out.println("Switch R");
+							} else if ( i == 1 && !maxSR) {
 								driver.findElement(By.cssSelector("div[class*='id-4'][data-id='4']")).click();
-								wait.until(ExpectedConditions.textToBe(By.className("prt-deck-title"), "Quick"));
+								wait.until(ExpectedConditions.or(
+										ExpectedConditions.textToBe(By.className("prt-deck-title"), "Quick"),
+										ExpectedConditions.textToBe(By.className("prt-deck-title"), "SR")));
 								driver.findElement(By.cssSelector("ol[class*='flex-control-nav'] > li:nth-child(2)")).click();
+								System.out.println("Switch SR");
 							} else {
 								driver.findElement(By.cssSelector("div[class*='id-7'][data-id='7']")).click();
 								wait.until(ExpectedConditions.textToBe(By.className("prt-deck-title"), "Event"));
+								System.out.println("Switch *");
 							}
 						}
 						playAgain.playSkip(driver, wait);
