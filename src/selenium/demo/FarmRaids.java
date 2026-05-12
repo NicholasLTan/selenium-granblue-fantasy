@@ -12,9 +12,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaids {
 	@Test
 	public void farmRaids() throws InterruptedException {
-		boolean exitAtZero = true;
-		boolean speedFarm = true;
-		int maxAttempts = 20; // Optional: To prevent infinite loops		
+		boolean exitAtZero = false;
+		boolean speedFarm = false;
+		int maxAttempts = 30; // Optional: To prevent infinite loops		
 		int minHP = 20;
 		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot3']");
 		
@@ -23,7 +23,7 @@ public class FarmRaids {
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		Battle battle = new Battle();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
+		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(1200));
 		Results results = new Results();
 		WebElement refresh;
 		WebElement element;
