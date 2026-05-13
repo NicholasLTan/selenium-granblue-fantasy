@@ -13,21 +13,21 @@ public class Battle {
 	public void battle(WebDriver driver, WebDriverWait wait) throws InterruptedException {
 		By ok = By.className("btn-usual-ok");
 		By popup = By.className("pop-usual");
+		String raidStr = "https://game.granbluefantasy.jp/#raid";
+		String resultStr = "https://game.granbluefantasy.jp/#result";
 		WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		AutoBattle autoBattle = new AutoBattle();
 		autoBattle.autoBattle(driver, shortWait);
-		//activate purple skills
-		
 		
 		wait.until(ExpectedConditions.or (
-				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid"),
+				ExpectedConditions.urlContains(raidStr),
 				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result_multi/empty")
 		));
 		List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][type='5'][state='2']"));
 		if ( !purpleSkills.isEmpty() ) {
 		    for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {
 		        WebElement purple = purpleSkills.get(i);
-		        System.out.println("pos = " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
+		        System.out.println("Purple skill @ pos " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
 		        if (!purple.findElement(By.xpath("./../..")).getAttribute("pos").isEmpty()) {
 		        	purple.click();
 		        	Thread.sleep(2500);
@@ -44,27 +44,14 @@ public class Battle {
 		        }
 		    } 
 		}
-		/*
-		if ( purpleSkills.size() > 0 ) {
-		    for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {		        
-		        WebElement purple = purpleSkills.get(i);
-		        if ( !purple.getAttribute("pos").isEmpty() ) { 
-		        	purple.click();
-		        }
-		    } 
-		}
-		  */
-		  
-		  
-		  //<div class="lis-ability-state ability2" state="1" type="3"></div>
-		 
-		
-		while (driver.getCurrentUrl().startsWith("https://game.granbluefantasy.jp/#raid")) {
+		while (driver.getCurrentUrl().startsWith(raidStr)) {
 			wait.until(ExpectedConditions.or(
 					ExpectedConditions.visibilityOfElementLocated(popup),
-					ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result")));
+					ExpectedConditions.urlContains(resultStr),
+					ExpectedConditions.elementToBeClickable(By.className("btn-result"))));
 			List<WebElement> elementPopup = driver.findElements(popup);
-			if (driver.getCurrentUrl().contains("https://game.granbluefantasy.jp/#result")) {
+			List<WebElement> elementResult = driver.findElements(By.className("btn-result"));
+			if (driver.getCurrentUrl().contains(resultStr)) {
 				return;
 			} else if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed() ) {
 				System.out.println("Battle OK Click");
@@ -72,9 +59,13 @@ public class Battle {
 				wait.until(ExpectedConditions.stalenessOf(elementPopup.get(0)));
 				driver.findElement(By.className("btn-treasure-footer-reload")).click();
 				return;
+			} else if ( !elementResult.isEmpty() && elementResult.get(0).isDisplayed() ) {
+				System.out.println("Battle Next");
+				elementResult.get(0).click();
+				wait.until(ExpectedConditions.urlContains(resultStr));
 			}
 		}
-		if (!driver.getCurrentUrl().startsWith("https://game.granbluefantasy.jp/#raid")) {
+		if (!driver.getCurrentUrl().startsWith(raidStr)) {
 			return;
 		}
 	}
