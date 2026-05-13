@@ -22,6 +22,7 @@ public class DrawCrate {
 		
 		driver.get("https://game.granbluefantasy.jp/#gacha/normal");
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.className("prt-title-rupie-gacha")));
+//		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("flex-next")));
 		if (!driver.findElements(By.className("prt-popup-header")).isEmpty()) {
 			wait.until(ExpectedConditions.elementToBeClickable(ok));
 			okElement = driver.findElement(ok);
@@ -45,7 +46,9 @@ public class DrawCrate {
 		//!driver.findElement( By.className("txt-unclaimed-present")).getText().equals("0")
 		List<WebElement> getAll = driver.findElements(By.cssSelector("#prt-present-limit div.prt-get-all"));
 		count = 0;
-		while ( !getAll.isEmpty() && getAll.get(0).isDisplayed() ) {
+		while ( !getAll.isEmpty() && getAll.get(0).isDisplayed() && !getAll.get(0).getAttribute("class").contains("hide") ) {
+			System.out.println("GetAll size = " + getAll.size());
+			System.out.println("pre = " + getAll.get(0).getAttribute("class"));
 			driver.findElement(By.cssSelector("#prt-present-limit div div.btn-get-all")).click();
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.className("prt-popup-header")));
 			okElement = driver.findElement(ok);
@@ -55,6 +58,7 @@ public class DrawCrate {
 			okElement.click();
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("txt-pop-confirm"), "You picked up"));
 			getAll = driver.findElements(By.cssSelector("#prt-present-limit div.prt-get-all"));
+			System.out.println("post= " + getAll.get(0).getAttribute("class"));
 			count++;
 		}
 		System.out.println(count + " Item pages picked up");
@@ -69,7 +73,7 @@ public class DrawCrate {
 			okElement.click();
 			wait.until(ExpectedConditions.stalenessOf(okElement));
 			if ( !driver.findElements(ok).isEmpty() ) {	
-				wait.until(ExpectedConditions.textToBe(By.className("prt-popup-header"), "Plus Stock Mark"));
+				wait.until(ExpectedConditions.textToBe(By.className("prt-popup-header"), "Plus Mark Stock"));
 				okElement = driver.findElement(ok);
 				okElement.click();
 				wait.until(ExpectedConditions.stalenessOf(okElement));
