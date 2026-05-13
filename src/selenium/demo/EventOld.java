@@ -12,10 +12,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class EventOld {
 	@Test
 	public void eventOld() throws InterruptedException {
-		boolean maniac = true;
-		boolean raid = true;
+		boolean maniac = false;
+		boolean raid = false;
 		boolean extreme = true;
-		int maxAttempts = 10; //For farming Extreme
+		int maxAttempts = 50; //For farming Extreme
 		
 		Login login = new Login();
 		WebDriver driver = login.login();

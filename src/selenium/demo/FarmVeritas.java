@@ -14,7 +14,7 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='811081'][class^='prt-quest-list btn-quest-list']"; //E Hundred-Armed Hulk
 	//public static final String questClass = "div[data-quest-id='811041'][class^='prt-quest-list btn-quest-list']"; //E Paradoxical Gate
 	//public static final String questClass = "div[data-quest-id='811071'][class^='prt-quest-list btn-quest-list']"; //E Terror Trifecta
-	//public static final String questClass = "div[data-quest-id='811091'][class^='prt-quest-list btn-quest-list']"; //E Rageborn One
+	public static final String questClass = "div[data-quest-id='811091'][class^='prt-quest-list btn-quest-list']"; //E Rageborn One
 	//public static final String questClass = "div[data-quest-id='812071'][class^='prt-quest-list btn-quest-list']"; //F Eyes of Sorrow
 	//public static final String questClass = "div[data-quest-id='812011'][class^='prt-quest-list btn-quest-list']"; //F Trident Grandmaster
 	//public static final String questClass = "div[data-quest-id='812051'][class^='prt-quest-list btn-quest-list']"; //F Faymian Fortress
@@ -32,7 +32,7 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='819031'][class^='prt-quest-list btn-quest-list']"; //M High-Voltage Rock
 	//public static final String questClass = "div[data-quest-id='819091'][class^='prt-quest-list btn-quest-list']"; //M Princess of Dragons
 	//public static final String questClass = "div[data-quest-id='819071'][class^='prt-quest-list btn-quest-list']"; //M Parasite Steve
-	public static final String questClass = "div[data-quest-id='819021'][class^='prt-quest-list btn-quest-list']"; //M Earth-Shattering Fire Demon
+	//public static final String questClass = "div[data-quest-id='819021'][class^='prt-quest-list btn-quest-list']"; //M Earth-Shattering Fire Demon
 	@Test
 	public void farmVeritas() throws InterruptedException {
 		int maxAttempts = 500; // Optional: To prevent infinite loops
