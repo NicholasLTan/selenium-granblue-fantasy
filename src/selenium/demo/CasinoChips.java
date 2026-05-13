@@ -18,7 +18,9 @@ public class CasinoChips {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		
 		driver.get("https://game.granbluefantasy.jp/#casino");
-		
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".btn-move.back")));
+		driver.findElement(By.cssSelector(".btn-move.back")).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-shine'][data-id='1']")));
 		List<WebElement> chips = driver.findElements(By.cssSelector(".btn-shine.present"));
 		System.out.println(chips.size() + " chip shines found");
 		if ( !chips.isEmpty() ) {
