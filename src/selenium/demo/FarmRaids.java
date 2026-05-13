@@ -205,8 +205,9 @@ public class FarmRaids {
 							continue; 
 						} 
 					} else if (url.startsWith("https://game.granbluefantasy.jp/#raid_multi")) {
-						if ( logLevel >= 1 ) {System.out.println("raid_multi");}
-						driver.findElement(By.className("btn-usual-ok")).click();
+						if ( logLevel >= 0 ) {System.out.println("raid_multi");}
+						List<WebElement> elements = driver.findElements(By.className("btn-usual-ok")); 
+						if (!elements.isEmpty() && elements.get(0).isDisplayed()) { elements.get(0).click(); }
 						Thread.sleep(1000);
 						driver.findElement(By.className("btn-treasure-footer-reload")).click();
 					}
