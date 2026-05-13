@@ -11,13 +11,13 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 public class Login {
 
 	public WebDriver login() throws InterruptedException {
-
-		//boolean journeyDrops = false; //deprecated, move Journey Drops to Suite
-
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\Nick\\libs\\selenium-jars\\chromedriver-win64\\chromedriver.exe");
+		//System.setProperty("webdriver.chrome.driver", "C:\\Users\\Nick\\libs\\selenium-jars\\chromedriver-win64\\chromedriver.exe");
+		WebDriverManager.chromedriver().setup();
 		ChromeOptions options = new ChromeOptions();
 		options.setExperimentalOption("debuggerAddress","localhost:9222");
 		WebDriver driver = new ChromeDriver(options);
@@ -29,16 +29,9 @@ public class Login {
 		if (elementExists) {
 			WebElement element = driver.findElement(By.className("btn-usual-close"));
 			element.click();
-			
 			System.out.println("Main Quest Close");
 			wait.until(ExpectedConditions.stalenessOf(element));
 		}
-		/*
-		if ( journeyDrops == true ) {
-			JourneyDropsActivate JDA = new JourneyDropsActivate();
-			JDA.journeyDropsActivate(driver);
-		}
-		*/
 		return driver;
 	}	  
 }
