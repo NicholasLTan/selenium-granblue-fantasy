@@ -12,9 +12,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class EventOld {
 	@Test
 	public void eventOld() throws InterruptedException {
-		boolean maniac = false;
+		boolean maniac = true;
 		boolean raid = false;
-		boolean extreme = true;
+		boolean extreme = false;
 		int maxAttempts = 50; //For farming Extreme
 		
 		Login login = new Login();
@@ -23,7 +23,7 @@ public class EventOld {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(120));
 		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[2]/div[3]/div/img")).click();  //Imagination Overdrive banner
-		driver.get("https://game.granbluefantasy.jp/#quest/extra/event/11074"); 
+		driver.get("https://game.granbluefantasy.jp/#quest/extra/event/6043"); 
 		System.out.println("ZodiaCamp 2nd");  
 		System.out.println("Event SP Quests");		
 		int attempts;
