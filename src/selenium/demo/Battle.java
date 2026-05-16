@@ -29,6 +29,7 @@ public class Battle {
 		        WebElement purple = purpleSkills.get(i);
 		        System.out.println("Purple skill @ pos " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
 		        if (!purple.findElement(By.xpath("./../..")).getAttribute("pos").isEmpty()) {
+		        	wait.until(ExpectedConditions.elementToBeClickable(purple));
 		        	purple.click();
 		        	Thread.sleep(2500);
 		        	//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-ability-skip']")));
@@ -52,17 +53,24 @@ public class Battle {
 			List<WebElement> elementPopup = driver.findElements(popup);
 			List<WebElement> elementResult = driver.findElements(By.className("btn-result"));
 			if (driver.getCurrentUrl().contains(resultStr)) {
+				System.out.println("Battle GoTo Result");
 				return;
 			} else if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed() ) {
-				System.out.println("Battle OK Click");
+				System.out.println("Battle Popup OK Click");
 				elementPopup.get(0).findElement(ok).click();
 				wait.until(ExpectedConditions.stalenessOf(elementPopup.get(0)));
 				driver.findElement(By.className("btn-treasure-footer-reload")).click();
 				return;
 			} else if ( !elementResult.isEmpty() && elementResult.get(0).isDisplayed() ) {
-				System.out.println("Battle Next");
-				elementResult.get(0).click();
-				wait.until(ExpectedConditions.urlContains(resultStr));
+				System.out.println("Battle Next found, size:" + elementResult.size());
+				Thread.sleep(2500); //wait for auto to potentially proceed to results 
+				//List<WebElement> elementAuto = driver.findElements(By.className("btn-auto"));
+				//if ( elementAuto.isEmpty() || !elementAuto.get(0).isDisplayed() ) {
+				if (driver.getCurrentUrl().contains(raidStr)) {
+					System.out.println("Battle Next, completing stalled battle");
+					elementResult.get(0).click();
+					wait.until(ExpectedConditions.urlContains(resultStr));	
+				}				
 			}
 		}
 		if (!driver.getCurrentUrl().startsWith(raidStr)) {
