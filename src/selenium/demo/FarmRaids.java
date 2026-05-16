@@ -12,8 +12,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaids {
 	@Test
 	public void farmRaids() throws InterruptedException {
-		boolean exitAtZero = false;
-		boolean speedFarm = false;
+		boolean exitAtZero = true;
+		boolean speedFarm = true;
 		int maxAttempts = 30; // Optional: To prevent infinite loops		
 		int minHP = 20;
 		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot3']");
@@ -179,6 +179,7 @@ public class FarmRaids {
 				try {
 					battle.battle(driver, longWait);
 				} catch (ElementClickInterceptedException e) {
+					System.out.println("FarmRaids battle ElementClickInterceptedException");
 					if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid")) {
 						if ( logLevel >= 1 ) {System.out.println("supporter_raid");} 
 						Thread.sleep(1000); 
