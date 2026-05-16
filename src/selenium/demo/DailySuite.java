@@ -3,9 +3,17 @@ import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
-//@SelectClasses({JourneyDropsActivate.class, FarmRaids.class})
-//@SelectClasses({JourneyDropsActivate.class, FarmVeritas.class, FarmRaids.class})
-@SelectClasses({CasinoChips.class, DrawCrate.class, Provisions.class, JourneyDropsActivate.class, ProQuests.class, FarmVeritas.class, FarmRaids.class})
+@SelectClasses({
+	CasinoChips.class, 
+	DrawCrate.class, 
+	Provisions.class, 
+	JourneyDropsActivate.class, 
+	ProQuests.class, 
+	EventOld.class,
+	FarmRaids.class,
+	FarmVeritas.class, 	
+	FreeSP.class
+	})
 public class DailySuite {
 
 }
