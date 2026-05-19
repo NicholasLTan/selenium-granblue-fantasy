@@ -18,7 +18,8 @@ public class Provisions {
 		driver.get("https://game.granbluefantasy.jp/#frontier");
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-receive-all")));
 		driver.findElement(By.className("btn-receive-all")).click();
-		wait.until(ExpectedConditions.textToBe(By.className("prt-popup-header"), "Pick Up Loot"));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-popup-header")));
+		//wait.until(ExpectedConditions.textToBe(By.className("prt-popup-header"), "Pick Up Loot"));
 		driver.findElement(By.className("btn-usual-ok")).click();
 	}
 }
