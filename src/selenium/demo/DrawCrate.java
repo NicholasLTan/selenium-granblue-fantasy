@@ -29,10 +29,12 @@ public class DrawCrate {
 			okElement.click();
 			wait.until(ExpectedConditions.stalenessOf(okElement));
 		}
-		List<WebElement> rupie = driver.findElements(By.cssSelector(".btn-lupi.multi.free"));
+		List<WebElement> rupie = driver.findElements(By.cssSelector("div[data-id='6002'][data-count='100']"));
+		System.out.println("Rupie.size = " + rupie.size());
 		if ( !rupie.isEmpty() ) {
 			wait.until(ExpectedConditions.elementToBeClickable(rupie.get(0)));
-			rupie.get(0).click();			
+			rupie.get(0).click();
+			Thread.sleep(1000); //For click to process, need to switch to url
 		}
 		
 		driver.get("https://game.granbluefantasy.jp/#present");
@@ -98,8 +100,10 @@ public class DrawCrate {
 				}
 				okElement.click();
 				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("prt-result-recycle"), "The following was reserved."));
-				driver.findElement(ok).click();
+				okElement = driver.findElement(ok);
+				okElement.click();
 				count++;
+				wait.until(ExpectedConditions.stalenessOf(okElement));
 			}
 			System.out.println(count + " " + type + " pages reserved");
 		} 
