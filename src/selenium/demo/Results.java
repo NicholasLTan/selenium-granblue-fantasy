@@ -23,7 +23,7 @@ public class Results {
 		String resultsURL = "https://game.granbluefantasy.jp/#result";
 				
 		if ( logLevel >= 1 ) {System.out.println("Results wait");}
-		Thread.sleep(1000);
+		//Thread.sleep(1000);
 		while (driver.getCurrentUrl().startsWith(resultsURL)) {
 			if ( logLevel >= 1 ) {System.out.println("In Results Wait Loop");}
 			wait.until(ExpectedConditions.or(
@@ -98,7 +98,7 @@ public class Results {
 					List<WebElement> elementOk = driver.findElements(ok);
 					List<WebElement> elementClose = driver.findElements(close);
 					List<WebElement> elementCtrl = driver.findElements(ctrl);
-					if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed() && retry) {
+					if (!elementNext.isEmpty() && elementNext.get(0).isDisplayed() && retry && !elementPopup.get(0).findElement(By.className("prt-popup-header")).getText().equals("Unparalleled Foe")) {
 						if ( logLevel >= 1 ) {System.out.println("PlayAgain Next");}
 						elementNext.get(0).click();
 						wait.until(ExpectedConditions.stalenessOf(elementNext.get(0)));
