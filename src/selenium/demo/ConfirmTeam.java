@@ -8,14 +8,15 @@ import org.openqa.selenium.WebElement;
 
 public class ConfirmTeam {
 	public void confirmTeam(WebDriver driver, WebDriverWait wait) {
+		int logLevel = 0;
 		WebElement confirm = null;
-		System.out.println("Start New ConfirmTeam");
-		System.out.println(driver.getCurrentUrl());
+		if ( logLevel >= 1) { System.out.println("Start New ConfirmTeam"); }
+		if ( logLevel >= 1) { System.out.println(driver.getCurrentUrl()); }
 		if (driver.getCurrentUrl().contains("supporter")) {
 			confirm = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-usual-ok']")));
 		}
 		if ( confirm != null ) {
-			System.out.println("Confirm team/support");
+			if ( logLevel >= 1) { System.out.println("Confirm team/support"); }
 			confirm.click(); // Confirm team/support
 		}
 		try {
