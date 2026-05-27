@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 
@@ -34,7 +35,15 @@ public class AutoBattle {
 				System.out.println("attack");
 				//wait.until(ExpectedConditions.stalenessOf(driver.findElement(attackButton)));
 				fluentWait.until(ExpectedConditions.elementToBeClickable(autoButton));
-				driver.findElement(autoButton).click();
+				try { 
+					driver.findElement(autoButton).click();
+				} catch (StaleElementReferenceException e) {
+					if (!driver.findElements(By.className("btn-result")).isEmpty()) {
+						System.out.println("AutoBattle AutoButton Stale Goto Result");
+						wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-result")));
+						driver.findElement(By.className("btn-result")).click();
+					}
+				}				
 				System.out.println("semi-auto");
 			}
 		} catch (TimeoutException e) {
