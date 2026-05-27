@@ -19,13 +19,13 @@ public class Results {
 		By rankup = By.id("cjs-lp-rankup");
 		By close = By.className("btn-usual-close");
 		By playAgain = By.cssSelector("div[data-chapter-id][class='btn-retry cnt-quest']");
-		int logLevel = 0;		
+		int logLevel = 1;		
 		String resultsURL = "https://game.granbluefantasy.jp/#result";
 				
 		if ( logLevel >= 1 ) {System.out.println("Results wait");}
 		//Thread.sleep(1000);
 		while (driver.getCurrentUrl().startsWith(resultsURL)) {
-			if ( logLevel >= 1 ) {System.out.println("In Results Wait Loop");}
+			if ( logLevel >= 2 ) {System.out.println("In Results Wait Loop");}
 			wait.until(ExpectedConditions.or(
 					ExpectedConditions.visibilityOfElementLocated(popup),
 					ExpectedConditions.elementToBeClickable(rankup),
@@ -44,7 +44,7 @@ public class Results {
 				if ( logLevel >= 1 ) {System.out.println("Empty result");}
 				wait.until(ExpectedConditions.elementToBeClickable(ctrl));
 				driver.findElement(ctrl).click();
-				if ( logLevel >= 1 ) {System.out.println("CTRL clicked");}
+				if ( logLevel >= 2 ) {System.out.println("CTRL clicked");}
 				wait.until(ExpectedConditions.stalenessOf(elementCtrl.get(0)));
 			} else if (!elementRankup.isEmpty() && elementRankup.get(0).isDisplayed()) {
 				if ( logLevel >= 1 ) {System.out.println("Rankup");}
@@ -52,14 +52,16 @@ public class Results {
 				Thread.sleep(2500); //Necessary sleep for canvas anim to play
 				elementRankup.get(0).click();
 				wait.until(ExpectedConditions.stalenessOf(elementRankup.get(0)));
-				if ( logLevel >= 1 ) {System.out.println("Rankup clicked");}
+				if ( logLevel >= 2 ) {System.out.println("Rankup clicked");}
 			} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
 				if ( logLevel >= 1 ) {System.out.println("Close");}
 				elementClose.get(0).click();
 				wait.until(ExpectedConditions.stalenessOf(elementClose.get(0)));
 			} else if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
-				if ( logLevel >= 1 ) {System.out.println("Popup Ok");
-				System.out.println(elementPopup.get(0).findElement(By.className("prt-popup-header")).getText());}
+				if ( logLevel >= 1 ) {
+					System.out.println("Popup Ok");
+					System.out.println(elementPopup.get(0).findElement(By.className("prt-popup-header")).getText()); 
+				}
 				elementOk.get(0).click();
 				wait.until(ExpectedConditions.invisibilityOf(elementPopup.get(0))); 	
 			/*} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
@@ -81,7 +83,7 @@ public class Results {
 		//Thread.sleep(1000); //Necessary sleep for potential popup to manifest
 		
 		while ( driver.getCurrentUrl().startsWith(resultsURL)) {
-			if ( logLevel >= 1 ) {System.out.println("In Results Wait Loop 2");}
+			if ( logLevel >= 2 ) {System.out.println("In Results Wait Loop 2");}
 			Thread.sleep(500);
 			List<WebElement> elementPopup = driver.findElements(popup);
 			while (!elementPopup.isEmpty()) {
