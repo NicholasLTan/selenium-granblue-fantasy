@@ -14,9 +14,6 @@ public class FreeSP {
 		By click1 = By.cssSelector("div[data-key^='800']"); //Exclusive Quest
 		By click2 = By.cssSelector("div[data-chapter-id^='8000']");	//Play
 
-		//By click1 = By.cssSelector("div[data-key='8001']"); //Exclusive Quest
-		//By click2 = By.cssSelector("div[data-chapter-id='80002']");	//Play
-		
 		Login login = new Login();
 		WebDriver driver = login.login();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
