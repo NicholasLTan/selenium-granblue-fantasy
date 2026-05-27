@@ -16,7 +16,7 @@ public class FarmRaids {
 		boolean speedFarm = true;
 		int maxAttempts = 30; // Optional: To prevent infinite loops		
 		int minHP = 20;
-		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot3']");
+		final By finderSlot = By.cssSelector("div[class^='btn-search-switch slot4']");
 		int logLevel = 0;
 		
 		Login login = new Login();
@@ -107,7 +107,7 @@ public class FarmRaids {
 			int minNum = 0;
 			int currBP = Integer.valueOf(driver.findElement(By.cssSelector("div[data-current-bp]")).getAttribute("data-current-bp"));
 			boolean crew = false;
-			if ( logLevel >= 1 ) {System.out.println(currBP + " BP");}
+			if ( logLevel >= 0 ) {System.out.println(currBP + " BP");}
 			if ( exitAtZero && currBP <= 1 ) { break; }
 			for (WebElement raid : raids) {
 				if (raid.getAttribute("class").endsWith("guild-member")) {
@@ -177,7 +177,7 @@ public class FarmRaids {
 					continue;
 				}
 				try {
-					battle.battle(driver, longWait);
+					battle.battle(driver, longWait, false);
 				} catch (ElementClickInterceptedException e) {
 					System.out.println("FarmRaids battle ElementClickInterceptedException");
 					if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid")) {

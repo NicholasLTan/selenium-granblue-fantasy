@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FreeSP {
 	@Test
 	public void freeSP() throws InterruptedException {
-		int maxAttempts = 400; // To prevent infinite loops
+		int maxAttempts = 4000; // To prevent infinite loops
 		By click1 = By.cssSelector("div[data-key^='800']"); //Exclusive Quest
 		By click2 = By.cssSelector("div[data-chapter-id^='8000']");	//Play
 
@@ -31,6 +31,6 @@ public class FreeSP {
 		System.out.println("Play");
 		
 		PlayAgain playAgain = new PlayAgain();
-		playAgain.playAgain(driver, wait, maxAttempts);		
+		playAgain.playAgain(driver, wait, maxAttempts, false);		
 	}
 }

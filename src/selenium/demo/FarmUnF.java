@@ -66,7 +66,7 @@ public class FarmUnF {
 		}
 		System.out.println(quest.getAttribute("data-chapter-name"));
 		quest.click();
-		playAgain.playAgain(driver, longWait, maxAttempts);
+		playAgain.playAgain(driver, longWait, maxAttempts, false);
 		
 		
 		/*

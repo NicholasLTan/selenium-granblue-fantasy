@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PlayAgain {
-	public void playAgain(WebDriver driver, WebDriverWait longWait, String itemID) throws InterruptedException {
+	public void playAgain(WebDriver driver, WebDriverWait longWait, String itemID, boolean oneTurn) throws InterruptedException {
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		Battle battle = new Battle();
@@ -17,7 +17,7 @@ public class PlayAgain {
 			wait.until(ExpectedConditions.urlContains("supporter"));
 			confirmTeam.confirmTeam(driver, wait);
 			wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid"));
-			battle.battle(driver, longWait);
+			battle.battle(driver, longWait, oneTurn);
 			nextLoop = materialTracker.materialTracker(driver, itemID);
 			results.results(driver, wait, true);
 			if ( driver.getCurrentUrl().equals("https://game.granbluefantasy.jp/#quest/extra") ) { return; }
@@ -26,7 +26,7 @@ public class PlayAgain {
 		return;
 	}
 	
-	public void playAgain(WebDriver driver, WebDriverWait longWait, int maxAttempts) throws InterruptedException {
+	public void playAgain(WebDriver driver, WebDriverWait longWait, int maxAttempts, boolean oneTurn) throws InterruptedException {
 		int attempts = 0;
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
@@ -36,8 +36,8 @@ public class PlayAgain {
 			wait.until(ExpectedConditions.urlContains("supporter"));
 			confirmTeam.confirmTeam(driver, wait);
 			wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid"));
-			battle.battle(driver, longWait);
-			if ( attempts + 1 == maxAttempts) {
+			battle.battle(driver, longWait, oneTurn);
+			if ( attempts + 1 >= maxAttempts) {
 				results.results(driver, wait, false);
 			} else {
 				results.results(driver, wait, true);

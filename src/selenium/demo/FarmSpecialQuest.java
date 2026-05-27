@@ -37,7 +37,7 @@ public class FarmSpecialQuest {
 			//wait.until(ExpectedConditions.elementToBeClickable(selectThree));
 			//driver.findElement(selectThree).click();
 			System.out.println("Play");
-			playAgain.playAgain(driver, wait, itemID);
+			playAgain.playAgain(driver, wait, itemID, false);
 		}
 		//playAgain.playAgain(driver, wait, maxAttempts);
 		/*

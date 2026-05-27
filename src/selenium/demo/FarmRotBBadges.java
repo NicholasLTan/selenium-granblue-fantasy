@@ -36,7 +36,7 @@ public class FarmRotBBadges {
 			String questString = "div[data-quest-id='" + questId + "']";
 			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(questString)));
 			driver.findElement(By.cssSelector(questString)).click();
-			playAgain.playAgain(driver, longWait, maxAttempts);
+			playAgain.playAgain(driver, longWait, maxAttempts, false);
 		}
 		System.out.println("Script complete");
 	}

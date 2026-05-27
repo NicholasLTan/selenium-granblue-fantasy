@@ -29,7 +29,7 @@ public class FarmRotBShenxian {
 		driver.findElement(selectOne).click();
 		wait.until(ExpectedConditions.elementToBeClickable(selectTwo));
 		driver.findElement(selectTwo).click();
-		playAgain.playAgain(driver, wait, maxAttempts);
+		playAgain.playAgain(driver, wait, maxAttempts, false);
 		System.out.println("Script Complete");
 	}
 }

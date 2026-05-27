@@ -162,7 +162,7 @@ public class FarmRaidEvent {
 				String url = driver.getCurrentUrl();
 				System.out.println("Conf " + url + " Auto");
 				try {
-					battle.battle(driver, longWait);
+					battle.battle(driver, longWait, false);
 				} catch (ElementClickInterceptedException e) {
 					if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid")) {
 						System.out.println("supporter_raid"); 
@@ -197,7 +197,7 @@ public class FarmRaidEvent {
 					}
 				}
 				//autoBattle.autoBattle(driver, wait);
-				battle.battle(driver, longWait);
+				battle.battle(driver, longWait, false);
 				results.results(driver, longWait, false);
 				System.out.println("Attempt " + attempts + " completed");
 				attempts++;

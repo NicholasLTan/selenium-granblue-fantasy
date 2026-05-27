@@ -57,7 +57,7 @@ public class EventNew {
 			driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='942941']")).click();
 			System.out.println("Impossible");
 
-			playAgain.playAgain(driver, wait, maxAttempts);
+			playAgain.playAgain(driver, wait, maxAttempts, false);
 			/*
 			 * if (attempts < maxAttempts) {
 			 * driver.findElement(By.cssSelector("[data-group='3']")).click(); // Raid

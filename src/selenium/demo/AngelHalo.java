@@ -41,7 +41,7 @@ public class AngelHalo {
 			while (haloCount < 10) {
 				confirmTeam.confirmTeam(wait);
 				//semiAuto.semiAuto(driver, wait);
-				battle.battle(driver, wait);
+				battle.battle(driver, wait, false);
 				//autoBattleNew.autoBattleNew(driver, wait);
 				haloCount++;
 				System.out.println(relics + "." + haloCount );
@@ -57,7 +57,7 @@ public class AngelHalo {
 					System.out.println("DHalo start " + relics ); 
 					confirmTeam.confirmTeam(wait);		  
 					//autoBattle.autoBattle(driver, wait);
-					battle.battle(driver, wait);
+					battle.battle(driver, wait, false);
 					results.results(driver, wait, false);								
 				}
 			}

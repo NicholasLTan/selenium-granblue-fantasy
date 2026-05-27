@@ -14,7 +14,7 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='811081'][class^='prt-quest-list btn-quest-list']"; //E Hundred-Armed Hulk
 	//public static final String questClass = "div[data-quest-id='811041'][class^='prt-quest-list btn-quest-list']"; //E Paradoxical Gate
 	//public static final String questClass = "div[data-quest-id='811071'][class^='prt-quest-list btn-quest-list']"; //E Terror Trifecta
-	public static final String questClass = "div[data-quest-id='811091'][class^='prt-quest-list btn-quest-list']"; //E Rageborn One
+	//public static final String questClass = "div[data-quest-id='811091'][class^='prt-quest-list btn-quest-list']"; //E Rageborn One
 	//public static final String questClass = "div[data-quest-id='812071'][class^='prt-quest-list btn-quest-list']"; //F Eyes of Sorrow
 	//public static final String questClass = "div[data-quest-id='812011'][class^='prt-quest-list btn-quest-list']"; //F Trident Grandmaster
 	//public static final String questClass = "div[data-quest-id='812051'][class^='prt-quest-list btn-quest-list']"; //F Faymian Fortress
@@ -28,15 +28,15 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='814051'][class^='prt-quest-list btn-quest-list']"; //H Vengeful Demigod
 	//public static final String questClass = "div[data-quest-id='815031'][class^='prt-quest-list btn-quest-list']"; //I Blushing Groom
 	//public static final String questClass = "div[data-quest-id='818061'][class^='prt-quest-list btn-quest-list']"; //L Simpering Beast
-	//public static final String questClass = "div[data-quest-id='818131'][class^='prt-quest-list btn-quest-list']"; //L Xeno Sagi Militis
+	public static final String questClass = "div[data-quest-id='818131'][class^='prt-quest-list btn-quest-list']"; //L Xeno Sagi Militis
 	//public static final String questClass = "div[data-quest-id='819031'][class^='prt-quest-list btn-quest-list']"; //M High-Voltage Rock
 	//public static final String questClass = "div[data-quest-id='819091'][class^='prt-quest-list btn-quest-list']"; //M Princess of Dragons
 	//public static final String questClass = "div[data-quest-id='819071'][class^='prt-quest-list btn-quest-list']"; //M Parasite Steve
 	//public static final String questClass = "div[data-quest-id='819021'][class^='prt-quest-list btn-quest-list']"; //M Earth-Shattering Fire Demon
 	@Test
 	public void farmVeritas() throws InterruptedException {
-		int maxAttempts = 500; // Optional: To prevent infinite loops
-		boolean exitAtZero = true;
+		int maxAttempts = 400; // Optional: To prevent infinite loops
+		boolean exitAtZero = false;
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -93,7 +93,7 @@ public class FarmVeritas {
 					driver.findElement(By.cssSelector(mimicClass)).click();
 					wait.until(ExpectedConditions.urlMatches("https://game.granbluefantasy.jp/#replicard/supporter/"));
 					confirmTeam.confirmTeam(wait);
-					battle.battle(driver, wait);
+					battle.battle(driver, wait, false);
 					results.results(driver, wait, false);					
 				} else {
 					driver.findElement(ok).click();
@@ -132,7 +132,7 @@ public class FarmVeritas {
 				System.out.println("cost = " + cost);
 			}
 			confirmTeam.confirmTeam(wait);
-			battle.battle(driver, wait);
+			battle.battle(driver, wait, false);
 			if ( cost == 20 && turnReload ) {
 				wait = new WebDriverWait(driver, Duration.ofSeconds(120));
 				//reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
