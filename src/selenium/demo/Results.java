@@ -24,6 +24,7 @@ public class Results {
 				
 		if ( logLevel >= 1 ) {System.out.println("Results wait");}
 		//Thread.sleep(1000);
+		wait.until(ExpectedConditions.urlContains(resultsURL));
 		while (driver.getCurrentUrl().startsWith(resultsURL)) {
 			if ( logLevel >= 2 ) {System.out.println("In Results Wait Loop");}
 			wait.until(ExpectedConditions.or(
