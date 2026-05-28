@@ -24,7 +24,9 @@ public class Battle {
 				ExpectedConditions.urlContains(raidStr),
 				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result_multi/empty")
 				));
-		List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][type='5'][state='2']"));
+		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-attack-start")));
+		List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][state='2'][type='5']"));
+		System.out.println(purpleSkills.size() + " purple skills");
 		if ( !purpleSkills.isEmpty() && !driver.findElement(By.className("name")).getText().contains("Perfected Alchemist")) {
 			for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {
 				WebElement purple = purpleSkills.get(i);
@@ -50,14 +52,16 @@ public class Battle {
 		//try {
 			while (driver.getCurrentUrl().startsWith(raidStr)) {
 				wait.until(ExpectedConditions.or(
-						ExpectedConditions.attributeContains(By.cssSelector("div[class^='btn-attack-start']"), "class", "display-off"),
+						ExpectedConditions.and(
+								ExpectedConditions.elementToBeClickable(By.className("btn-temporary")),
+								ExpectedConditions.attributeContains(By.cssSelector("div[class^='btn-attack-start']"), "class", "display-off")),
 						ExpectedConditions.visibilityOfElementLocated(popup),
 						ExpectedConditions.urlContains(resultStr),
 						ExpectedConditions.elementToBeClickable(By.className("btn-result"))));
 				List<WebElement> elementPopup = driver.findElements(popup);
 				List<WebElement> elementResult = driver.findElements(By.className("btn-result"));
 				List<WebElement> elementStart = driver.findElements(By.cssSelector("div[class^='btn-attack-start']"));
-				List<WebElement> elementWave = driver.findElements(By.className("txt-info-num"));
+				List<WebElement> elementWave = driver.findElements(By.cssSelector("div[id='prt-wave-num'] > div[class='txt-info-num'] > div"));
 				if (!elementStart.isEmpty()) {}
 				if (driver.getCurrentUrl().contains(resultStr)) {
 					System.out.println("Battle GoTo Result");
@@ -68,7 +72,7 @@ public class Battle {
 					wait.until(ExpectedConditions.stalenessOf(elementPopup.get(0)));
 					driver.findElement(By.className("btn-treasure-footer-reload")).click();
 					return;
-				} else if (driver.getCurrentUrl().contains("raid_multi") && !elementResult.isEmpty() && elementResult.get(0).isDisplayed() ) {
+				} else if (driver.getCurrentUrl().contains("raid") && !elementResult.isEmpty() && elementResult.get(0).isDisplayed() ) {
 					System.out.println("Battle Next found, size:" + elementResult.size());
 					Thread.sleep(2500); //wait for auto to potentially proceed to results 
 					//List<WebElement> elementAuto = driver.findElements(By.className("btn-auto"));
@@ -79,7 +83,7 @@ public class Battle {
 						wait.until(ExpectedConditions.urlContains(resultStr));	
 					}				
 				} else if ( OneTurn && 
-						(elementWave.isEmpty() || elementWave.get(0).findElement(By.cssSelector("> div:nth-child(1)")).getAttribute("class").equals(elementWave.get(0).findElement(By.cssSelector("> div:nth-child(2)")).getAttribute("class"))) &&
+						(elementWave.isEmpty() || elementWave.get(0).getAttribute("class").equals(elementWave.get(1).getAttribute("class"))) &&
 						!elementStart.isEmpty() && elementStart.get(0).getAttribute("class").endsWith("display-off") ) {
 					System.out.println("Start invisible, reloading");
 					reload.reload(driver, wait);
