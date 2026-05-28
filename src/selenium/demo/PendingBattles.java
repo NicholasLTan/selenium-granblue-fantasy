@@ -22,6 +22,7 @@ public class PendingBattles {
 		while (true) {
 			driver.get("https://game.granbluefantasy.jp/#quest/assist/unclaimed");
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("txt-multi-title"), "Pending Battles"));
+			Thread.sleep(1500); //Delay necessary for making sure raids populate before creating raidList
 			List<WebElement> raidList = driver.findElements(By.cssSelector("div[class*='btn-multi-raid']"));
 			if (!raidList.isEmpty()) {
 				count++;
