@@ -24,6 +24,12 @@ public class RecordsTen {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-head-current")));
 		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
 
+		if (!driver.findElements(By.className("prt-popup-header")).isEmpty()) {
+			WebElement close = driver.findElement(By.className("btn-usual-close"));
+			close.click();
+			wait.until(ExpectedConditions.stalenessOf(close));
+		}
+			
 		wait.until(ExpectedConditions.elementToBeClickable(questBy));
 		System.out.println(driver.findElement(questBy).getAttribute("data-quest-name"));
 		driver.findElement(questBy).click(); 
