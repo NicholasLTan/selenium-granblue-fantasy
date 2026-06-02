@@ -2,6 +2,7 @@ package selenium.demo;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -19,37 +20,47 @@ public class Battle {
 		WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		AutoBattle autoBattle = new AutoBattle();		
 		Reload reload = new Reload();
+		boolean usePurple = true;
 
 		wait.until(ExpectedConditions.or (
 				ExpectedConditions.urlContains(raidStr),
 				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result_multi/empty")
 				));
+		if (!driver.getCurrentUrl().startsWith(raidStr)) {
+			return;
+		}
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-attack-start")));
-		List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][state='2'][type='5']"));
-		System.out.println(purpleSkills.size() + " purple skills");
-		if ( !purpleSkills.isEmpty() && !driver.findElement(By.className("name")).getText().contains("Perfected Alchemist")) {
-			for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {
-				WebElement purple = purpleSkills.get(i);
-				System.out.println("Purple skill @ pos " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
-				if (!purple.findElement(By.xpath("./../..")).getAttribute("pos").isEmpty()) {
-					wait.until(ExpectedConditions.elementToBeClickable(purple));
-					purple.click();
-					Thread.sleep(2500);
-					//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-ability-skip']")));
-					/*if ( driver.findElement(By.className("prt-ability-skip")).getAttribute("active").equals("1") ) {
+		autoBattle.autoBattle(driver, shortWait);
+		if (usePurple) {
+			List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][state='2'][type='5']"));
+			System.out.println(purpleSkills.size() + " purple skills");
+			if ( !purpleSkills.isEmpty() && !driver.findElement(By.className("name")).getText().contains("Perfected Alchemist")) {
+				for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {
+					WebElement purple = purpleSkills.get(i);
+					System.out.println("Purple skill @ pos " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
+					if (!purple.findElement(By.xpath("./../..")).getAttribute("pos").isEmpty()) {
+						wait.until(ExpectedConditions.elementToBeClickable(purple));
+						if (!driver.findElements(By.cssSelector("div[class='prt-raid-log.log-battle']")).isEmpty()) {
+							WebElement raidLog = driver.findElement(By.cssSelector("div[class^='prt-raid-log']"));
+							wait.until(ExpectedConditions.invisibilityOf(raidLog));
+						}
+						purple.click();
+						Thread.sleep(2500);
+						//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-ability-skip']")));
+						/*if ( driver.findElement(By.className("prt-ability-skip")).getAttribute("active").equals("1") ) {
 		        		driver.findElement(By.className("btn-ability-skip")).click();
 		        	}*/
 
-					purpleSkills = driver.findElements(By.cssSelector("div[icon-type='5']"));
-					if ( !purpleSkills.isEmpty() ) {
-						purpleSkills.get(0).click();
+						purpleSkills = driver.findElements(By.cssSelector("div[icon-type='5']"));
+						if ( !purpleSkills.isEmpty() ) {
+							purpleSkills.get(0).click();
+						}
+						driver.findElement(By.className("btn-command-back")).click();
 					}
-					driver.findElement(By.className("btn-command-back")).click();
 				}
-			} 
-		}
-		autoBattle.autoBattle(driver, shortWait);
-		//try {
+			}
+		}		
+		try {
 			while (driver.getCurrentUrl().startsWith(raidStr)) {
 				wait.until(ExpectedConditions.or(
 						ExpectedConditions.and(
@@ -68,7 +79,7 @@ public class Battle {
 					return;
 				} else if (driver.getCurrentUrl().contains("raid_multi") && !elementPopup.isEmpty() && elementPopup.get(0).isDisplayed() ) { //going stale here
 					System.out.println("Battle Popup OK Click");
-					elementPopup.get(0).findElement(ok).click();
+					elementPopup.get(0).findElement(ok).click();  //no such element exception
 					wait.until(ExpectedConditions.stalenessOf(elementPopup.get(0)));
 					driver.findElement(By.className("btn-treasure-footer-reload")).click();
 					return;
@@ -91,7 +102,7 @@ public class Battle {
 			}
 			if (!driver.getCurrentUrl().startsWith(raidStr)) {
 				return;
-			}/*
+			}
 		} catch (StaleElementReferenceException e) {
 			System.out.println("Battle StaleElementReferenceException GoTo Return");
 			List<WebElement> elementResult = driver.findElements(By.className("btn-result"));
@@ -108,6 +119,14 @@ public class Battle {
 				}
 				return;
 			}
-		}*/
+		} catch (NoSuchElementException e) {
+			System.out.println("Battle NoSuchElementException Wait Return");
+			if (!driver.getCurrentUrl().contains(raidStr)) {
+				System.out.println("Battle !RaidURL");
+				wait.until(ExpectedConditions.urlContains(resultStr));
+				System.out.println("Battle -> ResultURL");
+			}
+			return;
+		}
 	}
 }
