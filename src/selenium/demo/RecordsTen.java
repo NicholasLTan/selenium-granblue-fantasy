@@ -8,41 +8,40 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class RecordsTen {
-
 	@Test
 	public void recordsTen() throws InterruptedException {
-		int maxAttempts = 1000; // Optional: To prevent infinite loops
-		By questBy = By.cssSelector("div[data-chapter-id='94413'");
-				
+		int maxAttempts = 5; // Optional: To prevent infinite loops
+		int questLv = 150; //75=VH, 80=EX, 95=IMP, 100=NM, 150=NM
+		boolean reload = true; //Set to false if unable to OTK
+
 		Login login = new Login();
 		WebDriver driver = login.login();
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
 		PlayAgain playAgain = new PlayAgain();
-		
-		driver.get("https://game.granbluefantasy.jp/#event/terra");
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-head-current")));
-		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
+		By questBy = By.cssSelector("div[id='btn-quest-start'][data-quest-name^='Lvl " + questLv + "']");				
 
+		driver.get("https://game.granbluefantasy.jp/#event/terra");
+		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-progress-map")));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-head-current")));		
+		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
+		WebElement questBtn;
 		if (!driver.findElements(By.className("prt-popup-header")).isEmpty()) {
-			WebElement close = driver.findElement(By.className("btn-usual-close"));
-			close.click();
-			wait.until(ExpectedConditions.stalenessOf(close));
-		}
-			
+			WebElement closeBtn = driver.findElement(By.className("btn-usual-close"));
+			closeBtn.click();
+			wait.until(ExpectedConditions.stalenessOf(closeBtn));
+		}		
+		if (questLv >= 100) {
+			driver.findElement(By.className("btn-quest-start-hell")).click();
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("pop-usual")));
+			questBtn=driver.findElement(questBy);
+			maxAttempts=Integer.valueOf(questBtn.findElement(By.xpath("../div[@class='txt-remain-count']")).getText().replaceAll("[^0-9]", ""));
+			reload = false;			
+		} else { questBtn = driver.findElement(questBy); }
 		wait.until(ExpectedConditions.elementToBeClickable(questBy));
 		System.out.println(driver.findElement(questBy).getAttribute("data-quest-name"));
-		driver.findElement(questBy).click(); 
-		//For farming NM100
-		/*
-		 * driver.findElement(By.xpath(
-		 * "/html/body/div[1]/div[2]/div/div[3]/div[3]/div[3]/div[3]/div[1]/div[2]/div/div[1]/div/div/div[1]"
-		 * )).click(); System.out.println("Nightmare"); Thread.sleep(1500);
-		 * driver.findElement(By.xpath(
-		 * "/html/body/div[1]/div[2]/div/div[3]/div[3]/div[6]/div/div[2]/div/div[2]/div[1]/div[1]"
-		 * )).click(); System.out.println("NM100"); Thread.sleep(5000);
-		 */	
-		playAgain.playAgain(driver, longWait, maxAttempts, true);
+		questBtn.click();
+		playAgain.playAgain(driver, longWait, maxAttempts, reload);
 	}
 
 
