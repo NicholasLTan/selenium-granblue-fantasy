@@ -12,11 +12,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaidEvent {
 	@Test
 	public void farmRaidEvent() throws InterruptedException {
-		final String raidStr = "treasureraid171_high";
+		int maxAttempts = 4; // Optional: To prevent infinite loops
+		final String raidStr = "treasureraid172_high";
 		final String raidCss = "img[alt$='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid171";
+		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid172";
 		final String raidUrl = "https://game.granbluefantasy.jp/#quest/assist/event";
-		int maxAttempts = 2; // Optional: To prevent infinite loops
+		
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -198,6 +199,7 @@ public class FarmRaidEvent {
 				}
 				//autoBattle.autoBattle(driver, wait);
 				battle.battle(driver, longWait, false);
+				System.out.println("RaidEvent Battle completed, moving to Results");
 				results.results(driver, longWait, false);
 				System.out.println("Attempt " + attempts + " completed");
 				attempts++;
