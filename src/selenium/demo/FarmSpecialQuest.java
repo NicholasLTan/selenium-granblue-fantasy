@@ -1,9 +1,9 @@
 package selenium.demo;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.openqa.selenium.*;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -15,8 +15,8 @@ public class FarmSpecialQuest {
 		String itemID = "5431";
 		
 		Login login = new Login();
-		WebDriver driver = login.login();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
+		WebDriver driver = Objects.requireNonNull(login.login());
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(100)));
 		PlayAgain playAgain = new PlayAgain();
 		MaterialTracker materialTracker = new MaterialTracker();
 		//By selectOne = By.cssSelector("div[data-key='100']"); //DHalo
