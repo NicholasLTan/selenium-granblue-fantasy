@@ -12,7 +12,7 @@ import org.junit.platform.suite.api.Suite;
 	FarmRaids.class,
 	PendingBattles.class,
 	FarmVeritas.class,
-	EventNew.class
+	FarmExo.class
 	})
 public class DailySuite {
 
