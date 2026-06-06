@@ -1,18 +1,20 @@
 package selenium.demo;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class ConfirmTeam {
-	public void confirmTeam(WebDriver driver, WebDriverWait wait) {
+	public void confirmTeam(@NonNull WebDriver driver, WebDriverWait wait) {
 		int logLevel = 0;
 		WebElement confirm = null;
 		if ( logLevel >= 1) { System.out.println("Start New ConfirmTeam"); }
-		if ( logLevel >= 1) { System.out.println(driver.getCurrentUrl()); }
-		if (driver.getCurrentUrl().contains("supporter")) {
+		String currentUrl = driver.getCurrentUrl();
+		if ( logLevel >= 1) { System.out.println(currentUrl); }
+		if (currentUrl != null && currentUrl.contains("supporter")) {
 			confirm = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-usual-ok']")));
 		}
 		if ( confirm != null ) {
@@ -26,7 +28,8 @@ public class ConfirmTeam {
 				WebElement popup = driver.findElement(By.className("pop-usual"));
 				popup.findElement(By.className("btn-usual-ok")).click();
 			}
-			if (driver.getCurrentUrl().equals("https://game.granbluefantasy.jp/#mypage")) {
+			String url = driver.getCurrentUrl();
+			if (url != null && url.equals("https://game.granbluefantasy.jp/#mypage")) {
 				System.out.println("homepage");
 				return;
 			}

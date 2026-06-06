@@ -1,29 +1,25 @@
 package selenium.demo;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import org.openqa.selenium.*;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FarmExo {
-
 	@Test
 	public void farmExo() throws InterruptedException {
 		Login login = new Login();
-		WebDriver driver = login.login();
+		WebDriver driver = Objects.requireNonNull(login.login(), "WebDriver must not be null");
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		AutoBattle autoBattle = new AutoBattle();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(1000));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(60)));
+		WebDriverWait longWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(1000)));
 		driver.get("https://game.granbluefantasy.jp/#event/godslayer"); //Exo event URL
 
 		System.out.println("Exo Cocytus");
-		Thread.sleep(5000);
-
-		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[3]/div[2]/div[2]/div/div[2]/img")).click();
+		Thread.sleep(2000);
 		driver.findElement(By.className("img-boss-quest")).click();
 		System.out.println("Crucible");
 		Thread.sleep(1000);

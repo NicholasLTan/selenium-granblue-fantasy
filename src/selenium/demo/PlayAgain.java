@@ -1,14 +1,15 @@
 package selenium.demo;
 import java.time.Duration;
-
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PlayAgain {
-	public void playAgain(WebDriver driver, WebDriverWait longWait, String itemID, boolean oneTurn) throws InterruptedException {
+	public void playAgain(@NonNull WebDriver driver, WebDriverWait longWait, String itemID, boolean oneTurn) throws InterruptedException {
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
 		Battle battle = new Battle();
 		MaterialTracker materialTracker = new MaterialTracker();
 		Results results = new Results();
@@ -20,16 +21,18 @@ public class PlayAgain {
 			battle.battle(driver, longWait, oneTurn);
 			nextLoop = materialTracker.materialTracker(driver, itemID);
 			results.results(driver, wait, true);
-			if ( driver.getCurrentUrl().equals("https://game.granbluefantasy.jp/#quest/extra") ) { return; }
+			if ("https://game.granbluefantasy.jp/#quest/extra".equals(driver.getCurrentUrl())) {
+    return;
+			}
 		}
 		results.results(driver, wait, false);
 		return;
 	}
 	
-	public void playAgain(WebDriver driver, WebDriverWait longWait, int maxAttempts, boolean oneTurn) throws InterruptedException {
+	public void playAgain(@NonNull WebDriver driver, WebDriverWait longWait, int maxAttempts, boolean oneTurn) throws InterruptedException {
 		int attempts = 0;
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
 		Battle battle = new Battle();
 		Results results = new Results();
 		while (attempts < maxAttempts) {
@@ -48,9 +51,9 @@ public class PlayAgain {
 		return;
 	}
 	
-	public void playSkip(WebDriver driver, WebDriverWait longWait) throws InterruptedException {
+	public void playSkip(@NonNull WebDriver driver, WebDriverWait longWait) throws InterruptedException {
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
 		Results results = new Results();
 		wait.until(ExpectedConditions.urlContains("supporter"));
 		confirmTeam.confirmTeam(driver, wait);

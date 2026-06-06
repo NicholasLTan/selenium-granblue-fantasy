@@ -1,9 +1,9 @@
 package selenium.demo;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.openqa.selenium.*;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,10 +11,10 @@ public class FarmFavorite {
 	@Test
 	public void farmFavorite() throws InterruptedException {
 		Login login = new Login();
-		WebDriver driver = login.login();
+		WebDriver driver = Objects.requireNonNull(login.login(), "WebDriver must not be null");
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		AutoBattle autoBattle = new AutoBattle();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(100));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(100)));
 		
 		//driver.findElement(By.xpath("/html/body/div[1]/div[2]/div/div[3]/div[3]/div[2]/div[1]/div[1]/div[8]/div[1]")).click();  //Quest
 		//driver.findElement(By.className("btn-link-quest")).click();  //Quest
@@ -36,7 +36,6 @@ public class FarmFavorite {
 		while (attempts < maxAttempts) {
 			confirmTeam.confirmTeam(wait);
 			autoBattle.autoBattle(driver, wait);
-			IsElementPresent ePresent = new IsElementPresent();				
 			Results results = new Results();
 			if ( attempts + 1 == maxAttempts) {
 				results.results(driver, wait, false);

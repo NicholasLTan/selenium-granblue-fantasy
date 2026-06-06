@@ -2,6 +2,7 @@ package selenium.demo;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 import org.openqa.selenium.*;
 import org.junit.Test;
@@ -19,10 +20,10 @@ public class EventOld {
 		int extremeAttempts = 10; //For farming Extreme
 		
 		Login login = new Login();
-		WebDriver driver = login.login();
+		WebDriver driver = Objects.requireNonNull(login.login(), "WebDriver must not be null");
 		PlayAgain playAgain = new PlayAgain();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(120));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
+		WebDriverWait longWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(120)));
 		driver.get("https://game.granbluefantasy.jp/#quest/extra/event/6043");
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.className("atx-lead-link")));
 		System.out.println("Event SP Quests");		
@@ -49,7 +50,8 @@ public class EventOld {
 							wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-usual-close")));
 						}
 						elementExists = driver.findElements(cssManiac);
-						if (elementExists.size() > 0 && !elementExists.get(j).getAttribute("class").contains("disable")) {
+						String classAttr = elementExists.size() > 0 ? elementExists.get(j).getAttribute("class") : null;
+						if (elementExists.size() > 0 && classAttr != null && !classAttr.contains("disable")) {
 							System.out.println("EventOld Maniac " + i + "(" + j + ") launching.");
 							elementExists.get(j).click(); //Maniac+
 							wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-usual-ok"))); //Daily limit OK

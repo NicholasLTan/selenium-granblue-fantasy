@@ -2,6 +2,7 @@ package selenium.demo;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -16,12 +17,16 @@ public class ProQuests {
 	@Test
 	public void proQuests() throws InterruptedException {
 		Login login = new Login();
-		WebDriver driver = login.login();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriver driver = Objects.requireNonNull(login.login());
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(10)));
 		String url = "https://game.granbluefantasy.jp/#quest/extra";
+		int logLevel = 0;
 		
 		driver.get("https://game.granbluefantasy.jp/#mypage");
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-mbp-detail")));
+		if (!driver.findElements(By.className("prt-popup-header")).isEmpty()) {
+			driver.findElement(By.className("btn-usual-close")).click();
+		}
 		WebElement pendantButton = driver.findElement(By.className("btn-mbp-detail"));
 		Actions actions = new Actions(driver);
 		actions.sendKeys(Keys.PAGE_DOWN).perform();
@@ -37,12 +42,14 @@ public class ProQuests {
 		WebElement countSR = parentSR.findElement(By.xpath(".//div[@class='txt-bonus-num']/span"));
 		boolean maxR;
 		boolean maxSR;
-		if (!countR.getAttribute("class").isEmpty())  {
+		String countRClass = countR.getAttribute("class");
+		if (countRClass != null && !countRClass.isEmpty())  {
 			maxR = true;
 		} else {
 			maxR = false;
 		}
-		if (!countSR.getAttribute("class").isEmpty())  {
+		String countSRClass = countSR.getAttribute("class");
+		if (countSRClass != null && !countSRClass.isEmpty())  {
 			maxSR = true;
 		} else {
 			maxSR = false;
@@ -58,9 +65,8 @@ public class ProQuests {
 		}
 		String[] proList = {"normal", "high", "extra"};
 		for (String type : proList) {
-			int questNum = 0;
 			PlayAgain playAgain = new PlayAgain();
-			System.out.println("Type = " + type);
+			if (logLevel >= 1 ) { System.out.println("Type = " + type); }
 			wait.until(ExpectedConditions.urlContains(url));
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.className("prt-popup-header")));
 			driver.findElement(By.cssSelector("div[class^='btn-quest-type'][data-type='" + type + "']")).click();			
@@ -68,20 +74,21 @@ public class ProQuests {
 			List<WebElement> playButtons = questGroup.findElements(By.cssSelector("div[class^='btn-set-quest']"));
 			while (!playButtons.isEmpty()) {
 				playButtons = questGroup.findElements(By.cssSelector("div[class^='btn-set-quest']"));
-				System.out.println("Size = " + playButtons.size());
+				if (logLevel >= 1) { System.out.println("Size = " + playButtons.size()); }
 				for (int i=0; i<playButtons.size(); i++) {
 					wait.until(ExpectedConditions.urlContains(url));
 					wait.until(ExpectedConditions.presenceOfElementLocated(By.className("prt-popup-header")));
 					questGroup = driver.findElement(By.cssSelector(".prt-stage-quest.active"));
 					playButtons = questGroup.findElements(By.cssSelector("div[class^='btn-set-quest']"));
-					System.out.println("i = " + i);
-					if (!playButtons.get(i).getAttribute("class").contains("disable")) {
+					if (logLevel >= 1) { System.out.println("i = " + i); }
+					String playClass = playButtons.get(i).getAttribute("class");
+					if (playClass != null && !playClass.contains("disable")) {
 						playButtons.get(i).click();
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[class*='pop-pro-quest-skip']")));
 						driver.findElement(By.className("btn-usual-ok")).click();
 						wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#quest/supporter"));
 						wait.until(ExpectedConditions.presenceOfElementLocated(By.className("prt-supporter")));
-						System.out.println("Type = " + type + "; questNum = " + i);
+						if (logLevel >= 1) { System.out.println("Type = " + type + "; questNum = " + i); }
 						if (type.equals("normal") && i <= 1) {
 							if ( i == 0 && !maxR ) {
 								driver.findElement(By.cssSelector("div[class*='id-5'][data-id='5']")).click();
@@ -89,22 +96,21 @@ public class ProQuests {
 										ExpectedConditions.textToBe(By.className("prt-deck-title"), "Hayai"),
 										ExpectedConditions.textToBe(By.className("prt-deck-title"), "R")));
 								driver.findElement(By.cssSelector("ol[class*='flex-control-nav'] > li:nth-child(3)")).click();
-								System.out.println("Switch R");
+								if (logLevel >= 1) { System.out.println("Switch R"); }
 							} else if ( i == 1 && !maxSR) {
 								driver.findElement(By.cssSelector("div[class*='id-4'][data-id='4']")).click();
 								wait.until(ExpectedConditions.or(
 										ExpectedConditions.textToBe(By.className("prt-deck-title"), "Quick"),
 										ExpectedConditions.textToBe(By.className("prt-deck-title"), "SR")));
 								driver.findElement(By.cssSelector("ol[class*='flex-control-nav'] > li:nth-child(2)")).click();
-								System.out.println("Switch SR");
+								if (logLevel >= 1) { System.out.println("Switch SR"); }
 							} else {
 								driver.findElement(By.cssSelector("div[class*='id-7'][data-id='7']")).click();
 								wait.until(ExpectedConditions.textToBe(By.className("prt-deck-title"), "Event"));
-								System.out.println("Switch *");
+								if (logLevel >= 1) { System.out.println("Switch *"); }
 							}
 						}
 						playAgain.playSkip(driver, wait);
-						questNum++;
 					}
 				}
 				break;

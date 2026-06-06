@@ -1,10 +1,9 @@
 package selenium.demo;
 
 import java.time.Duration;
-import java.util.List;
+import java.util.Objects;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,20 +16,13 @@ public class FarmRotBBadges {
 		final String eventUrl = "https://game.granbluefantasy.jp/#event/advent";
 		
 		Login login = new Login();
-		WebDriver driver = login.login();
-		ConfirmTeam confirmTeam = new ConfirmTeam();
-		Battle battle = new Battle();
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
-		Results results = new Results();
-		WebElement refresh;
-		IsElementPresent ePresent = new IsElementPresent();
+		WebDriver driver = Objects.requireNonNull(login.login());
+		WebDriverWait longWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(600)));
 		
-		int attempts;
 		driver.get(eventUrl);		
 		for (String questId : questIdList) {
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+			WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
 			PlayAgain playAgain = new PlayAgain();
-			attempts = 0;
 			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-select-multi'")));
 			driver.findElement(By.cssSelector("div[class='btn-select-multi']")).click();
 			String questString = "div[data-quest-id='" + questId + "']";

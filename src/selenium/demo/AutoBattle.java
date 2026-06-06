@@ -3,9 +3,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
-
+import java.util.Objects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -21,9 +20,9 @@ public class AutoBattle {
 			By autoButton = By.className("btn-auto");
 			By attackButton = By.className("btn-attack-start");
 			Wait<WebDriver> fluentWait = new FluentWait<>(driver)
-				.withTimeout(Duration.ofSeconds(30))
-				.pollingEvery(Duration.ofMillis(50));
-				
+				.withTimeout(Objects.requireNonNull(Duration.ofSeconds(30)))
+				.pollingEvery(Objects.requireNonNull(Duration.ofMillis(50)));
+
 			wait.until ( ExpectedConditions.or (
 					ExpectedConditions.elementToBeClickable(autoButton),
 					ExpectedConditions.elementToBeClickable(attackButton)));
@@ -49,10 +48,10 @@ public class AutoBattle {
 		} catch (TimeoutException e) {
 			String url = driver.getCurrentUrl();
 			System.out.println("Autobattle " + url);
-			if (url.startsWith("https://game.granbluefantasy.jp/#result_multi/")) { 
+			if (url != null && url.startsWith("https://game.granbluefantasy.jp/#result_multi/")) { 
 				System.out.println("Autobattle exited early");
 				return; 
-			} else if (url.startsWith("https://game.granbluefantasy.jp/#raid_multi/")) {
+			} else if (url != null && url.startsWith("https://game.granbluefantasy.jp/#raid_multi/")) {
 				System.out.println("Battle ended first");
 				Reload reload = new Reload();
 				reload.reload(driver, wait);

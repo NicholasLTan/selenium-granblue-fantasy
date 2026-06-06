@@ -1,5 +1,6 @@
 package selenium.demo;
 
+import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -8,7 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SemiAuto {
-	public void semiAuto(WebDriver driver, WebDriverWait wait) throws InterruptedException {
+	public void semiAuto(@NonNull WebDriver driver, WebDriverWait wait) throws InterruptedException {
 		By atk = By.className("btn-attack-start");
 		By auto = By.className("btn-auto");
 		try { 

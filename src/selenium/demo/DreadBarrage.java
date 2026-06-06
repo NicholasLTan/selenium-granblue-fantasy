@@ -1,16 +1,13 @@
 package selenium.demo;
 
 import java.time.Duration;
-import org.openqa.selenium.chrome.*;
+import java.util.Objects;
 import org.openqa.selenium.*;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class DreadBarrage {
-
 	@Test
 	public void dreadBarrage() throws InterruptedException {
 		int quest = 5;
@@ -21,11 +18,8 @@ public class DreadBarrage {
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		AutoBattle autoBattle = new AutoBattle();
 
-
-		driver.findElement(By.xpath("//*[@id=\"wrapper\"]/div[3]/div[2]/div[2]/div/div")).click();  //Dread Barrage banner
 		driver.get("https://game.granbluefantasy.jp/#event/teamforce");
 		System.out.println("Dread Barrage");
-		//driver.findElement(By.cssSelector("[alt='banner_event_start_1']")).click();
 		Thread.sleep(2000);
 
 		if ( quest == 5 ) {
@@ -48,7 +42,7 @@ public class DreadBarrage {
 	
 		int attempts = 0;
 		while (attempts < maxAttempts) {
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(1000));
+			WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(1000)));
 			confirmTeam.confirmTeam(wait);
 			autoBattle.autoBattle(driver, wait);
 			IsElementPresent ePresent = new IsElementPresent();				

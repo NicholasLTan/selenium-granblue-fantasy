@@ -1,14 +1,16 @@
 package selenium.demo;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.openqa.selenium.*;
+import org.jspecify.annotations.NonNull;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FarmVeritas {
-	public static final By chestBy = By.className("btn-stage-chest"); //Mimic
+	public static final @NonNull By chestBy = By.className("btn-stage-chest"); //Mimic
 	public static final String mimicClass = "div[data-chapter-name='Mimic'][class='prt-quest-list btn-quest-list']"; //Mimic
 	//public static final String questClass = "div[data-quest-id='811021'][class^='prt-quest-list btn-quest-list']"; //E Living Lightning Rod
 	//public static final String questClass = "div[data-quest-id='811081'][class^='prt-quest-list btn-quest-list']"; //E Hundred-Armed Hulk
@@ -27,8 +29,10 @@ public class FarmVeritas {
 	//public static final String questClass = "div[data-quest-id='814101'][class^='prt-quest-list btn-quest-list']"; //H D Jadegleam Dragon
 	//public static final String questClass = "div[data-quest-id='814051'][class^='prt-quest-list btn-quest-list']"; //H Vengeful Demigod
 	//public static final String questClass = "div[data-quest-id='815031'][class^='prt-quest-list btn-quest-list']"; //I Blushing Groom
+	//public static final String questClass = "div[data-quest-id='816131'][class^='prt-quest-list btn-quest-list']"; //J Xeno Cocytus Militis
+	public static final String questClass = "div[data-quest-id='817131'][class^='prt-quest-list btn-quest-list']"; //K Xeno Vohu Manah Militis
 	//public static final String questClass = "div[data-quest-id='818061'][class^='prt-quest-list btn-quest-list']"; //L Simpering Beast
-	public static final String questClass = "div[data-quest-id='818131'][class^='prt-quest-list btn-quest-list']"; //L Xeno Sagi Militis
+	//public static final String questClass = "div[data-quest-id='818131'][class^='prt-quest-list btn-quest-list']"; //L Xeno Sagi Militis
 	//public static final String questClass = "div[data-quest-id='819031'][class^='prt-quest-list btn-quest-list']"; //M High-Voltage Rock
 	//public static final String questClass = "div[data-quest-id='819091'][class^='prt-quest-list btn-quest-list']"; //M Princess of Dragons
 	//public static final String questClass = "div[data-quest-id='819071'][class^='prt-quest-list btn-quest-list']"; //M Parasite Steve
@@ -36,13 +40,13 @@ public class FarmVeritas {
 	@Test
 	public void farmVeritas() throws InterruptedException {
 		int maxAttempts = 400; // Optional: To prevent infinite loops
-		boolean exitAtZero = false;
+		boolean exitAtZero = true;
 		
 		Login login = new Login();
-		WebDriver driver = login.login();
+		WebDriver driver = Objects.requireNonNull(login.login());
 		ConfirmTeam confirmTeam = new ConfirmTeam();
 		Battle battle = new Battle();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(200));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(200)));
 		Results results = new Results();
 		WebElement element;
 		By ok = By.className("btn-usual-ok"); 
@@ -111,7 +115,8 @@ public class FarmVeritas {
 			if (quest) {
 				element = driver.findElement(By.cssSelector(questClass));
 				element.click();
-				String name = element.getAttribute("data-chapter-name");
+				@NonNull
+				String name = Objects.requireNonNull(element.getAttribute("data-chapter-name"));
 				System.out.println("Class name: " + name);
 				if (name.endsWith("Militis")) {
 					wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-offer")));
@@ -121,7 +126,7 @@ public class FarmVeritas {
 
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("txt-stamina-after")));
 			aap = Integer.valueOf(driver.findElement(By.className("txt-stamina-after")).getText());
-			System.out.println(aap + " AAP");
+			System.out.println(driver.findElement(By.className("txt-stamina")).getText());
 			if (cost == 19) {
 				String costString = driver.findElement(By.className("txt-stamina")).getText();
 				int preNum = costString.indexOf(':');
@@ -134,10 +139,10 @@ public class FarmVeritas {
 			confirmTeam.confirmTeam(wait);
 			battle.battle(driver, wait, false);
 			if ( cost == 20 && turnReload ) {
-				wait = new WebDriverWait(driver, Duration.ofSeconds(120));
+				wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(120)));
 				//reload.reload(driver, wait); //Do not run for 30 AAP cost enemies
 			}
-			if (( attempts++ >= maxAttempts ) || ( exitAtZero == true && aap == 0 )) {
+			if (( attempts++ >= maxAttempts ) || ( exitAtZero == true && aap < (cost/2) )) {
 				results.results(driver, wait, false);
 				next = false;
 				System.out.println("next = " + next);
@@ -146,7 +151,7 @@ public class FarmVeritas {
 			}
 			System.out.println("Completed " + attempts + "/" + maxAttempts + " attempts");
 		}
-		System.out.println("Farm Complete");
+		System.out.println("FarmVeritas Complete");
 	}
 }
 

@@ -1,12 +1,8 @@
 package selenium.demo;
 import java.time.Duration;
-
+import java.util.Objects;
 import org.junit.Test;
 import org.openqa.selenium.*;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -22,7 +18,7 @@ public class JourneyDropsActivate {
 		By ok = By.className("btn-usual-ok");
 		By cancel = By.className("btn-usual-cancel");		
 		driver.get("https://game.granbluefantasy.jp/#shop/exchange/trajectory");
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(10)));
 		//System.out.println("Before trangect");
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("txt-trangect-num")));
 		int jdNum = Integer.valueOf(driver.findElement(By.className("txt-trangect-num")).getText());
@@ -38,7 +34,7 @@ public class JourneyDropsActivate {
 			}
 			String jdTarget = String.valueOf(jdNum - (Integer.valueOf(hours) * 10));			 
 			WebElement button = driver.findElement(jdByCSS);
-			String buttonString = button.getDomAttribute("class");
+			String buttonString = Objects.requireNonNull(button.getDomAttribute("class"));
 			if (buttonString.equals("btn-use-support")  ) {				
 				driver.findElement(jdByCSS).click();	// Activate		
 				wait.until(ExpectedConditions.elementToBeClickable(cancel));
@@ -58,7 +54,7 @@ public class JourneyDropsActivate {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("pop-support-complete")));
 			Thread.sleep(500); //Necessary delay
 			driver.findElement(ok).click();
-			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("txt-trangect-num"),jdTarget));
+			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("txt-trangect-num"), Objects.requireNonNull(jdTarget)));
 			jdNum = Integer.valueOf(driver.findElement(By.className("txt-trangect-num")).getText());
 		}
 		return;

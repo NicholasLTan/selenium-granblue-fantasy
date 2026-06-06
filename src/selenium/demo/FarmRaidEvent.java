@@ -2,7 +2,7 @@ package selenium.demo;
 
 import java.time.Duration;
 import java.util.List;
-
+import java.util.Objects;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.junit.Test;
@@ -20,12 +20,11 @@ public class FarmRaidEvent {
 		
 		
 		Login login = new Login();
-		WebDriver driver = login.login();
+		WebDriver driver = Objects.requireNonNull(login.login(), "WebDriver must not be null");
 		ConfirmTeam confirmTeam = new ConfirmTeam();
-		AutoBattle autoBattle = new AutoBattle();
 		Battle battle = new Battle();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
+		WebDriverWait longWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(600)));
 		Results results = new Results();
 		WebElement refresh;
 		By refreshBy = By.cssSelector("div[class='btn-switch-list event active']");
@@ -35,8 +34,12 @@ public class FarmRaidEvent {
 		driver.get(raidUrl);
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='onm-assist-priority'")));
 		elements = driver.findElements(By.cssSelector("div[class^='onm-assist-priority'"));
-		if (!elements.isEmpty() && elements.get(0).getAttribute("class").endsWith("disable")) {
-			elements.get(0).click();
+		if (!elements.isEmpty()) {
+			WebElement firstElement = Objects.requireNonNull(elements.get(0));
+			String classAttr = firstElement.getAttribute("class");
+			if (classAttr != null && classAttr.endsWith("disable")) {
+				firstElement.click();
+			}
 		}
 		int attempts = 1;
 		while (attempts <= maxAttempts) {
@@ -83,20 +86,27 @@ public class FarmRaidEvent {
 			int maxNum = 0;
 			boolean crew = false;
 			for (WebElement raid : raids) {	
-				if (raid.getAttribute("class").endsWith("guild-member")) { // Prioritize crew raid for Prestige pendants
+				String raidClass = raid.getAttribute("class");
+				if (raidClass != null && raidClass.endsWith("guild-member")) { // Prioritize crew raid for Prestige pendants
 					crew = true;
 					break;
 				}
 				WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-thumbnail']/img[@class='img-raid-thumbnail']"));
 				WebElement raidPct = raid.findElement(By.xpath("./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[@class='prt-raid-gauge']/div[@class='prt-raid-gauge-inner']"));
 				String strPct = raidPct.getAttribute("style");
+				if (strPct == null) {
+					System.out.println("Skipping raid " + raidNum + " due to missing style attribute");
+					raidNum++;
+					continue;
+				}
 				int intPct = Integer.parseInt(strPct.replaceAll("\\D+", ""));
-				if (raidStatus.getAttribute("alt").contains(raidStr) && (intPct > maxPct)) {
+				String alt = raidStatus.getAttribute("alt");
+				if (alt != null && alt.contains(raidStr) && (intPct > maxPct)) {
 					maxPct = intPct;
 					maxNum = raidNum;
 				}
 				//System.out.println("gauge = " + raidPct.getAttribute("style"));
-				System.out.println(raidNum + " " + raidStatus.getAttribute("alt") + " " + intPct);
+				System.out.println(raidNum + " " + String.valueOf(alt) + " " + intPct);
 				
 				raidNum++;
 			}
@@ -112,7 +122,8 @@ public class FarmRaidEvent {
 			System.out.println("maxNum = " + (maxNum+1));
 			WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-thumbnail']/img[@class='img-raid-thumbnail']"));
 			
-			if (raidStatus.getAttribute("alt").endsWith(raidStr)) {
+			String raidAlt = raidStatus.getAttribute("alt");
+			if (raidAlt != null && raidAlt.endsWith(raidStr)) {
 				System.out.println("");
 				if (maxNum > 6) {
 					Actions actions = new Actions(driver);
@@ -147,7 +158,8 @@ public class FarmRaidEvent {
 					ExpectedConditions.urlContains("https://game.granluefantasy.jp/#result_multi"),
 					ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#raid_multi"),
 					ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class='pop-usual common-pop-error pop-show']"))));
-			if (driver.getCurrentUrl().equals(raidUrl)) {
+			String currentUrl = driver.getCurrentUrl();
+			if (raidUrl.equals(currentUrl)) { 
 				System.out.println("assist");
 				driver.findElement(By.className("btn-usual-ok")).click();
 				retry = true;
@@ -160,7 +172,7 @@ public class FarmRaidEvent {
 				
 				confirmTeam.confirmTeam(wait);
 				Thread.sleep(1500);
-				String url = driver.getCurrentUrl();
+				String url = Objects.requireNonNull(driver.getCurrentUrl());
 				System.out.println("Conf " + url + " Auto");
 				try {
 					battle.battle(driver, longWait, false);

@@ -1,10 +1,10 @@
 package selenium.demo;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import org.openqa.selenium.*;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -12,14 +12,14 @@ public class FarmUnF {
 	@Test
 	public void farmUnF() throws InterruptedException {
 		int maxAttempts = 50; // Optional: To prevent infinite loops;
-		int target = 7; // Selects quest. Choose from 1-5 below
+		int target = 7; // Selects quest. Choose from 1-9 below
 		Login login = new Login();
-		WebDriver driver = login.login();
+		WebDriver driver = Objects.requireNonNull(login.login());
 		PlayAgain playAgain = new PlayAgain();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(1000));
-		WebElement banner = null; //Nightmare
-		WebElement quest = null; //NM95
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
+		WebDriverWait longWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(1000)));
+		WebElement banner = null; 
+		WebElement quest = null; 
 
 		driver.get("https://game.granbluefantasy.jp/#event/teamraid082");
 		System.out.println("UnF");
@@ -48,7 +48,7 @@ public class FarmUnF {
 		} else if (target == 3) {banner = driver.findElement(By.className("btn-ex-raid2")); } //BaitFarm;
 		else if (target <= 2) {banner = driver.findElement(By.className("btn-raid-select")); } //Solo;		
 		
-		System.out.println(banner.findElement(By.className("img-btn-raid")).getAttribute("alt"));
+		System.out.println(Objects.requireNonNull(banner).findElement(By.className("img-btn-raid")).getAttribute("alt"));
 		banner.click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class*='pop-raid']")));
 		
@@ -64,7 +64,7 @@ public class FarmUnF {
 		else if (target == 1) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94262']")); //Hard
 			maxAttempts = Math.min(maxAttempts, 15);
 		}
-		System.out.println(quest.getAttribute("data-chapter-name"));
+		System.out.println(Objects.requireNonNull(quest).getAttribute("data-chapter-name"));
 		quest.click();
 		playAgain.playAgain(driver, longWait, maxAttempts, false);
 		

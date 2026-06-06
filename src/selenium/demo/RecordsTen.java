@@ -1,9 +1,9 @@
 package selenium.demo;
 
 import java.time.Duration;
+import java.util.Objects;
 import org.openqa.selenium.*;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -15,9 +15,9 @@ public class RecordsTen {
 		boolean reload = true; //Set to false if unable to OTK
 
 		Login login = new Login();
-		WebDriver driver = login.login();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(600));
+		WebDriver driver = Objects.requireNonNull(login.login());
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(10)));
+		WebDriverWait longWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(600)));
 		PlayAgain playAgain = new PlayAgain();
 		By questBy = By.cssSelector("div[id='btn-quest-start'][data-quest-name^='Lvl " + questLv + "']");				
 

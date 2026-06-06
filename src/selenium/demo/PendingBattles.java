@@ -2,7 +2,7 @@ package selenium.demo;
 
 import java.time.Duration;
 import java.util.List;
-
+import java.util.Objects;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,8 +14,8 @@ public class PendingBattles {
 	@Test
 	public void pendingBattles() throws InterruptedException {
 		Login login = new Login();
-		WebDriver driver = login.login();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriver driver = Objects.requireNonNull(login.login());
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(10)));
 		Results results = new Results();
 		int count = 0;
 		

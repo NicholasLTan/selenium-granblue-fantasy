@@ -2,6 +2,7 @@ package selenium.demo;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -14,8 +15,8 @@ public class DrawCrate {
 	@Test
 	public void drawCrate() throws InterruptedException{
 		Login login = new Login();
-		WebDriver driver = login.login();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriver driver = Objects.requireNonNull(login.login(), "WebDriver must not be null");
+		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(10)));
 		By ok = By.cssSelector("div[class^='btn-usual-ok']");
 		WebElement okElement;
 		int count;
@@ -32,8 +33,9 @@ public class DrawCrate {
 		List<WebElement> rupie = driver.findElements(By.cssSelector("div[data-id='6002'][data-count='100']"));
 		System.out.println("Rupie.size = " + rupie.size());
 		if ( !rupie.isEmpty() ) {
-			wait.until(ExpectedConditions.elementToBeClickable(rupie.get(0)));
-			rupie.get(0).click();
+			WebElement rupieButton = Objects.requireNonNull(rupie.get(0), "Rupie element must not be null");
+			wait.until(ExpectedConditions.elementToBeClickable(rupieButton));
+			rupieButton.click();
 			Thread.sleep(1000); //For click to process, need to switch to url
 		}
 		
@@ -41,14 +43,13 @@ public class DrawCrate {
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-get-all")));
 		driver.findElement(By.cssSelector("div[class*='termed']")).click();
 		wait.until(ExpectedConditions.presenceOfElementLocated(By.className("lis-present")));
-		String allCount = driver.findElement(By.className("txt-unclaimed-present")).getText();
 		wait.until(ExpectedConditions.attributeToBe(By.cssSelector("div[id='loading']"), "style", "display: none;"));
 		driver.findElement(By.cssSelector("div#prt-present-limit div div[class='btn-present-other']")).click();
 		wait.until(ExpectedConditions.attributeToBe(By.cssSelector("div[id='loading']"), "style", "display: none;"));
 		//!driver.findElement( By.className("txt-unclaimed-present")).getText().equals("0")
 		List<WebElement> getAll = driver.findElements(By.cssSelector("#prt-present-limit div.prt-get-all"));
 		count = 0;
-		while ( !getAll.isEmpty() && getAll.get(0).isDisplayed() && !getAll.get(0).getAttribute("class").contains("hide") ) {
+		while ( !getAll.isEmpty() && getAll.get(0).isDisplayed() && !Objects.requireNonNull(getAll.get(0).getAttribute("class")).contains("hide") ) {
 			System.out.println("GetAll size = " + getAll.size());
 			System.out.println("pre = " + getAll.get(0).getAttribute("class"));
 			driver.findElement(By.cssSelector("#prt-present-limit div div.btn-get-all")).click();
@@ -59,6 +60,10 @@ public class DrawCrate {
 			okElement = driver.findElement(ok);
 			okElement.click();
 			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("txt-pop-confirm"), "You picked up"));
+			Thread.sleep(500);
+			//okElement = driver.findElement(ok); //fails here
+			//okElement.click();
+			wait.until(ExpectedConditions.stalenessOf(okElement));
 			getAll = driver.findElements(By.cssSelector("#prt-present-limit div.prt-get-all"));
 			System.out.println("post= " + getAll.get(0).getAttribute("class"));
 			count++;

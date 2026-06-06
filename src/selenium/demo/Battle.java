@@ -3,8 +3,10 @@ package selenium.demo;
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
-
+import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,25 +14,32 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Battle {
-	public void battle(WebDriver driver, WebDriverWait wait, boolean OneTurn) throws InterruptedException {
+	@SuppressWarnings("null")
+	public void battle(@NonNull WebDriver driver, WebDriverWait wait, boolean OneTurn) throws InterruptedException {
 		By ok = By.className("btn-usual-ok");
 		By popup = By.className("pop-usual");
 		String raidStr = "https://game.granbluefantasy.jp/#raid";
 		String resultStr = "https://game.granbluefantasy.jp/#result";
-		WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		WebDriverWait shortWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
 		AutoBattle autoBattle = new AutoBattle();		
 		Reload reload = new Reload();
-		boolean usePurple = true;
+		boolean usePurple = false;
 
 		wait.until(ExpectedConditions.or (
 				ExpectedConditions.urlContains(raidStr),
 				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result_multi/empty")
 				));
-		if (!driver.getCurrentUrl().startsWith(raidStr)) {
+		String currentUrl = driver.getCurrentUrl();
+		if (currentUrl == null || !currentUrl.startsWith(raidStr)) {
 			return;
 		}
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-attack-start")));
-		autoBattle.autoBattle(driver, shortWait);
+		try {
+			autoBattle.autoBattle(driver, shortWait);
+		} catch (ElementClickInterceptedException e) {
+			reload.reload(driver, wait);
+			return;
+		}
 		if (usePurple) {
 			List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][state='2'][type='5']"));
 			System.out.println(purpleSkills.size() + " purple skills");
@@ -38,11 +47,14 @@ public class Battle {
 				for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {
 					WebElement purple = purpleSkills.get(i);
 					System.out.println("Purple skill @ pos " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
-					if (!purple.findElement(By.xpath("./../..")).getAttribute("pos").isEmpty()) {
+					String posAttr = purple.findElement(By.xpath("./../..")).getAttribute("pos");
+					if (posAttr != null && !posAttr.isEmpty()) {
 						wait.until(ExpectedConditions.elementToBeClickable(purple));
-						if (!driver.findElements(By.cssSelector("div[class='prt-raid-log.log-battle']")).isEmpty()) {
+						if (!driver.findElements(By.cssSelector("div[class^='prt-raid-log']")).isEmpty()) {
 							WebElement raidLog = driver.findElement(By.cssSelector("div[class^='prt-raid-log']"));
-							wait.until(ExpectedConditions.invisibilityOf(raidLog));
+							System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
+							wait.until(ExpectedConditions.attributeToBe(raidLog, "style", "display: none;"));
+							System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
 						}
 						purple.click();
 						Thread.sleep(2500);
@@ -50,7 +62,11 @@ public class Battle {
 						/*if ( driver.findElement(By.className("prt-ability-skip")).getAttribute("active").equals("1") ) {
 		        		driver.findElement(By.className("btn-ability-skip")).click();
 		        	}*/
-
+					/*	<div class="prt-raid-log log-multipop log-battle" style="display: block;">
+						<div class="txt-title">Battle Log</div>
+						<div class="prt-line"></div>
+						<div class="txt-body">Lvl 120 Qilin's special ability took effect!</div>
+					</div> */
 						purpleSkills = driver.findElements(By.cssSelector("div[icon-type='5']"));
 						if ( !purpleSkills.isEmpty() ) {
 							purpleSkills.get(0).click();
