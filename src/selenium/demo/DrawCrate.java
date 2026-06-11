@@ -91,7 +91,7 @@ public class DrawCrate {
 				driver.findElement(By.className("btn-usual-close")).click();			
 			}
 			wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("prt-popup-header")));
-			
+			Thread.sleep(1000); // Sleep for picked up items to clear from crate, prevent ElementClickInterceptedException
 			count = 0;
 			while (true) {
 				driver.findElement(By.cssSelector("div[class^='btn-recycle'][data-category='" + type +"']")).click();
