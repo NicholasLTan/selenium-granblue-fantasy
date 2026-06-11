@@ -20,7 +20,7 @@ public class AngelHalo {
 	
 	@Test
 	public void angelHalo() throws InterruptedException {
-		int maxRelics = 13; // Number of Silver Relics to farm
+		int maxRelics = 25; // Number of Silver Relics to farm
 		
 		Login login = new Login();
 		WebDriver driver = login.login();
@@ -34,7 +34,7 @@ public class AngelHalo {
 		while (relics < maxRelics) {
 			int haloCount = 0;
 			this.AngelVH(driver); //Angel Halo VH quest
-			while (haloCount < 10) {
+			while (haloCount < 100) {
 				confirmTeam.confirmTeam(wait);
 				battle.battle(driver, wait, false);
 				haloCount++;
