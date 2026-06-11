@@ -6,11 +6,17 @@ import java.util.Objects;
 import org.openqa.selenium.*;
 import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class FarmExo {
 	@Test
 	public void farmExo() throws InterruptedException {
+		int maxAttempts = 40; // To prevent infinite loops; 0 for infinite
+		String level = "120"; // Crucible level for farming
+		String itemID = "10596"; // Ardens Lapis for Ifrit, item must be visible in 
+		int maxItem = 10;
+		
 		Login login = new Login();
 		WebDriver driver = Objects.requireNonNull(login.login(), "WebDriver must not be null");
 		ConfirmTeam confirmTeam = new ConfirmTeam();
@@ -26,8 +32,6 @@ public class FarmExo {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-popup-header")));
 		System.out.println(driver.findElement(By.className("prt-popup-header")).getText());
 		
-		String itemID = "10596"; //Ardens Lapis for Ifrit		
-		int maxItem = 10;
 		int currItem = 0;
 		String itemCSS = "figure[data-item-id='" + itemID + "']";
 		IsElementPresent ePresent = new IsElementPresent();
@@ -42,13 +46,15 @@ public class FarmExo {
 			System.out.println("currItem = " + currItem + "; maxItem = " + maxItem);
 		}
 		
-		int maxAttempts = 40; // To prevent infinite loops; 0 for infinite
 		int attempts = 0;
 		if (attempts < maxAttempts || maxAttempts == 0) {
+	        WebElement selectElement = driver.findElement(By.className("btn-select-level"));
+	        Select select = new Select(selectElement);
+	        select.selectByVisibleText(level);
 			driver.findElement(By.className("btn-set-quest")).click(); //Play
 			wait.until(ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#quest/supporter"));
 		}		
-		while (attempts < maxAttempts || maxAttempts == 0 || currItem >= maxItem) {
+		while (attempts < maxAttempts || maxAttempts == 0 || (elementExists && currItem >= maxItem)) {
 			confirmTeam.confirmTeam(wait);
 			autoBattle.autoBattle(driver, wait);
 			ePresent = new IsElementPresent();				
