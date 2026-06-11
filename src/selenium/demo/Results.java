@@ -4,6 +4,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.Objects;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -41,51 +43,55 @@ public class Results {
 			List<WebElement> elementCtrl = driver.findElements(ctrl);
 			List<WebElement> elementClose = driver.findElements(close);
 			List<WebElement> elementPlayAgain = driver.findElements(playAgain);
-			if (url.startsWith("https://game.granbluefantasy.jp/#result_multi/empty")) {
-				if ( logLevel >= 1 ) {System.out.println("Empty result");}
-				wait.until(ExpectedConditions.elementToBeClickable(ctrl));
-				WebElement ctrlElement = elementCtrl.get(0);
-				ctrlElement.click();
-				if ( logLevel >= 2 ) {System.out.println("CTRL clicked");}
-				wait.until(ExpectedConditions.stalenessOf(ctrlElement));
-			} else if (!elementRankup.isEmpty() && elementRankup.get(0).isDisplayed()) {
-				if ( logLevel >= 1 ) {System.out.println("Rankup");}
-				WebElement rankupElement = Objects.requireNonNull(elementRankup.get(0));
-				wait.until(ExpectedConditions.elementToBeClickable(rankupElement));
-				Thread.sleep(2500); //Necessary sleep for canvas anim to play
-				rankupElement.click();
-				wait.until(ExpectedConditions.stalenessOf(rankupElement));
-				if ( logLevel >= 2 ) {System.out.println("Rankup clicked");}
-			} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
-				if ( logLevel >= 1 ) {System.out.println("Close");}
-				WebElement closeElement = Objects.requireNonNull(elementClose.get(0));
-				closeElement.click();
-				wait.until(ExpectedConditions.stalenessOf(closeElement));
-			} else if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
-				String popupHeader = elementPopup.get(0).findElement(popupHeaderBy).getText();
-				if ( logLevel >= 1 ) {
-					System.out.println("Popup Ok");
-					System.out.println(popupHeader); 
-				}
-				elementOk.get(0).click();
-				wait.until(ExpectedConditions.or(
-						ExpectedConditions.not(ExpectedConditions.textToBe(popupHeaderBy, popupHeader)),
-						ExpectedConditions.invisibilityOf(Objects.requireNonNull(elementPopup.get(0))))); 	
-			/*} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
+			try {
+				if (url.startsWith("https://game.granbluefantasy.jp/#result_multi/empty")) {
+					if ( logLevel >= 1 ) {System.out.println("Empty result");}
+					wait.until(ExpectedConditions.elementToBeClickable(ctrl));
+					WebElement ctrlElement = elementCtrl.get(0);
+					ctrlElement.click();
+					if ( logLevel >= 2 ) {System.out.println("CTRL clicked");}
+					wait.until(ExpectedConditions.stalenessOf(ctrlElement));
+				} else if (!elementRankup.isEmpty() && elementRankup.get(0).isDisplayed()) {
+					if ( logLevel >= 1 ) {System.out.println("Rankup");}
+					WebElement rankupElement = Objects.requireNonNull(elementRankup.get(0));
+					wait.until(ExpectedConditions.elementToBeClickable(rankupElement));
+					Thread.sleep(2500); //Necessary sleep for canvas anim to play
+					rankupElement.click();
+					wait.until(ExpectedConditions.stalenessOf(rankupElement));
+					if ( logLevel >= 2 ) {System.out.println("Rankup clicked");}
+				} else if (!elementClose.isEmpty() && elementClose.get(0).isDisplayed()) {
+					if ( logLevel >= 1 ) {System.out.println("Close");}
+					WebElement closeElement = Objects.requireNonNull(elementClose.get(0));
+					closeElement.click();
+					wait.until(ExpectedConditions.stalenessOf(closeElement));
+				} else if (!elementPopup.isEmpty() && elementPopup.get(0).isDisplayed()) {
+					String popupHeader = elementPopup.get(0).findElement(popupHeaderBy).getText();
+					if ( logLevel >= 1 ) {
+						System.out.println("Popup Ok");
+						System.out.println(popupHeader); 
+					}
+					elementOk.get(0).click();				
+					wait.until(ExpectedConditions.or(
+							ExpectedConditions.textToBe(popupHeaderBy, "Treasure"), // temporary workaround for Treasure popup getting stuck
+							ExpectedConditions.not(ExpectedConditions.textToBe(popupHeaderBy, popupHeader)),
+							ExpectedConditions.invisibilityOf(Objects.requireNonNull(elementPopup.get(0))))); 	
+					/*} else if (!elementOk.isEmpty() && elementOk.get(0).isDisplayed()) {
 				System.out.println("Ok");
 				elementOk.get(0).click();
 				wait.until(ExpectedConditions.invisibilityOfElementLocated(ok)); */			
-			} else if (retry  && !elementPlayAgain.isEmpty() && elementPlayAgain.get(0).isDisplayed()) {
-				if ( logLevel >= 1 ) {System.out.println("PlayAgain");}
-				elementPlayAgain.get(0).click();
-				break;
-			} else if (!elementCtrl.isEmpty() && elementCtrl.get(0).isDisplayed()) {
-				if ( logLevel >= 1 ) {System.out.println("Ctrl");}
-				elementCtrl.get(0).click();
-				//wait.until(ExpectedConditions.invisibilityOfElementLocated(ctrl));
-				if ( logLevel >= 1 ) {System.out.println("Ctrl complete");}
-				break;
-			}
+				} else if (retry  && !elementPlayAgain.isEmpty() && elementPlayAgain.get(0).isDisplayed()) {
+					if ( logLevel >= 1 ) {System.out.println("PlayAgain");}
+					elementPlayAgain.get(0).click();
+					break;
+				} else if (!elementCtrl.isEmpty() && elementCtrl.get(0).isDisplayed()) {
+					if ( logLevel >= 1 ) {System.out.println("Ctrl");}
+					elementCtrl.get(0).click();
+					//wait.until(ExpectedConditions.invisibilityOfElementLocated(ctrl));
+					if ( logLevel >= 1 ) {System.out.println("Ctrl complete");}
+					break;
+				}
+			} catch (StaleElementReferenceException e) { continue; }
+			catch (ElementClickInterceptedException e) { continue; }			
 		}
 		//Thread.sleep(1000); //Necessary sleep for potential popup to manifest
 		
