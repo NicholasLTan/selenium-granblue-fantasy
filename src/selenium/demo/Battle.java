@@ -64,6 +64,7 @@ public class Battle {
 							System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
 						}
 						wait.until(ExpectedConditions.attributeToBe(By.id("command-mask"), "style", "display: none;"));
+						wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("prt-mask")));
 						//<div class="active-mask" id="command-mask" style="display: block;"></div>
 						purple.click();
 						Thread.sleep(2500);
