@@ -24,16 +24,22 @@ public class Battle {
 		WebDriverWait shortWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
 		AutoBattle autoBattle = new AutoBattle();		
 		Reload reload = new Reload();
-		boolean usePurple = false;
+		boolean usePurple = true;
 
 		wait.until(ExpectedConditions.or (
 				ExpectedConditions.urlContains(raidStr),
-				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result_multi/empty")
+				ExpectedConditions.urlContains("https://game.granbluefantasy.jp/#result_multi/empty")//,
+				//ExpectedConditions.visibilityOfElementLocated(popup)
 				));
 		String currentUrl = driver.getCurrentUrl();
 		if (currentUrl == null || !currentUrl.startsWith(raidStr)) {
 			return;
 		}
+		/*if (!driver.findElements(popup).isEmpty()) {
+			driver.findElement(ok).click();
+			reload.reload(driver, wait);
+			return;
+		}*/
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-attack-start")));
 		try {
 			autoBattle.autoBattle(driver, shortWait);
@@ -57,6 +63,8 @@ public class Battle {
 							wait.until(ExpectedConditions.attributeToBe(raidLog, "style", "display: none;"));
 							System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
 						}
+						wait.until(ExpectedConditions.attributeToBe(By.id("command-mask"), "style", "display: none;"));
+						//<div class="active-mask" id="command-mask" style="display: block;"></div>
 						purple.click();
 						Thread.sleep(2500);
 						//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-ability-skip']")));
