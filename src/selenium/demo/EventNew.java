@@ -18,7 +18,7 @@ public class EventNew {
 		PlayAgain playAgain = new PlayAgain();
 		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(600)));
 		IsElementPresent ePresent = new IsElementPresent();
-		driver.get("https://game.granbluefantasy.jp/#event/treasureraid172"); 		
+		driver.get("https://game.granbluefantasy.jp/#event/treasureraid173"); 		
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
 		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
 		if (ePresent.isElementPresent(driver, By.cssSelector("div[class='pop-usual pop-daily-bonus pop-show']"))) {
@@ -35,21 +35,23 @@ public class EventNew {
 			maxAttempts = Integer.valueOf(driver.findElement(By.cssSelector("span[class='txt-red']")).getText());
 		}
 		
-		while (currLoop < 3) {
+		while (currLoop <= 2) {
 			if (currLoop == 2 ) { maxAttempts = raidMatNum / 5; }
 			System.out.println("Loop " + currLoop + ": " + maxAttempts + " IMP runs");
-			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
-			driver.findElement(By.cssSelector("div[class^='btn-event-raid group']")).click();
-			if (logLevel >= 1) { System.out.println("Raid Battle"); }
-			Thread.sleep(1000);
-			if (ePresent.isElementPresent(driver, By.className("pop-select-part-raid"))) {
-				System.out.println("Event boss selection");
-				driver.findElement(By.cssSelector("div[data-part='1']")).click();
+			if (maxAttempts > 0) {
+				wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
+				driver.findElement(By.cssSelector("div[class^='btn-event-raid group']")).click();
+				if (logLevel >= 1) { System.out.println("Raid Battle"); }
 				Thread.sleep(1000);
+				if (ePresent.isElementPresent(driver, By.className("pop-select-part-raid"))) {
+					System.out.println("Event boss selection");
+					driver.findElement(By.cssSelector("div[data-part='2']")).click();
+					Thread.sleep(1000);
+				}
+				driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-rank='101']")).click();
+				if (logLevel >= 1) { System.out.println("Impossible"); }
+				playAgain.playAgain(driver, wait, maxAttempts, false);
 			}
-			driver.findElement(By.cssSelector("div[class^='btn-quest-start ico-'][data-quest-id*='943341']")).click();
-			if (logLevel >= 1) { System.out.println("Impossible"); }
-			playAgain.playAgain(driver, wait, maxAttempts, false);
 			currLoop++;
 		}
 		System.out.println("Script Complete");
