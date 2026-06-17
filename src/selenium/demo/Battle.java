@@ -35,11 +35,13 @@ public class Battle {
 		if (currentUrl == null || !currentUrl.startsWith(raidStr)) {
 			return;
 		}
-		/*if (!driver.findElements(popup).isEmpty()) {
-			driver.findElement(ok).click();
-			reload.reload(driver, wait);
-			return;
-		}*/
+		if (!driver.findElements(popup).isEmpty()) {
+			if (driver.findElement(By.className("prt-popup-header")).getText().equals("Battle Concluded")) 
+			{	driver.findElement(ok).click();
+				reload.reload(driver, wait);
+				return;
+			}
+		}
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-attack-start")));
 		try {
 			autoBattle.autoBattle(driver, shortWait);
