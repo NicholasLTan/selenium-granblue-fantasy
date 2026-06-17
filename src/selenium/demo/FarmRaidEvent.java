@@ -12,10 +12,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaidEvent {
 	@Test
 	public void farmRaidEvent() throws InterruptedException {
-		int maxAttempts = 4; // Optional: To prevent infinite loops
-		final String raidStr = "treasureraid172_high";
-		final String raidCss = "img[alt$='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid172";
+		int maxAttempts = 15; // Optional: To prevent infinite loops
+		final String raidStr = "treasureraid156";
+		final String raidCss = "img[alt*='" + raidStr + "']";
+		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid173";
 		final String raidUrl = "https://game.granbluefantasy.jp/#quest/assist/event";
 		
 		
@@ -123,7 +123,7 @@ public class FarmRaidEvent {
 			WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-thumbnail']/img[@class='img-raid-thumbnail']"));
 			
 			String raidAlt = raidStatus.getAttribute("alt");
-			if (raidAlt != null && raidAlt.endsWith(raidStr)) {
+			if (raidAlt != null && raidAlt.contains(raidStr)) {
 				System.out.println("");
 				if (maxNum > 6) {
 					Actions actions = new Actions(driver);
@@ -210,7 +210,7 @@ public class FarmRaidEvent {
 					}
 				}
 				//autoBattle.autoBattle(driver, wait);
-				battle.battle(driver, longWait, false);
+				//battle.battle(driver, longWait, false);
 				System.out.println("RaidEvent Battle completed, moving to Results");
 				results.results(driver, longWait, false);
 				System.out.println("Attempt " + attempts + " completed");
