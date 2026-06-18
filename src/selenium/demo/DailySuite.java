@@ -9,10 +9,11 @@ import org.junit.platform.suite.api.Suite;
 	Provisions.class, 
 	JourneyDropsActivate.class, 
 	ProQuests.class, 
+	EventNew.class,
 	FarmRaids.class,
 	PendingBattles.class,
 	FarmVeritas.class,
-	FarmExo.class
+	FarmSpecialQuest.class
 	})
 public class DailySuite {
 
