@@ -6,8 +6,10 @@ import java.util.Objects;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -56,19 +58,32 @@ public class DrawCrate {
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.className("prt-popup-header")));
 			okElement = driver.findElement(ok);
 			okElement.click();
-			wait.until(ExpectedConditions.textToBe(By.className("prt-popup-header"), "Item Pickup"));
-			okElement = driver.findElement(ok);
-			okElement.click();
-			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("txt-pop-confirm"), "You picked up"));
-			Thread.sleep(500);
-			//okElement = driver.findElement(ok); //fails here
-			//okElement.click();
-			wait.until(ExpectedConditions.stalenessOf(okElement));
-			getAll = driver.findElements(By.cssSelector("#prt-present-limit div.prt-get-all"));
-			System.out.println("post= " + getAll.get(0).getAttribute("class"));
-			count++;
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("prt-popup-header")));
+			String headerText = driver.findElement(By.className("prt-popup-header")).getText();
+			if (headerText.equals("Item Pickup")) {
+				okElement = driver.findElement(ok);
+				okElement.click();
+				wait.until(ExpectedConditions.textToBePresentInElementLocated(By.className("txt-pop-confirm"), "You picked up"));
+				Thread.sleep(500);
+				//okElement = driver.findElement(ok); //fails here
+				//okElement.click();
+				wait.until(ExpectedConditions.stalenessOf(okElement));
+				getAll = driver.findElements(By.cssSelector("#prt-present-limit div.prt-get-all"));
+				System.out.println("post= " + getAll.get(0).getAttribute("class"));
+				count++;	
+			} else if (headerText.equals("Too many items")) {
+				okElement = driver.findElement(ok);
+				okElement.click();
+				break;
+			}
+			
 		}
 		System.out.println(count + " Item pages picked up");
+		
+		Actions actions = new Actions(driver);
+		actions.sendKeys(Keys.END).perform();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("atx-lead-link")));
+		Thread.sleep(500);  //Necessary sleep for PGDN to process
 		
 		String[] list = { "weapon", "summon" };
 		for ( String type : list ) {
