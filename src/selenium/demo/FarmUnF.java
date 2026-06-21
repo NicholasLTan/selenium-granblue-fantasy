@@ -11,8 +11,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmUnF {
 	@Test
 	public void farmUnF() throws InterruptedException {
-		int maxAttempts = 50; // Optional: To prevent infinite loops;
-		int target = 7; // Selects quest. Choose from 1-9 below
+		int maxAttempts = 150; // Optional: To prevent infinite loops;
+		int target = 2; // Selects quest. Choose from 1-9 below
 		Login login = new Login();
 		WebDriver driver = Objects.requireNonNull(login.login());
 		PlayAgain playAgain = new PlayAgain();
@@ -21,7 +21,7 @@ public class FarmUnF {
 		WebElement banner = null; 
 		WebElement quest = null; 
 
-		driver.get("https://game.granbluefantasy.jp/#event/teamraid082");
+		driver.get("https://game.granbluefantasy.jp/#event/teamraid083");
 		System.out.println("UnF");
 		wait.until(ExpectedConditions.elementToBeClickable(By.className("btn-ranking-profile")));
 		
@@ -52,16 +52,16 @@ public class FarmUnF {
 		banner.click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class*='pop-raid']")));
 		
-		if (target == 9) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94272']")); } //NM250
-		else if (target == 8) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94271']")); } //NM200
-		else if (target == 7) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94270']")); } //NM150
-		else if (target == 6) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94269']")); } //NM100
-		else if (target == 5) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94268']")); } //NM95
-		else if (target == 4) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94267']")); } //NM90
-		else if (target == 3) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94265']")); } //Extreme+
-		else if (target == 2) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94263']")); //Very Hard
+		if (target == 9) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94372']")); } //NM250
+		else if (target == 8) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94371']")); } //NM200
+		else if (target == 7) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94370']")); } //NM150
+		else if (target == 6) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94379']")); } //NM100
+		else if (target == 5) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94378']")); } //NM95
+		else if (target == 4) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94377']")); } //NM90
+		else if (target == 3) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94375']")); } //Extreme+
+		else if (target == 2) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94373']")); //Very Hard
 			maxAttempts = Math.min(maxAttempts, 15);}
-		else if (target == 1) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94262']")); //Hard
+		else if (target == 1) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94372']")); //Hard
 			maxAttempts = Math.min(maxAttempts, 15);
 		}
 		System.out.println(Objects.requireNonNull(quest).getAttribute("data-chapter-name"));
