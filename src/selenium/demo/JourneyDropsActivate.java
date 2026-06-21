@@ -30,7 +30,7 @@ public class JourneyDropsActivate {
 				actions.sendKeys(Keys.PAGE_DOWN).perform();
 				//wait.until(ExpectedConditions.visibilityOfElementLocated(jdByCSS));
 				wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("atx-lead-link")));
-				Thread.sleep(500);  //Necessary sleep for PGDN to process
+				Thread.sleep(1000);  //Necessary sleep for PGDN to process
 			}
 			String jdTarget = String.valueOf(jdNum - (Integer.valueOf(hours) * 10));			 
 			WebElement button = driver.findElement(jdByCSS);
