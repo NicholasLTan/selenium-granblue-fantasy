@@ -68,7 +68,11 @@ public class Battle {
 						wait.until(ExpectedConditions.attributeToBe(By.id("command-mask"), "style", "display: none;"));
 						wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("prt-mask")));
 						//<div class="active-mask" id="command-mask" style="display: block;"></div>
-						purple.click();
+						try {
+							purple.click();
+						} catch (ElementClickInterceptedException e) {
+							break;
+						}
 						Thread.sleep(2500);
 						//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-ability-skip']")));
 						/*if ( driver.findElement(By.className("prt-ability-skip")).getAttribute("active").equals("1") ) {
