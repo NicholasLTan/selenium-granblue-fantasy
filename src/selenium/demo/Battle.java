@@ -70,24 +70,25 @@ public class Battle {
 						//<div class="active-mask" id="command-mask" style="display: block;"></div>
 						try {
 							purple.click();
-						} catch (ElementClickInterceptedException e) {
-							break;
-						}
-						Thread.sleep(2500);
-						//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-ability-skip']")));
-						/*if ( driver.findElement(By.className("prt-ability-skip")).getAttribute("active").equals("1") ) {
+
+							Thread.sleep(2500);
+							//wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class='btn-ability-skip']")));
+							/*if ( driver.findElement(By.className("prt-ability-skip")).getAttribute("active").equals("1") ) {
 		        		driver.findElement(By.className("btn-ability-skip")).click();
 		        	}*/
-					/*	<div class="prt-raid-log log-multipop log-battle" style="display: block;">
+							/*	<div class="prt-raid-log log-multipop log-battle" style="display: block;">
 						<div class="txt-title">Battle Log</div>
 						<div class="prt-line"></div>
 						<div class="txt-body">Lvl 120 Qilin's special ability took effect!</div>
 					</div> */
-						purpleSkills = driver.findElements(By.cssSelector("div[icon-type='5']"));
-						if ( !purpleSkills.isEmpty() ) {
-							purpleSkills.get(0).click();
+							purpleSkills = driver.findElements(By.cssSelector("div[icon-type='5']"));
+							if ( !purpleSkills.isEmpty() ) {
+								purpleSkills.get(0).click();
+							}
+							driver.findElement(By.className("btn-command-back")).click();
+						} catch (ElementClickInterceptedException e) {
+							break;
 						}
-						driver.findElement(By.className("btn-command-back")).click();
 					}
 				}
 			}
