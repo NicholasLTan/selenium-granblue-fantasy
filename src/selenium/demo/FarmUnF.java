@@ -11,15 +11,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmUnF {
 	@Test
 	public void farmUnF() throws InterruptedException {
-		int maxAttempts = 150; // Optional: To prevent infinite loops;
-		int target = 2; // Selects quest. Choose from 1-9 below
+		int maxAttempts = 500; // Optional: To prevent infinite loops;
+		int target = 3; // Selects quest. Choose from 1-9 below
 		Login login = new Login();
 		WebDriver driver = Objects.requireNonNull(login.login());
 		PlayAgain playAgain = new PlayAgain();
 		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(30)));
 		WebDriverWait longWait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(1000)));
 		WebElement banner = null; 
-		WebElement quest = null; 
+		WebElement quest = null;
+		boolean oneTurn = false;
 
 		driver.get("https://game.granbluefantasy.jp/#event/teamraid083");
 		System.out.println("UnF");
@@ -52,9 +53,9 @@ public class FarmUnF {
 		banner.click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div[class*='pop-raid']")));
 		
-		if (target == 9) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94372']")); } //NM250
-		else if (target == 8) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94371']")); } //NM200
-		else if (target == 7) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94370']")); } //NM150
+		if (target == 9) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94382']")); } //NM250
+		else if (target == 8) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94381']")); } //NM200
+		else if (target == 7) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94380']")); } //NM150
 		else if (target == 6) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94379']")); } //NM100
 		else if (target == 5) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94378']")); } //NM95
 		else if (target == 4) {quest = driver.findElement(By.cssSelector("div[data-chapter-id='94377']")); } //NM90
@@ -66,7 +67,7 @@ public class FarmUnF {
 		}
 		System.out.println(Objects.requireNonNull(quest).getAttribute("data-chapter-name"));
 		quest.click();
-		playAgain.playAgain(driver, longWait, maxAttempts, false);
+		playAgain.playAgain(driver, longWait, maxAttempts, oneTurn);
 		
 		
 		/*
