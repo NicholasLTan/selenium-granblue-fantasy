@@ -49,26 +49,29 @@ public class Battle {
 			reload.reload(driver, wait);
 			return;
 		}
+
 		if (usePurple) {
 			List<WebElement> purpleSkills = driver.findElements(By.cssSelector("div[class^='lis-ability-state'][state='2'][type='5']"));
 			System.out.println(purpleSkills.size() + " purple skills");
 			if ( !purpleSkills.isEmpty() && !driver.findElement(By.className("name")).getText().contains("Perfected Alchemist")) {
+
 				for ( int i = 0 ; i < purpleSkills.size() ; i++ ) {
-					WebElement purple = purpleSkills.get(i);
-					System.out.println("Purple skill @ pos " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
-					String posAttr = purple.findElement(By.xpath("./../..")).getAttribute("pos");
-					if (posAttr != null && !posAttr.isEmpty()) {
-						wait.until(ExpectedConditions.elementToBeClickable(purple));
-						if (!driver.findElements(By.cssSelector("div[class^='prt-raid-log']")).isEmpty()) {
-							WebElement raidLog = driver.findElement(By.cssSelector("div[class^='prt-raid-log']"));
-							System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
-							wait.until(ExpectedConditions.attributeToBe(raidLog, "style", "display: none;"));
-							System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
-						}
-						wait.until(ExpectedConditions.attributeToBe(By.id("command-mask"), "style", "display: none;"));
-						wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("prt-mask")));
-						//<div class="active-mask" id="command-mask" style="display: block;"></div>
-						try {
+					try {
+						WebElement purple = purpleSkills.get(i);
+						System.out.println("Purple skill @ pos " + purple.findElement(By.xpath("./../..")).getAttribute("pos"));
+						String posAttr = purple.findElement(By.xpath("./../..")).getAttribute("pos");
+						if (posAttr != null && !posAttr.isEmpty()) {
+							wait.until(ExpectedConditions.elementToBeClickable(purple));
+							if (!driver.findElements(By.cssSelector("div[class^='prt-raid-log']")).isEmpty()) {
+								WebElement raidLog = driver.findElement(By.cssSelector("div[class^='prt-raid-log']"));
+								System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
+								wait.until(ExpectedConditions.attributeToBe(raidLog, "style", "display: none;"));
+								System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
+							}
+							wait.until(ExpectedConditions.attributeToBe(By.id("command-mask"), "style", "display: none;"));
+							wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("prt-mask")));
+							//<div class="active-mask" id="command-mask" style="display: block;"></div>
+
 							purple.click();
 
 							Thread.sleep(2500);
@@ -86,13 +89,18 @@ public class Battle {
 								purpleSkills.get(0).click();
 							}
 							driver.findElement(By.className("btn-command-back")).click();
-						} catch (ElementClickInterceptedException e) {
-							break;
+
 						}
-					}
+
+					} catch (ElementClickInterceptedException e) {
+						break;
+					} catch (StaleElementReferenceException e) {
+						break;
+					} 
 				}
 			}
-		}		
+		}
+
 		try {
 			while (driver.getCurrentUrl().startsWith(raidStr)) {
 				wait.until(ExpectedConditions.or(
