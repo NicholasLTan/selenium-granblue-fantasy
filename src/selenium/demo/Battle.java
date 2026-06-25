@@ -65,7 +65,9 @@ public class Battle {
 							if (!driver.findElements(By.cssSelector("div[class^='prt-raid-log']")).isEmpty()) {
 								WebElement raidLog = driver.findElement(By.cssSelector("div[class^='prt-raid-log']"));
 								System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
-								wait.until(ExpectedConditions.attributeToBe(raidLog, "style", "display: none;"));
+								wait.until(ExpectedConditions.or(
+										ExpectedConditions.attributeToBe(raidLog, "style", "display: none;"),
+										ExpectedConditions.not(ExpectedConditions.attributeToBeNotEmpty(raidLog, "style"))));
 								System.out.println("Battle purple style=" + raidLog.getAttribute("style"));
 							}
 							wait.until(ExpectedConditions.attributeToBe(By.id("command-mask"), "style", "display: none;"));
