@@ -12,10 +12,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaidEvent {
 	@Test
 	public void farmRaidEvent() throws InterruptedException {
-		int maxAttempts = 15; // Optional: To prevent infinite loops
-		final String raidStr = "treasureraid156";
+		int maxAttempts = 5; // Optional: To prevent infinite loops
+		final String raidStr = "treasureraid174_high";
 		final String raidCss = "img[alt*='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid173";
+		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid174";
 		final String raidUrl = "https://game.granbluefantasy.jp/#quest/assist/event";
 		
 		
