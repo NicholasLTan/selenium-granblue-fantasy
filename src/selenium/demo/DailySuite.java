@@ -9,12 +9,14 @@ import org.junit.platform.suite.api.Suite;
 	Provisions.class, 
 	JourneyDropsActivate.class, 
 	ProQuests.class,
-	EventNew.class,
 	FarmRaids.class,
 	PendingBattles.class,
-	FarmVeritas.class
+	FarmVeritas.class,
+	FarmRotBBadges.class,
+	FarmRotBShenxian.class
 	})
 public class DailySuite {
+
 }
 
 //handle event mission in pro quest 
