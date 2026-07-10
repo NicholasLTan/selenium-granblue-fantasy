@@ -13,7 +13,7 @@ public class FarmRotBShenxian {
 	public void farmSpecialQuest() throws InterruptedException {
 		int maxAttempts = 500; // Optional: To prevent infinite loops
 		By selectOne = By.cssSelector("div[class='prt-hl-multi']"); //Shenxian
-		By selectTwo = By.cssSelector("div[data-chapter-id='74345']"); //150
+		By selectTwo = By.cssSelector("div[data-chapter-id='74346']"); //150
 		//By selectOne = By.cssSelector("div[class='prt-raid-image']"); //Extreme+ Elemental
 		final String eventUrl = "https://game.granbluefantasy.jp/#event/advent";
 		
