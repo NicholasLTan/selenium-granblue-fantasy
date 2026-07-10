@@ -18,6 +18,7 @@ public class EventNew {
 		PlayAgain playAgain = new PlayAgain();
 		WebDriverWait wait = new WebDriverWait(driver, Objects.requireNonNull(Duration.ofSeconds(600)));
 		IsElementPresent ePresent = new IsElementPresent();
+		Results results = new Results();
 		driver.get("https://game.granbluefantasy.jp/#event/treasureraid174"); 		
 		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
 		System.out.println(driver.findElement(By.className("prt-head-current")).getText());
@@ -26,7 +27,16 @@ public class EventNew {
 			close.click();
 			Thread.sleep(1000);
 			wait.until(ExpectedConditions.stalenessOf(close));
-		}		
+		}
+		if (ePresent.isElementPresent(driver, By.className("img-hell-boss"))) {
+			driver.findElement(By.className("img-hell-boss")).click();
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[class='pop-usual pop-start-hell pop-show']"))); //Expecting skip NM enabled
+			driver.findElement(By.cssSelector("div[class='btn-usual-text hide-common-text']")).click();
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div[class='prt-deck-select set-toggle']")));
+			driver.findElement(By.cssSelector("div[class='btn-usual-ok se-quest-start']")).click();
+			results.results(driver, wait, false);
+			wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[class^='btn-event-raid group']")));
+		}
 		int currLoop = 2;
 		int maxAttempts = 100; // Optional: To prevent infinite loops
 		int raidMatNum = Integer.valueOf(driver.findElement(By.cssSelector("div[class='txt-possessed-item']")).getText());
