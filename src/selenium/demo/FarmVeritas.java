@@ -1,11 +1,11 @@
 package selenium.demo;
 import java.time.Duration;
+import java.util.List;
 import java.util.Objects;
 
 import org.openqa.selenium.*;
 import org.jspecify.annotations.NonNull;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -114,6 +114,21 @@ public class FarmVeritas {
 			boolean quest = ePresent.isElementPresent(driver, By.cssSelector(questClass));
 			if (quest) {
 				element = driver.findElement(By.cssSelector(questClass));
+				cost = Integer.valueOf(element.findElement(By.className("txt-require-aap")).getText().replaceAll("[^0-9]", ""));
+				WebElement aapElement = driver.findElement(By.id("prt-current-aap"));
+				List<WebElement> aapDigits = aapElement.findElements(By.xpath(".//*"));
+				String aapString = "";
+				for ( int i = 0 ; i < aapDigits.size() ; i++ ) {					
+			        String classAttr = aapDigits.get(i).getAttribute("class");
+			        if (classAttr != null) {
+			        	aapString += classAttr.replaceAll("[^0-9]", "");
+			        }
+			    } 
+				aap = Integer.valueOf(aapString);
+				if (aap < (cost/2)) {
+					System.out.println(aap + " AAP is less than half of cost " + cost + ", exiting.");
+					break; 
+					}
 				element.click();
 				@NonNull
 				String name = Objects.requireNonNull(element.getAttribute("data-chapter-name"));
