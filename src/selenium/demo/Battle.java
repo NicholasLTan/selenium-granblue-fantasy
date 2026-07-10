@@ -7,6 +7,7 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -98,6 +99,8 @@ public class Battle {
 						break;
 					} catch (StaleElementReferenceException e) {
 						break;
+					} catch (ElementNotInteractableException e) {
+						break;
 					} 
 				}
 			}
@@ -175,7 +178,12 @@ public class Battle {
 				reload.reload(driver, wait);
 				return;
 			}
-			
+		} catch (ElementClickInterceptedException e) {
+			System.out.println("Battle ElementClickInterceptedException Return");
+			if (driver.getCurrentUrl().startsWith(raidStr)) {
+				reload.reload(driver, wait);
+				return;
+			}
 		}
 	}
 }
