@@ -12,11 +12,20 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class FarmRaidEvent {
 	@Test
 	public void farmRaidEvent() throws InterruptedException {
-		int maxAttempts = 5; // Optional: To prevent infinite loops
-		final String raidStr = "treasureraid174_high";
+		int maxAttempts = 50; // Optional: To prevent infinite loops
+		boolean speedFarm = false; //to use BP ASAP. Use False for FP farming.
+		boolean quickEntry = true; //For raids that fill/end quickly, usually 6-man or Baha
+		int minHP = 20;
+		final String raidStr = "603771_highlevel";
 		final String raidCss = "img[alt*='" + raidStr + "']";
-		final String eventUrl = "https://game.granbluefantasy.jp/#event/treasureraid174";
+		final String eventUrl = "https://game.granbluefantasy.jp/#event/advent";
 		final String raidUrl = "https://game.granbluefantasy.jp/#quest/assist/event";
+		final String normalApStr = "prt-use-ap";
+		final String normalApCss = "div[class='" + normalApStr + "']";
+		final String lowApStr = normalApStr + " decreased";
+		final String lowApCss = "div[class='" + lowApStr + "']";		
+		int logLevel = 1;
+
 		
 		
 		Login login = new Login();
@@ -42,8 +51,10 @@ public class FarmRaidEvent {
 			}
 		}
 		int attempts = 1;
+		boolean forcedRefresh = false;
+
 		while (attempts <= maxAttempts) {
-			System.out.println("Attempt " + attempts + " started");
+			if ( logLevel >= 1 ) {System.out.println("Attempt " + attempts + " started");}
 			boolean retry = false;
 			boolean ten = false;
 			wait.until(ExpectedConditions.elementToBeClickable(refreshBy));
@@ -53,13 +64,13 @@ public class FarmRaidEvent {
 			Thread.sleep(1000);
 			refresh = driver.findElement(refreshBy);
 			int refreshCount=0;
-			System.out.println(raids.size() + " " + raidStr);
+			if ( logLevel >= 1 ) {System.out.println(raids.size() + " " + raidStr);}
 			while (raids.size() < 1) { 
-				System.out.println("Refresh " + refreshCount);
+				if ( logLevel >= 1 ) {System.out.println("Refresh " + refreshCount);}
 				//wait.until(element.isDisplayed() -> element.click());
 				wait.until(ExpectedConditions.elementToBeClickable(refresh));
-				if (refreshCount == 500) {
-					System.out.println(refreshCount + " refreshes");
+				if (refreshCount == 5 || quickEntry) {
+					if ( logLevel >= 1 ) {System.out.println(refreshCount + " refreshes");}
 					raids = raidList.findElements(By.cssSelector("img[class='img-raid-thumbnail']"));
 					ten = true;
 					break;
@@ -70,7 +81,7 @@ public class FarmRaidEvent {
 				wait.until(ExpectedConditions.elementToBeClickable(refresh));
 				Thread.sleep(1000);
 				raids = raidList.findElements(By.cssSelector(raidCss));
-				System.out.println(raids.size() + " " + raidStr);
+				{System.out.println(raids.size() + " " + raidStr);}
 				Thread.sleep(1000);
 			}
 			/*
@@ -79,11 +90,13 @@ public class FarmRaidEvent {
 			 * "./div[@class='prt-raid-info']/div[@class='prt-raid-status']/div[2]"));
 			 * System.out.println(rNum + " " + raid.getAttribute("class")); rNum++; }
 			 */
-			System.out.println("*****");
+			if ( logLevel >= 1 ) {System.out.println("*****");}
 			raids = raidList.findElements(By.xpath("./div"));
 			int raidNum = 1;
 			int maxPct = 0;
 			int maxNum = 0;
+			int minPct = 100;
+			int minNum = 0;
 			boolean crew = false;
 			for (WebElement raid : raids) {	
 				String raidClass = raid.getAttribute("class");
@@ -100,31 +113,44 @@ public class FarmRaidEvent {
 					continue;
 				}
 				int intPct = Integer.parseInt(strPct.replaceAll("\\D+", ""));
-				String alt = raidStatus.getAttribute("alt");
-				if (alt != null && alt.contains(raidStr) && (intPct > maxPct)) {
-					maxPct = intPct;
-					maxNum = raidNum;
+				String raidStatusAlt = raidStatus.getAttribute("alt");
+				if (ten || (raidStatusAlt != null && ((!quickEntry && raidStatusAlt.equals(lowApStr)) || (quickEntry && raidStatusAlt.equals(normalApStr))))) {
+					//System.out.println(raidNum + " " + raidStatus.getAttribute("class") + " " + intPct);					
+					if (intPct > maxPct) {
+						maxPct = intPct;
+						maxNum = raidNum;
+					}
+					if (intPct < minPct && intPct > minHP) {
+						minPct = intPct;
+						minNum = raidNum;
+					}
 				}
+				
 				//System.out.println("gauge = " + raidPct.getAttribute("style"));
-				System.out.println(raidNum + " " + String.valueOf(alt) + " " + intPct);
+				if ( logLevel >= 1 ) {System.out.println(raidNum + " " + String.valueOf(raidStatusAlt) + " " + intPct);}
 				
 				raidNum++;
 			}
 			if (crew) {
 				System.out.println("crew raid found. raidNum = " + raidNum);
-				maxNum = raidNum;
 				//raidNum-- ???
+			} else if (speedFarm) {
+				if ( logLevel >= 0 ) {System.out.println("speed mode. minNum = " + minNum + "; minPct = " + minPct);}
+				if (minNum==0) { forcedRefresh = true; continue; }
+				minNum--;
+				raidNum = minNum;
 			} else {
-				
+				if ( logLevel >= 0 ) {System.out.println("FP mode. maxNum = " + maxNum + "; maxPct = " + maxPct);}
+				maxNum--;
+				raidNum = maxNum;
 			}
-			maxNum--;
-			WebElement raid = raids.get(maxNum);
-			System.out.println("maxNum = " + (maxNum+1));
+			WebElement raid = raids.get(raidNum);
+			//System.out.println("maxNum = " + (maxNum+1));
 			WebElement raidStatus = raid.findElement(By.xpath("./div[@class='prt-raid-thumbnail']/img[@class='img-raid-thumbnail']"));
 			
 			String raidAlt = raidStatus.getAttribute("alt");
 			if (raidAlt != null && raidAlt.contains(raidStr)) {
-				System.out.println("");
+				if ( logLevel >= 1 ) {System.out.println("");}
 				if (maxNum > 6) {
 					Actions actions = new Actions(driver);
 					actions.sendKeys(Keys.PAGE_DOWN).perform();
@@ -173,16 +199,16 @@ public class FarmRaidEvent {
 				confirmTeam.confirmTeam(wait);
 				Thread.sleep(1500);
 				String url = Objects.requireNonNull(driver.getCurrentUrl());
-				System.out.println("Conf " + url + " Auto");
+				if ( logLevel >= 1 ) {System.out.println("Conf " + url + " Auto");}
 				try {
 					battle.battle(driver, longWait, false);
 				} catch (ElementClickInterceptedException e) {
 					if ( url.startsWith("https://game.granbluefantasy.jp/#quest/supporter_raid")) {
-						System.out.println("supporter_raid"); 
+						if ( logLevel >= 1 ) {System.out.println("supporter_raid");} 
 						Thread.sleep(1000); 
 						boolean	elementExists = ePresent.isElementPresent(driver, By.className("btn-usual-ok")); 
 						if (elementExists) {
-							System.out.println("Raid ended");
+							if ( logLevel >= 1 ) {System.out.println("Raid ended");}
 							driver.findElement(By.className("btn-usual-ok")).click(); 
 							//Thread.sleep(2000);
 							driver.get(raidUrl);
